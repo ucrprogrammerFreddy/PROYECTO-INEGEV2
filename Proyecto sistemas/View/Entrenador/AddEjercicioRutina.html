@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vista Entrenador - Selección de Ejercicios</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="/Proyecto sistemas/Complementos/css/EntrenadorEstilo.css" />
+
+</head>
+<body>
+  <button class="btn btn-outline-dark position-absolute m-3" id="openSidebar">
+    <i class="fas fa-bars"></i>
+  </button>
+
+  <script type="module" src="/Proyecto sistemas/Complementos/Components/MenuEntren.js"></script>
+
+  <header>
+    <nav class="d-flex justify-content-between align-items-center px-4 py-3 bg-white">
+      <div></div>
+      <img src="../../Complementos/img/logoof.png" alt="Logo" height="60" />
+      <div></div>
+    </nav>
+  </header>
+
+  <main class="container-fluid my-4">
+    <div class="fit-wrapper">
+      <div class="d-flex justify-content-center gap-4 mb-4">
+        <div>
+          <label class="form-label">Entrenar grupo muscular</label>
+          <select class="form-select">
+            <option>Pecho</option>
+            <option>Espalda</option>
+            <option>Piernas</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label">Días a entrenar</label>
+          <select class="form-select">
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+          </select>
+        </div>
+      </div>
+
+      <h6 class="text-muted">LIsta de Ejercicios</h6>
+      <div class="table-responsive">
+        <table class="table table-bordered bg-white">
+          <thead class="table-light">
+            <tr>
+              <th>Nombre</th>
+              <th>Descripción</th>
+              <th>Area Muscular</th>
+              <th>Dificultad</th>
+              <th>Impedimentos</th>
+              <th>Cant de repeticiones</th>
+              <th>Comentarios</th>
+              <th>Accion</th>
+            </tr>
+          </thead>
+            <tbody>
+            <tr>
+                <td>Sentadillas</td>
+                <td>Ejercicio compuesto que trabaja principalmente piernas y glúteos...</td>
+                <td>Piernas (cuádriceps, glúteos, isquiotibiales) y core</td>
+                <td>Intermedio</td>
+                <td>Lesiones en rodillas, espalda baja o caderas...</td>
+                <td>4 x 10-12 repeticiones</td>
+                <td></td>
+                <td class="text-center">
+                <button class="btn btn-dark btn-sm rounded-circle" title="Agregar ejercicio">
+                    <i class="fas fa-plus"></i>
+                </button>
+                </td>
+            </tr>
+            <tr>
+                <td>Peso muerto</td>
+                <td>Ejercicio de fuerza que trabaja la espalda baja, piernas y core...</td>
+                <td>Espalda baja, glúteos, isquiotibiales, core</td>
+                <td>Avanzado</td>
+                <td>Problemas en la zona lumbar, hernias discales...</td>
+                <td>4 x 6-8 repeticiones</td>
+                <td></td>
+                <td class="text-center">
+                <button class="btn btn-dark btn-sm rounded-circle" title="Agregar ejercicio">
+                    <i class="fas fa-plus"></i>
+                </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+      </div>
+
+      <div class="d-flex justify-content-end gap-3 mt-4">
+        <button class="btn-volver">
+          Volver
+        </button>
+        <button class="btn-aceptar">
+          Aceptar
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer mt-auto">
+    <img src="../../Complementos/img/facebook.png" alt="Facebook" class="footer-logo" />
+    <img src="../../Complementos/img/instagram.png" alt="Instagram" class="footer-logo" />
+  </footer>
+</body>
+</html>

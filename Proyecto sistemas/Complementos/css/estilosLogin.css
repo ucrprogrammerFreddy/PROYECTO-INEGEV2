@@ -1,0 +1,72 @@
+
+body {
+    background-color: #ECF0F1;
+}
+
+.login-card {
+    max-width: 400px;
+    margin: auto;
+    
+}
+
+header {
+    background-color: #ECF0F1;
+    color: #000000;
+    padding: 1rem 0;
+}
+
+    header img {
+        height: 60px;
+    }
+
+footer {
+    background-color: #316163;
+    color: #ffffff;
+    padding: 1rem 0;
+}
+
+    footer img {
+        width: 30px;
+        margin: 0 10px;
+    }
+
+h1, h2 {
+    margin-bottom: 1rem;
+    color: black;
+}
+
+a.small {
+    font-size: 0.875rem;
+    color: #007bff;
+    text-decoration: none;
+}
+
+    a.small:hover {
+        text-decoration: underline;
+    }
+
+.btn-primary {
+    background-color: #316163;
+    border-color: #316163;
+}
+
+    .btn-primary:hover {
+        background-color: #316163;
+        border-color: #316163;
+    }
+
+footer img {
+    width: 30px; /* tamaño opcional */
+    height: auto;
+    filter: grayscale(100%);
+    transition: filter 0.3s ease;
+    margin: 0 10px;
+}
+
+    footer img:hover {
+        filter: grayscale(0%);
+    }
+
+footer p {
+    color: black;
+}

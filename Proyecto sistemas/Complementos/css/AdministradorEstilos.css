@@ -1,0 +1,346 @@
+/* -------------------- RESET -------------------- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #ECF0F1;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* -------------------- HEADER -------------------- */
+.header {
+  background-color: #ECF0F1;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  padding: 10px 20px;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+.header-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.header-logo {
+  height: 60px;
+}
+
+.menu-toggle {
+  position: absolute;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 24px;
+  cursor: pointer;
+  color: #4f316d;
+}
+
+/* -------------------- SIDEBAR -------------------- */
+.slide {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 220px;
+  background-color: #316163;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+  z-index: 1100;
+  color: white;
+  padding-top: 70px;
+}
+
+.slide.open {
+  transform: translateX(0);
+}
+
+.menu-header {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  background: #316163;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+}
+
+.menu-header h1 {
+  color: #fff;
+  font-weight: 800;
+}
+
+.close-btn {
+  font-size: 30px;
+  cursor: pointer;
+}
+
+/* -------------------- MENÚ PRINCIPAL -------------------- */
+.slide ul {
+  list-style: none;
+  padding: 1px;
+  font-size: 20px;
+}
+
+.slide ul li a {
+  display: flex;
+  align-items: center;
+  color: #ecf1f1;
+  font-weight: 500;
+  padding: 10px 20px;
+  text-decoration: none;
+  transition: 0.2s ease-out;
+}
+
+.slide ul li a i {
+  margin-right: 10px;
+}
+
+.slide ul li a:hover {
+  background-color: #b66447;
+  color: white;
+  font-weight: bold;
+  border-left: 4px solid white;
+}
+
+.caret {
+  font-size: 12px;
+  margin-left: 5px;
+}
+
+/* -------------------- SUBMENÚ -------------------- */
+.submenu {
+  display: none;
+  flex-direction: column;
+  background-color: #316163;
+}
+
+.submenu.visible {
+  display: flex;
+}
+
+.submenu li a {
+  padding: 10px 35px;
+  font-size: 14px;
+  color: #e4f4f3;
+}
+
+.submenu li a:hover,
+.submenu li a.active {
+  background-color: #b66447;
+  color: white;
+  font-weight: bold;
+  border-left: 4px solid white;
+}
+
+/* -------------------- CONTENIDO PRINCIPAL -------------------- */
+.contenedor-main {
+  transition: margin-left 0.3s ease;
+  padding: 90px 20px 90px;
+  flex: 1;
+}
+
+.contenedor-main.shifted {
+  margin-left: 220px;
+}
+
+/* -------------------- FOOTER -------------------- */
+.footer {
+  background-color: #022227;
+  color: white;
+  padding: 10px 15px;
+  text-align: center;
+  height: 80px;
+  width: 100%;
+  z-index: 10;
+  margin-top: 30px;
+}
+
+.footer-logo {
+  height: 50px;
+}
+
+/* -------------------- BOTONES -------------------- */
+.btn-enviar,
+.btn-volver,
+.btn-aceptar {
+  background-color: #b66447;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 20px;
+}
+
+.btn-enviar:hover,
+.btn-volver:hover,
+.btn-cancelar:hover,
+.btn-aceptar:hover,
+.btn-aceptar:focus {
+  background-color: #9f5639;
+  color: white;
+}
+
+/* -------------------- TARJETAS -------------------- */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.custom-card {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 0 6px rgba(0,0,0,0.1);
+  text-align: center;
+  transition: transform 0.2s ease;
+  text-decoration: none;
+  color: inherit;
+}
+
+.custom-card:hover {
+  transform: translateY(-5px);
+}
+
+.icon-section {
+  font-size: 2rem;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.bg-light-brown { background-color: #d3a87c; }
+.bg-light-green { background-color: #a3d3a1; }
+.bg-light-yellow { background-color: #f7e99d; }
+.bg-light-pink { background-color: #f7c7db; }
+
+.icon-brown { color: #5a3e2b; }
+.icon-green { color: #275d27; }
+.icon-olive { color: #6b6b2d; }
+
+/* -------------------- RESPONSIVE -------------------- */
+@media (max-width: 768px) {
+  .slide {
+    width: 200px;
+  }
+
+  .contenedor-main.shifted {
+    margin-left: 200px;
+  }
+}
+
+
+.menu-header h1 {
+  font-size: 1.4rem; /* igual al primer HTML donde se ve bien */
+  margin: 0;
+  padding: 0;
+  line-height: 1;
+}
+
+    .bg-verde-panel {
+      background-color: #316163 !important;
+    }
+
+    body {
+      background-color: #f8f9fa;
+    }
+/* -------------------- TABLAS -------------------- */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+th {
+  background-color: white;
+  color: #000;
+  font-weight: bold;
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+td {
+  padding: 10px 16px;
+  border-bottom: 1px solid #eee;
+}
+
+tr:hover {
+  background-color: #f1f1f1;
+}
+
+
+
+/* -------------------- FORMULARIOS -------------------- */
+/* Estilo base del contenedor */
+.form-wrapper {
+  max-width: 700px;
+  margin: 2rem auto;
+  background-color: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+/* Título del formulario */
+.form-wrapper h2 {
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 2rem;
+  font-size: 1.5rem;
+}
+
+/* Entradas personalizadas */
+.form-wrapper .input-custom {
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  width: 100%;
+  margin-bottom: 1rem;
+  transition: border-color 0.3s;
+}
+
+.form-wrapper .input-custom:focus {
+  border-color: #316163;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(49, 97, 99, 0.2);
+}
+
+/* Botones del formulario */
+.form-wrapper .form-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.etiqueta-seccion {
+  display: inline-block;
+  background-color: #0d5c5d;
+  color: white;
+  padding: 0.5rem 1.5rem;
+  border-radius: 30px;
+  font-weight: bold;
+  font-size: 1rem;
+  margin-top: 1rem;       /* separa del logo */
+  margin-bottom: 1.5rem;  /* separa del formulario */
+  text-align: center;
+}
+
+
+
