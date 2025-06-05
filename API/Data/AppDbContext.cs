@@ -20,8 +20,6 @@ namespace PowerVital.Data
         public DbSet<EjercicioRutina> EjercicioRutina { get; set; }
         public DbSet<PadecimientoCliente> PadecimientoCliente { get; set; }
         public DbSet<HistorialSalud> HistorialesSalud { get; set; }
-
-
         public DbSet<PadecimientoHistorial> PadecimientosHistorial { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -40,11 +38,21 @@ namespace PowerVital.Data
                 .HasForeignKey(c => c.EntrenadorId)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            // Relación EjercicioRutina (clave compuesta)
+            // 🚀 RELACIÓN CORRECTA EjercicioRutina
             modelBuilder.Entity<EjercicioRutina>()
                 .HasKey(er => new { er.IdRutina, er.IdEjercicio });
 
-            // 🔧 RELACIÓN CORREGIDA para PadecimientoCliente
+            modelBuilder.Entity<EjercicioRutina>()
+                .HasOne(er => er.Rutina)
+                .WithMany(r => r.EjerciciosRutina)
+                .HasForeignKey(er => er.IdRutina);
+
+            modelBuilder.Entity<EjercicioRutina>()
+                .HasOne(er => er.Ejercicio)
+                .WithMany() // Sin navegación inversa en Ejercicio
+                .HasForeignKey(er => er.IdEjercicio);
+
+            // RELACIÓN PadecimientoCliente
             modelBuilder.Entity<PadecimientoCliente>()
                 .HasKey(pc => new { pc.IdCliente, pc.IdPadecimiento });
 
@@ -60,37 +68,27 @@ namespace PowerVital.Data
                 .HasForeignKey(pc => pc.IdPadecimiento)
                 .OnDelete(DeleteBehavior.Cascade);
 
-
-
-
-            // PadecimientoHistorial -> Cliente
-
-            // NUEVA RELACIÓN: HistorialSalud -> Cliente
+            // RELACIÓN HistorialSalud -> Cliente
             modelBuilder.Entity<HistorialSalud>()
                 .HasOne(h => h.Cliente)
                 .WithMany(c => c.HistorialesSalud)
                 .HasForeignKey(h => h.ClienteId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-
-             // NUEVA RELACIÓN: PadecimientoHistorial -> HistorialSalud
+            // RELACIÓN PadecimientoHistorial -> HistorialSalud
             modelBuilder.Entity<PadecimientoHistorial>()
                 .HasOne(ph => ph.HistorialSalud)
                 .WithMany(h => h.Padecimientos)
                 .HasForeignKey(ph => ph.HistorialSaludId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // RELACIÓN: PadecimientoHistorial -> Padecimiento
+            // RELACIÓN PadecimientoHistorial -> Padecimiento
             modelBuilder.Entity<PadecimientoHistorial>()
                 .HasOne(ph => ph.Padecimiento)
                 .WithMany(p => p.PadecimientosHistorial)
                 .HasForeignKey(ph => ph.PadecimientoId)
                 .OnDelete(DeleteBehavior.Cascade);
-
-
-
         }
-
     }
 }
 

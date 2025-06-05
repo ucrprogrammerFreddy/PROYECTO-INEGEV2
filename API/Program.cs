@@ -6,11 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 // ✅ Agrega configuración desde varios archivos, incluido el secreto
-builder.Configuration
-    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-    .AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: true)
-    .AddJsonFile("appsettings.secrets.json", optional: true, reloadOnChange: true) // 👈 este es nuevo
-    .AddEnvironmentVariables();
+
 
 
 // 👉 Ahora puedes acceder a la clave OpenAI así:

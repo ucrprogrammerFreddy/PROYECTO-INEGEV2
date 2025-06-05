@@ -6,10 +6,13 @@ namespace PowerVital.Models
     {
         [Required(ErrorMessage = "El campo IdRutina es obligatorio.")]
         public int IdRutina { get; set; }
+
+        // No hace falta poner Navigation extra, con el Id y Fluent API controlamos la relación
         public Rutina Rutina { get; set; }
 
         [Required(ErrorMessage = "El campo IdEjercicio es obligatorio.")]
         public int IdEjercicio { get; set; }
+
         public Ejercicio Ejercicio { get; set; }
 
         [StringLength(300, ErrorMessage = "El comentario no puede superar los 300 caracteres.")]
@@ -38,4 +41,3 @@ namespace PowerVital.Models
         public string Dificultad { get; set; }
     }
 }
-
