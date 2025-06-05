@@ -135,6 +135,10 @@
       <input type="text" id="clienteBuscador" placeholder="Nombre o correo..." autocomplete="off" />
       <ul id="listaResultados"></ul>
     </div>
+    <button id="btnRecomendarIA" type="button">Recomendar con IA</button>
+
+
+
 
     <!-- Tablita con info del cliente -->
     <div id="infoCliente" style="display: none; margin-top: 10px;">
@@ -152,6 +156,8 @@
 
     <section id="rutinaGenerada" style="display: none;">
       <h2>Rutina sugerida para <span id="nombreCliente">[Selecciona un cliente]</span></h2>
+      <input type="hidden" id="clienteId" />
+
       <table id="tablaRutina">
         <thead>
           <tr>

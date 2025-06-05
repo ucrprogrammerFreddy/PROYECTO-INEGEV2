@@ -235,3 +235,179 @@ function normalizarZona(zona) {
   const zonaNormalizada = zona.trim().toLowerCase();
   return mapa[zonaNormalizada] || zonaNormalizada;
 }
+
+//GENERADOR DE RUTINA CON IA
+
+
+document.getElementById("btnRecomendarIA").addEventListener("click", async () => {
+  const idCliente = localStorage.getItem("clienteSeleccionadoId"); // ✅ Asegúrate de guardar esto al seleccionar el cliente
+  const nombreCliente = document.getElementById("clienteNombre").textContent;
+
+  if (!idCliente) {
+    alert("Selecciona un cliente antes de continuar.");
+    return;
+  }
+
+const payload = {
+  IdCliente: parseInt(idCliente),
+  NombreCliente: nombreCliente,
+  Padecimientos: [],
+  EjerciciosDisponibles: []
+};
+
+
+  try {
+    const res = await fetch("https://localhost:7086/api/IAEjercicios/recomendar", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+
+    if (!res.ok) throw new Error("Error al llamar la IA");
+
+    const data = await res.json();
+
+    const tabla = document.getElementById("tablaRutina").querySelector("tbody");
+    tabla.innerHTML = "";
+
+    data.ejerciciosRecomendados.forEach(nombreEjercicio => {
+      const fila = document.createElement("tr");
+      fila.innerHTML = `
+        <td>${nombreEjercicio}</td>
+        <td>-</td>
+        <td><input type="number" value="3" /></td>
+        <td><input type="number" value="10" /></td>
+        <td><button class="eliminar">Eliminar</button></td>
+      `;
+      tabla.appendChild(fila);
+    });
+
+    document.getElementById("rutinaGenerada").style.display = "block";
+  } catch (err) {
+    alert("Hubo un error al generar la rutina con IA");
+    console.error(err);
+  }
+
+
+
+  
+});
+
+
+
+// const idCliente = document.getElementById("clienteId").value;
+
+// if (!idCliente) {
+//   alert("Selecciona un cliente antes de continuar.");
+//   return;
+// }
+
+// 🔍 Buscar clientes y guardar el ID seleccionado
+$("#clienteBuscador").on("input", function () {
+  const texto = $(this).val().toLowerCase();
+  if (texto.length < 2) return;
+
+  $.get(`${API_CLIENTE}/listaClientes`, (clientes) => {
+    const filtrados = clientes.filter((c) =>
+      c.Nombre.toLowerCase().includes(texto) || c.Email.toLowerCase().includes(texto)
+    );
+
+    const $lista = $("#listaResultados");
+    $lista.empty();
+    filtrados.forEach((c) => {
+      $lista.append(`<li data-id="${c.IdUsuario}">${c.Nombre} - ${c.Email}</li>`);
+    });
+
+    // Evento al seleccionar un cliente
+    $lista.find("li").on("click", function () {
+      const id = $(this).data("id");
+      const nombre = $(this).text();
+
+      clienteSeleccionado = id;
+      localStorage.setItem("clienteSeleccionadoId", id); // ✅ GUARDADO CLAVE PARA IA
+
+      $("#nombreCliente").text(nombre);
+      $("#rutinaGenerada").show();
+      $("#infoCliente").show();
+      cargarInfoCliente(id);
+      generarRutina(id);
+
+      $lista.empty();
+      $("#clienteBuscador").val("");
+    });
+  });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+// document.getElementById("btnRecomendarIA").addEventListener("click", async () => {
+//   const nombreCliente = document.getElementById("clienteNombre").textContent;
+
+//   // Simula ejercicios disponibles (puedes obtenerlos de tu base real si ya tienes una lista)
+//   const ejerciciosDisponibles = [
+//     { nombre: "Natación", areaMuscular: "Espalda" },
+//     { nombre: "Caminata", areaMuscular: "Piernas" },
+//     { nombre: "Yoga", areaMuscular: "Cuerpo completo" }
+//   ];
+
+//   // Simula los padecimientos que ya cargaste del cliente
+//   const padecimientos = [
+//     { nombre: "Hernia", areaMuscular: "Espalda", severidad: "Grave" },
+//     { nombre: "Dolor de rodilla", areaMuscular: "Piernas", severidad: "Moderado" }
+//   ];
+
+//   const payload = {
+//     nombreCliente,
+//     ejerciciosDisponibles,
+//     padecimientos
+//   };
+
+//   try {
+//     const res = await fetch("https://localhost:7086/api/IAEjercicios/recomendar", {
+//       method: "POST",
+//       headers: { "Content-Type": "application/json" },
+//       body: JSON.stringify(payload)
+//     });
+
+//     if (!res.ok) throw new Error("Error al llamar la IA");
+
+//     const data = await res.json();
+
+//     // Muestra resultados en tabla
+//     const tabla = document.getElementById("tablaRutina").querySelector("tbody");
+//     tabla.innerHTML = ""; // Limpia tabla anterior
+//     const lineas = data.ejerciciosRecomendados;
+
+
+//     lineas.forEach(nombreEjercicio => {
+//       if (nombreEjercicio.trim() === "") return;
+
+//       const fila = document.createElement("tr");
+//       fila.innerHTML = `
+//         <td>${nombreEjercicio}</td>
+//         <td>-</td>
+//         <td><input type="number" value="3" /></td>
+//         <td><input type="number" value="10" /></td>
+//         <td><button class="eliminar">Eliminar</button></td>
+//       `;
+//       tabla.appendChild(fila);
+//     });
+
+//     document.getElementById("rutinaGenerada").style.display = "block";
+
+//   } catch (err) {
+//     alert("Hubo un error al generar la rutina con IA");
+//     console.error(err);
+//   }
+// });
+

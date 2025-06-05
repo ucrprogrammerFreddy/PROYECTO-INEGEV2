@@ -32,7 +32,14 @@ namespace PowerVital.Controllers
                 {
                     IdRutina = er.IdRutina,
                     IdEjercicio = er.IdEjercicio,
-                    Comentario = er.Comentario
+                    Comentario = er.Comentario,
+                    NombreEjercicio = er.Ejercicio.Nombre,
+                    DescripcionEjercicio = er.Ejercicio.Descripcion,
+                    AreaMuscular = er.Ejercicio.AreaMuscular,
+                    AreaMuscularAfectada = er.Ejercicio.AreaMuscularAfectada,
+                    Repeticiones = er.Ejercicio.Repeticiones,
+                    GuiaEjercicio = er.Ejercicio.GuiaEjercicio,
+                    Dificultad = er.Ejercicio.Dificultad
                 }).ToListAsync();
 
             return Ok(lista); // 200 OK con la lista
@@ -55,7 +62,14 @@ namespace PowerVital.Controllers
             {
                 IdRutina = er.IdRutina,
                 IdEjercicio = er.IdEjercicio,
-                Comentario = er.Comentario
+                Comentario = er.Comentario,
+                NombreEjercicio = er.Ejercicio.Nombre,
+                DescripcionEjercicio = er.Ejercicio.Descripcion,
+                AreaMuscular = er.Ejercicio.AreaMuscular,
+                AreaMuscularAfectada = er.Ejercicio.AreaMuscularAfectada,
+                Repeticiones = er.Ejercicio.Repeticiones,
+                GuiaEjercicio = er.Ejercicio.GuiaEjercicio,
+                Dificultad = er.Ejercicio.Dificultad
             };
         }
 
@@ -82,7 +96,16 @@ namespace PowerVital.Controllers
                 {
                     IdRutina = dto.IdRutina,
                     IdEjercicio = dto.IdEjercicio,
-                    Comentario = dto.Comentario
+                    Comentario = dto.Comentario,
+
+                    NombreEjercicio = dto.NombreEjercicio,
+                    DescripcionEjercicio =dto.DescripcionEjercicio,
+                    AreaMuscular =dto.AreaMuscular,
+                    AreaMuscularAfectada = dto.AreaMuscularAfectada,
+                    Repeticiones = dto.Repeticiones,
+                    GuiaEjercicio = dto.GuiaEjercicio,
+                    Dificultad =dto.Dificultad
+
                 };
 
                 // Agrega la entidad al contexto y guarda en la base de datos
@@ -116,7 +139,21 @@ namespace PowerVital.Controllers
                 return NotFound(new { mensaje = "La relación a actualizar no fue encontrada." }); // 404 Not Found
 
             // Solo se actualiza el comentario
+
             entidad.Comentario = dto.Comentario;
+            entidad.NombreEjercicio = dto.NombreEjercicio;
+            entidad.DescripcionEjercicio = dto.DescripcionEjercicio;
+            entidad.AreaMuscular = dto.AreaMuscular;
+            entidad.AreaMuscularAfectada = dto.AreaMuscularAfectada;
+            entidad.Repeticiones = dto.Repeticiones;
+            entidad.GuiaEjercicio = dto.GuiaEjercicio;
+            entidad.Dificultad = dto.Dificultad;
+            
+
+
+
+
+
 
             try
             {

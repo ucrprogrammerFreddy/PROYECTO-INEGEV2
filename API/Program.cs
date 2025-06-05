@@ -1,8 +1,23 @@
-
+﻿
 using PowerVital.Data;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+
+// ✅ Agrega configuración desde varios archivos, incluido el secreto
+builder.Configuration
+    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+    .AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: true)
+    .AddJsonFile("appsettings.secrets.json", optional: true, reloadOnChange: true) // 👈 este es nuevo
+    .AddEnvironmentVariables();
+
+
+// 👉 Ahora puedes acceder a la clave OpenAI así:
+string openAiKey = builder.Configuration["OpenAI:ApiKey"];
+Console.WriteLine("🔑 Clave OpenAI cargada: " + (string.IsNullOrEmpty(openAiKey) ? "NO" : "SÍ"));
+
+
 
 // Add services to the container.
 
@@ -36,7 +51,7 @@ builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
-        options.JsonSerializerOptions.PropertyNamingPolicy = null; // opcional: conserva nombres con may�sculas si usas PascalCase en tus modelos
+        options.JsonSerializerOptions.PropertyNamingPolicy = null; // opcional: conserva nombres con mayúsculas si usas PascalCase en tus modelos
     });
 
 
