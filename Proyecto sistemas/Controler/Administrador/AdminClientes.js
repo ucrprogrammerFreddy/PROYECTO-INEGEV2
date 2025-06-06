@@ -39,6 +39,7 @@ export function cargarEntrenadores(callback = null) {
  * @param {Array} padecimientosSeleccionados - IDs de padecimientos que deben aparecer seleccionados.
  * @param {Object} severidadesSeleccionadas - Diccionario idPadecimiento: severidad (opcional para edición)
  */
+
 export function cargarPadecimientos(
   padecimientosSeleccionados = [],
   severidadesSeleccionadas = {}
@@ -50,24 +51,27 @@ export function cargarPadecimientos(
     $container.empty();
 
     data.forEach((p) => {
-      const checked = padecimientosSeleccionados.includes(p.IdPadecimiento)
-        ? "checked"
-        : "";
-      const severidad = severidadesSeleccionadas[p.IdPadecimiento] || "";
+      const idPadecimiento = p.IdPadecimiento;
+      const checked = padecimientosSeleccionados.includes(idPadecimiento);
+      const severidad = severidadesSeleccionadas[idPadecimiento] || "";
 
-      const checkbox = `
+      const checkboxHtml = `
         <div class="d-flex align-items-center mb-2 gap-2">
-          <input class="form-check-input padecimiento-item" type="checkbox" value="${
-            p.IdPadecimiento
-          }" id="pad-${p.IdPadecimiento}" ${checked}>
-          <label class="form-check-label me-2" for="pad-${p.IdPadecimiento}">${
-        p.Nombre
-      }</label>
-          <select class="form-select form-select-sm severidad-padecimiento" data-padecimiento="${
-            p.IdPadecimiento
-          }" style="width: auto; display: ${
-        checked ? "inline-block" : "none"
-      };">
+          <input 
+            class="form-check-input padecimiento-item" 
+            type="checkbox" 
+            value="${idPadecimiento}" 
+            id="pad-${idPadecimiento}" 
+            ${checked ? "checked" : ""}>
+          
+          <label class="form-check-label me-2" for="pad-${idPadecimiento}">
+            ${p.Nombre}
+          </label>
+          
+          <select 
+            class="form-select form-select-sm severidad-padecimiento" 
+            data-padecimiento="${idPadecimiento}" 
+            style="width: auto; ${checked ? "" : "display: none;"}">
             <option value="">Severidad</option>
             <option value="Leve" ${
               severidad === "Leve" ? "selected" : ""
@@ -79,18 +83,23 @@ export function cargarPadecimientos(
               severidad === "Grave" ? "selected" : ""
             }>Grave</option>
           </select>
-        </div>`;
+        </div>
+      `;
 
-      $container.append(checkbox);
+      $container.append(checkboxHtml);
     });
 
-    // Mostrar/ocultar el select de severidad solo si el checkbox está seleccionado
+    // Event listener para mostrar/ocultar el select cuando se (des)marca el checkbox
     $container.find('input[type="checkbox"]').on("change", function () {
       const $select = $(this)
         .closest("div")
         .find("select.severidad-padecimiento");
-      $select.toggle(this.checked);
-      if (!this.checked) $select.val(""); // Limpia si se desmarca
+
+      if (this.checked) {
+        $select.show();
+      } else {
+        $select.hide().val(""); // Limpiar valor si se desmarca
+      }
     });
   }).fail(function () {
     alert("Error al cargar padecimientos.");
@@ -215,14 +224,20 @@ export function cargarClienteEditar() {
   const cliente = JSON.parse(localStorage.getItem("clienteEditar"));
   if (!cliente) return;
 
+  console.log("✅ Cliente a editar:", cliente);
+
+  // 🚀 Cargar entrenadores (con callback para seleccionar el correcto)
   cargarEntrenadores(() => {
-    $("#entrenador").val(
+    // Por compatibilidad con posibles nombres distintos en el DTO
+    const idEntrenador =
+      cliente.EntrenadorId ||
+      cliente.Entrenador?.IdUsuario ||
       cliente.Entrenador?.idIdUsuario ||
-        cliente.EntrenadorId ||
-        cliente.idIdUsuario
-    );
+      0;
+    $("#entrenador").val(idEntrenador);
   });
 
+  // 🚀 Rellenar campos básicos
   $("#nombre").val(cliente.Nombre);
   $("#clave").val(cliente.Clave);
   $("#correo").val(cliente.Email);
@@ -232,22 +247,36 @@ export function cargarClienteEditar() {
   $("#altura").val(cliente.Altura);
   $("#peso").val(cliente.Peso);
 
+  // 🚀 Padecimientos
   if (cliente.PadecimientosClientes?.length > 0) {
     $("#padecimiento").prop("checked", true);
     $("#contenedorPadecimientos").show();
-    const ids = cliente.PadecimientosClientes.map(
-      (p) =>
+
+    const ids = cliente.PadecimientosClientes.map((p) => {
+      return (
         p.PadecimientoId || p.IdPadecimiento || p.Padecimiento?.IdPadecimiento
-    );
+      );
+    });
+
     const severidades = {};
     cliente.PadecimientosClientes.forEach((p) => {
       const id =
         p.PadecimientoId || p.IdPadecimiento || p.Padecimiento?.IdPadecimiento;
       severidades[id] = p.Severidad || "";
     });
+
+    console.log("✅ Padecimientos seleccionados:", ids);
+    console.log("✅ Severidades:", severidades);
+
+    // 🚀 Cargar padecimientos con seleccionados
     cargarPadecimientos(ids, severidades);
+  } else {
+    // No tiene padecimientos
+    $("#padecimiento").prop("checked", false);
+    $("#contenedorPadecimientos").hide();
   }
 
+  // 🚀 Evento de submit del formulario
   $("#formularioEditar")
     .off("submit")
     .submit(function (e) {
@@ -265,28 +294,46 @@ export function actualizarCliente(id) {
   const cliente = obtenerClienteDesdeFormulario("Editar");
   cliente.IdUsuario = id;
 
+  console.log("🚀 Cliente a actualizar:", cliente);
+
   $.ajax({
     url: `${API_BASE}/Cliente/editarCliente`,
     method: "PUT",
     contentType: "application/json",
     data: JSON.stringify(cliente),
     success: () => {
+      console.log(
+        "✅ Cliente actualizado, ahora eliminando padecimientos antiguos..."
+      );
+
+      // 🚀 Primero elimina los padecimientos anteriores
       $.ajax({
         url: `${API_BASE}/AsignarPadecimientos/eliminarPadecimiento/${id}`,
         type: "DELETE",
         complete: () => {
+          console.log(
+            "✅ Padecimientos antiguos eliminados, asignando nuevos..."
+          );
+
           if (
             cliente.PadecimientosCompletos &&
             cliente.PadecimientosCompletos.length > 0
           ) {
+            // 🚀 Asignar los nuevos padecimientos
             asignarPadecimientos(id, cliente.PadecimientosCompletos);
+
+            // 🚀 Registrar historial de padecimientos
             registrarHistorialPadecimientosParaCliente(
               id,
               cliente.Peso,
               cliente.PadecimientosCompletos
             );
           } else {
-            // Registrar historial "sin padecimientos" cuando se eliminan todos
+            console.log(
+              "⚠️ Cliente actualizado SIN padecimientos, registrando historial vacío..."
+            );
+
+            // Registrar historial "sin padecimientos"
             $.ajax({
               url: `${API_BASE}/PadecimientoHistorial/crearHistorialPadecimiento`,
               method: "POST",
@@ -492,9 +539,10 @@ export function listarClientes() {
 
     data.forEach((c) => {
       // Padecimientos es ya un array de nombres
-      const padecimientos = c.Padecimientos && c.Padecimientos.length > 0
-        ? c.Padecimientos.join(", ")
-        : "-";
+      const padecimientos =
+        c.Padecimientos && c.Padecimientos.length > 0
+          ? c.Padecimientos.join(", ")
+          : "-";
 
       // Construir la fila
       const fila = `
@@ -508,9 +556,7 @@ export function listarClientes() {
             <td>${c.EstadoPago}</td>
             <td>${padecimientos}</td>
             <td>
-                <button class='btn btn-sm btn-primary' onclick='editarCliente(${JSON.stringify(
-                  c
-                ).replace(/"/g, "&quot;")})'>Editar</button>
+                <button class='btn btn-sm btn-primary' onclick='editarCliente(${c.IdUsuario})'>Editar</button>
                 <button class='btn btn-sm btn-danger' onclick='eliminarCliente(${c.IdUsuario})'>Eliminar</button>
             </td>
         </tr>`;
@@ -519,14 +565,20 @@ export function listarClientes() {
   });
 }
 
-
 /**
  * Función global para editar un cliente.
  * Almacena el cliente en localStorage y redirige a la página de edición.
  */
-window.editarCliente = function (cliente) {
-  localStorage.setItem("clienteEditar", JSON.stringify(cliente));
-  window.location.href = "EditarCliente.html";
+window.editarCliente = function (idUsuario) {
+  $.get(
+    `${API_BASE}/Cliente/obtenerClientePorId/${idUsuario}`,
+    function (clienteCompleto) {
+      localStorage.setItem("clienteEditar", JSON.stringify(clienteCompleto));
+      window.location.href = "EditarCliente.html";
+    }
+  ).fail(function () {
+    alert("❌ Error al obtener los datos completos del cliente.");
+  });
 };
 
 /**
