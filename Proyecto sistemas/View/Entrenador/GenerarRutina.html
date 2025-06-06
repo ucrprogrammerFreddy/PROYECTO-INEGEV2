@@ -155,23 +155,37 @@
     </div>
 
     <section id="rutinaGenerada" style="display: none;">
-      <h2>Rutina sugerida para <span id="nombreCliente">[Selecciona un cliente]</span></h2>
-      <input type="hidden" id="clienteId" />
+         <h6 class="text-muted">Lista de Ejercicios Generados</h6>
+      <div class="table-responsive">
+        <table class="table table-bordered bg-white" id="tablaRutina">
+          <thead class="table-light">
+            <tr>
+              <th>Nombre</th>
+              <th>Descripción</th>
+              <th>Área Muscular</th>
+              <th>Dificultad</th>
+              <th>Área Afectada</th>
+              <th>Repeticiones</th>
+              <th>Comentario</th>
+              <th>Acción</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Aquí se insertarán los ejercicios sugeridos -->
+          </tbody>
+        </table>
+      </div>
 
-      <table id="tablaRutina">
-        <thead>
-          <tr>
-            <th>Ejercicio</th>
-            <th>Área Muscular</th>
-            <th>Series</th>
-            <th>Repeticiones</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-      <button id="guardarRutina">Guardar Rutina</button>
+
+      
     </section>
+
+     <div class="d-flex justify-content-end mt-3">
+        <button class="btn btn-success" id="guardarRutina">
+          <i class="fas fa-save"></i> Guardar Rutina
+        </button>
+      </div>
+
   </div>
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

@@ -52,18 +52,41 @@ namespace PowerVital.Controllers
                 .Select(e => new EjercicioDTO
                 {
                     Nombre = e.Nombre,
-                    AreaMuscular = e.AreaMuscular
+                    AreaMuscular = e.AreaMuscular,
+                     AreaMuscularAfectada = e.AreaMuscularAfectada
                 })
                 .ToListAsync();
 
             // Filtrar los que no afecten padecimientos graves
+
+            // Nuevo filtro inteligente
+
             var ejerciciosSeguros = ejerciciosDisponibles
-                .Where(ej => !padecimientos.Any(p =>
-                    p.Severidad.ToLower() == "grave" &&
-                    !string.IsNullOrEmpty(p.AreaMuscular) &&
-                    p.AreaMuscular.ToLower() == ej.AreaMuscular?.ToLower()))
-                .OrderBy(_ => Guid.NewGuid())
-                .ToList();
+        .Where(ej =>
+        {
+            var zonasEjercicio = (ej.AreaMuscular ?? "")
+                .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                .Select(z => z.Trim().ToLower());
+
+            var afectaZonaGrave = padecimientos.Any(p =>
+            {
+                if (p.Severidad?.ToLower() != "grave" || string.IsNullOrEmpty(p.AreaMuscular))
+                    return false;
+
+                var zonasPadecimiento = p.AreaMuscular
+                    .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                    .Select(z => z.Trim().ToLower());
+
+                // Si alguna zona del padecimiento coincide con alguna zona del ejercicio
+                return zonasPadecimiento.Any(zona => zonasEjercicio.Contains(zona));
+            });
+
+            return !afectaZonaGrave; // Solo incluir si NO afecta zona grave
+        })
+        .ToList();
+
+
+
 
             if (ejerciciosSeguros.Count == 0)
             {
@@ -134,7 +157,26 @@ INSTRUCCIONES:
                 return Ok(new { ejerciciosRecomendados = new List<string> { "Ningún ejercicio es apto para este cliente" } });
             }
 
-            return Ok(new { ejerciciosRecomendados = sugerencias });
+
+            var resultado = ejerciciosSeguros
+       .Where(e => sugerencias.Contains(e.Nombre))
+       .Select(e => new EjercicioIARespuesta
+       {
+           Nombre = e.Nombre,
+           Descripcion = e.Descripcion,
+           AreaMuscular = e.AreaMuscular,
+           Dificultad = e.Dificultad,
+           Repeticiones = e.Repeticiones,
+           AreaAfectada = e.AreaMuscularAfectada ?? e.AreaMuscular // fallback si no hay otra
+       })
+       .ToList();
+
+            return Ok(new { ejerciciosRecomendados = resultado });
+
+
+
+
+
         }
     }
 }
