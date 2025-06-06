@@ -85,7 +85,8 @@
                   <div id="padecimientosList" class="form-check"></div>
                 </div>
                 <div class="d-flex justify-content-center gap-3">
-                  <button type="button" class="btn btn-volver" onclick="window.location.href='ListaClientes.html'">Volver</button>
+                  <button type="button" class="btn btn-volver"
+                    onclick="window.location.href='ListaClientes.html'">Volver</button>
                   <button type="submit" class="btn btn-aceptar">Guardar</button>
                 </div>
               </form>
@@ -107,9 +108,12 @@
     renderAdminLayout();
 
     $(document).ready(() => {
-      cargarEntrenadores();
-      cargarClienteEditar();
+      // ✅ Cargar entrenadores primero, luego cargar cliente
+      cargarEntrenadores(() => {
+        cargarClienteEditar();
+      });
 
+      // ✅ Checkbox de padecimientos
       $("#padecimiento").on("change", function () {
         if (this.checked) {
           $("#contenedorPadecimientos").show();
@@ -120,6 +124,7 @@
       });
     });
   </script>
+
 </body>
 
 </html>
