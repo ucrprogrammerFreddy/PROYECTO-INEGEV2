@@ -51,7 +51,7 @@ namespace PowerVital.Controllers
 
         // ✅ GET: api/cliente/obtenerClientePorId/{id}
         [HttpGet("obtenerClientePorId/{id}")]
-        public async Task<ActionResult<EditarClienteDto>> GetCliente(int id)
+        public async Task<ActionResult<object>> GetCliente(int id)
         {
             var cliente = await _context.Clientes
                 .Include(c => c.Entrenador)
@@ -62,7 +62,7 @@ namespace PowerVital.Controllers
             if (cliente == null)
                 return NotFound(new { mensaje = "Cliente no encontrado" });
 
-            var dto = new EditarClienteDto
+            var dto = new
             {
                 IdUsuario = cliente.IdUsuario,
                 Nombre = cliente.Nombre,
@@ -76,9 +76,12 @@ namespace PowerVital.Controllers
                 EstadoPago = cliente.EstadoPago,
                 EntrenadorId = cliente.EntrenadorId,
                 NombreEntrenador = cliente.Entrenador != null ? cliente.Entrenador.Nombre : "-",
-                Padecimientos = cliente.PadecimientosClientes != null
-                    ? cliente.PadecimientosClientes.Select(pc => $"{pc.Padecimiento.Nombre} ({pc.Severidad})").ToList()
-                    : new List<string>()
+                PadecimientosClientes = cliente.PadecimientosClientes
+                    .Select(pc => new
+                    {
+                        IdPadecimiento = pc.IdPadecimiento,
+                        Severidad = pc.Severidad
+                    }).ToList()
             };
 
             return Ok(dto);

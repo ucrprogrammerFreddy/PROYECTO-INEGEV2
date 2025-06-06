@@ -10,6 +10,8 @@ using PowerVital.DTO; // 👈 Esto importa el DTO necesario
 
 namespace PowerVital.Controllers
 {
+
+
     [ApiController]
     [Route("api/[controller]")]
     public class IAEjerciciosController : ControllerBase
@@ -25,10 +27,50 @@ namespace PowerVital.Controllers
             _context = context;
         }
 
+
+
+        private string NormalizarZona(string zona)
+        {
+            if (string.IsNullOrWhiteSpace(zona))
+                return "";
+
+            zona = zona.ToLower().Trim();
+
+            if (zona == "columna vertebral")
+                return "columna";
+            if (zona == "core")
+                return "abdomen";
+            if (zona == "bíceps")
+                return "biceps";
+            if (zona == "tríceps")
+                return "triceps";
+
+            return zona;
+        }
+
+
+        private List<string> ObtenerZonasAfectadas(List<PadecimientoIADTO> padecimientos)
+        {
+            return padecimientos
+                .SelectMany(p => (p.AreaMuscular ?? "")
+                    .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                    .Select(z => NormalizarZona(z)))
+                .Distinct()
+                .ToList();
+        }
+
+        private List<string> ObtenerTodasZonas(List<EjercicioDTO> ejerciciosDisponibles)
+        {
+            return ejerciciosDisponibles
+                .SelectMany(e => (e.AreaMuscularAfectada ?? e.AreaMuscular ?? "")
+                    .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                    .Select(z => NormalizarZona(z)))
+                .Distinct()
+                .ToList();
+        }
         [HttpPost("recomendar")]
         public async Task<IActionResult> Recomendar([FromBody] RecomendacionIARequest request)
         {
-            // Obtener datos reales del cliente
             var cliente = await _context.Clientes
                 .Include(c => c.PadecimientosClientes)
                     .ThenInclude(pc => pc.Padecimiento)
@@ -37,7 +79,6 @@ namespace PowerVital.Controllers
             if (cliente == null)
                 return NotFound("Cliente no encontrado");
 
-            // Obtener lista real de padecimientos
             var padecimientos = cliente.PadecimientosClientes
                 .Select(pc => new PadecimientoIADTO
                 {
@@ -47,80 +88,149 @@ namespace PowerVital.Controllers
                 })
                 .ToList();
 
-            // Obtener ejercicios desde la BD
             var ejerciciosDisponibles = await _context.Ejercicios
                 .Select(e => new EjercicioDTO
                 {
                     Nombre = e.Nombre,
+                    Descripcion = e.Descripcion,
                     AreaMuscular = e.AreaMuscular,
-                     AreaMuscularAfectada = e.AreaMuscularAfectada
+                    AreaMuscularAfectada = e.AreaMuscularAfectada,
+                    Dificultad = e.Dificultad,
+                    Repeticiones = e.Repeticiones
                 })
                 .ToListAsync();
 
-            // Filtrar los que no afecten padecimientos graves
-
-            // Nuevo filtro inteligente
-
             var ejerciciosSeguros = ejerciciosDisponibles
-        .Where(ej =>
-        {
-            var zonasEjercicio = (ej.AreaMuscular ?? "")
-                .Split(',', StringSplitOptions.RemoveEmptyEntries)
-                .Select(z => z.Trim().ToLower());
+                .Where(ej =>
+                {
+                    var zonasEjercicio = (ej.AreaMuscularAfectada ?? ej.AreaMuscular ?? "")
+                        .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                        .Select(z => NormalizarZona(z));
 
-            var afectaZonaGrave = padecimientos.Any(p =>
-            {
-                if (p.Severidad?.ToLower() != "grave" || string.IsNullOrEmpty(p.AreaMuscular))
-                    return false;
+                    bool afectaZonaGrave = zonasEjercicio.Any(zonaEj =>
+                        padecimientos.Any(p =>
+                            string.Equals(p.Severidad, "grave", StringComparison.OrdinalIgnoreCase) &&
+                            !string.IsNullOrEmpty(p.AreaMuscular) &&
+                            p.AreaMuscular
+                                .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                                .Select(z => NormalizarZona(z))
+                                .Contains(zonaEj)
+                        )
+                    );
 
-                var zonasPadecimiento = p.AreaMuscular
-                    .Split(',', StringSplitOptions.RemoveEmptyEntries)
-                    .Select(z => z.Trim().ToLower());
+                    bool afectaZonaModeradoLeve = zonasEjercicio.Any(zonaEj =>
+                        padecimientos.Any(p =>
+                            (string.Equals(p.Severidad, "moderado", StringComparison.OrdinalIgnoreCase) ||
+                             string.Equals(p.Severidad, "leve", StringComparison.OrdinalIgnoreCase)) &&
+                            !string.IsNullOrEmpty(p.AreaMuscular) &&
+                            p.AreaMuscular
+                                .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                                .Select(z => NormalizarZona(z))
+                                .Contains(zonaEj)
+                        )
+                    );
 
-                // Si alguna zona del padecimiento coincide con alguna zona del ejercicio
-                return zonasPadecimiento.Any(zona => zonasEjercicio.Contains(zona));
-            });
+                    if (padecimientos.Count == 0)
+                    {
+                        return true;
+                    }
+                    else if (afectaZonaGrave)
+                    {
+                        return string.Equals(ej.Dificultad, "baja", StringComparison.OrdinalIgnoreCase);
+                    }
+                    else if (afectaZonaModeradoLeve)
+                    {
+                        return ej.Dificultad != null &&
+                               (string.Equals(ej.Dificultad, "baja", StringComparison.OrdinalIgnoreCase) ||
+                                string.Equals(ej.Dificultad, "media", StringComparison.OrdinalIgnoreCase));
+                    }
+                    else
+                    {
+                        return true;
+                    }
+                })
+                .ToList();
 
-            return !afectaZonaGrave; // Solo incluir si NO afecta zona grave
-        })
-        .ToList();
-
-
-
+            Console.WriteLine($"Ejercicios seguros: {ejerciciosSeguros.Count}");
+            foreach (var e in ejerciciosSeguros)
+                Console.WriteLine($"- {e.Nombre} ({e.AreaMuscular})");
 
             if (ejerciciosSeguros.Count == 0)
             {
                 return Ok(new { ejerciciosRecomendados = new List<string> { "Ningún ejercicio es apto para este cliente" } });
             }
 
+            var zonasAfectadas = ObtenerZonasAfectadas(padecimientos);
+            var zonasNoAfectadas = ObtenerTodasZonas(ejerciciosDisponibles)
+                .Where(z => !zonasAfectadas.Contains(z))
+                .ToList();
+
             var prompt = $@"Eres un experto en salud y entrenamiento físico.
-Debes recomendar ejercicios seguros para el cliente {cliente.Nombre} según sus padecimientos y severidad.
+Debes recomendar ejercicios seguros para el cliente {request.NombreCliente} según sus padecimientos y severidad.";
 
-Padecimientos del cliente:";
-            foreach (var p in padecimientos)
-                prompt += $"\n- {p.Nombre} (Área: {p.AreaMuscular}, Severidad: {p.Severidad})";
+            if (padecimientos.Count == 0)
+            {
+                prompt += "\n\nEl cliente NO TIENE padecimientos.";
+            }
+            else
+            {
+                prompt += "\n\nPadecimientos del cliente:";
+                foreach (var p in padecimientos)
+                    prompt += $"\n- {p.Nombre} (Área: {p.AreaMuscular}, Severidad: {p.Severidad})";
 
-            prompt += "\n\nEjercicios disponibles en la base de datos (NO inventes nuevos):";
-            foreach (var e in ejerciciosSeguros)
-                prompt += $"\n- {e.Nombre} ({e.AreaMuscular})";
+                prompt += "\n\nÁreas musculares NO afectadas, donde sí puede recomendar ejercicios:";
+                foreach (var z in zonasNoAfectadas)
+                    prompt += $"\n- {z}";
+            }
 
+            // 🚀 BLOQUE OPTIMIZADO → agrupado por área
+            prompt += "\n\nEjercicios disponibles (agrupados por área, NO inventes nuevos):";
+
+            var ejerciciosPorArea = ejerciciosSeguros
+                .GroupBy(e => NormalizarZona(e.AreaMuscular))
+                .OrderBy(g => g.Key);
+
+            foreach (var grupo in ejerciciosPorArea)
+            {
+                var nombres = grupo.Select(e => e.Nombre).Distinct().ToList();
+                prompt += $"\n{grupo.Key.ToUpper()}: {string.Join(", ", nombres)}";
+            }
+
+            // 🚀 INSTRUCCIONES PRO
             prompt += @"
 
 INSTRUCCIONES:
-1. Selecciona solo ejercicios de la lista.
-2. Obten los padecimientos del cliente y analizalos.
-3. si el cliente no tiene padecimientos recomienda 3 ejercicios (obligatorio) por área muscular .
-4. Si hay menos de 3 ejercicios aptos, sugiere solo los posibles.
-5. Si el padecimiento es leve se puede considerar que haga el ejercicio.
-6. Evita contradicciones.
-7. Si el cliente no puede realizar ningun ejercicio por su padecimiento y grado de severidad , responde exactamente: 'Ningún ejercicio es apto para este cliente'.
-8. Devuelve solo los nombres, separados por salto de línea, sin texto adicional.";
+1. Devuelve los ejercicios AGRUPADOS POR ÁREA MUSCULAR. Ejemplo:
 
+PECHO:
+- Press banca plano
+- Aperturas con mancuernas
+
+ESPALDA:
+- Remo
+- Dominadas
+
+2. Si alguna de las áreas musculares NO afectadas NO tiene ejercicios, igualmente incluye el encabezado del área y debajo escribe: 'Sin ejercicios recomendables'.
+
+3. Si el cliente no tiene padecimientos, recomienda al menos 2 ejercicios por cada área disponible.
+
+4. Si el cliente sí tiene padecimientos, sugiere ejercicios seguros agrupados por área (al menos 1-2 por área permitida).
+
+5. No inventes ejercicios nuevos.
+
+6. Si el cliente no puede realizar ningún ejercicio, responde exactamente: 'Ningún ejercicio es apto para este cliente'.
+";
+
+            Console.WriteLine("======== PROMPT ENVIADO A OPENAI ========");
+            Console.WriteLine(prompt);
+            Console.WriteLine("========================================");
+
+            // 🚀 MAX TOKENS = 2000
             var requestBody = new
             {
                 model = "gpt-3.5-turbo",
                 messages = new[] { new { role = "user", content = prompt } },
-                max_tokens = 150
+                max_tokens = 2000
             };
 
             var json = JsonSerializer.Serialize(requestBody);
@@ -130,6 +240,7 @@ INSTRUCCIONES:
             _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {_config["OpenAI:ApiKey"]}");
 
             var response = await _httpClient.PostAsync("https://api.openai.com/v1/chat/completions", content);
+
             if (!response.IsSuccessStatusCode)
                 return StatusCode((int)response.StatusCode, "Error al consultar OpenAI");
 
@@ -140,16 +251,32 @@ INSTRUCCIONES:
                 .GetProperty("content")
                 .GetString();
 
-            if (raw.Trim().ToLower().Contains("ningún ejercicio"))
+            Console.WriteLine("======== RAW RESPONSE DE OPENAI ========");
+            Console.WriteLine(raw);
+            Console.WriteLine("=======================================");
+
+            if (raw.Contains("Ningún ejercicio es apto para este cliente", StringComparison.OrdinalIgnoreCase))
             {
                 return Ok(new { ejerciciosRecomendados = new List<string> { "Ningún ejercicio es apto para este cliente" } });
             }
 
             var sugerencias = raw.Split('\n', StringSplitOptions.RemoveEmptyEntries)
-                .Select(line => line.TrimStart('-', '.', ' ', '"'))
+                .Select(line =>
+                {
+                    var match = System.Text.RegularExpressions.Regex.Match(line, @"\d+\.\s*(.*)");
+                    string nombre = match.Success ? match.Groups[1].Value.Trim() : line.TrimStart('-', '.', ' ', '"').Trim();
+
+                    int parenIndex = nombre.LastIndexOf(" (");
+                    if (parenIndex > 0)
+                    {
+                        nombre = nombre.Substring(0, parenIndex).Trim();
+                    }
+
+                    return nombre;
+                })
                 .Where(nombre => ejerciciosSeguros.Any(e => e.Nombre.Equals(nombre, StringComparison.OrdinalIgnoreCase)))
                 .Distinct()
-                .Take(3)
+                .Take(50)
                 .ToList();
 
             if (sugerencias.Count == 0)
@@ -157,26 +284,22 @@ INSTRUCCIONES:
                 return Ok(new { ejerciciosRecomendados = new List<string> { "Ningún ejercicio es apto para este cliente" } });
             }
 
-
             var resultado = ejerciciosSeguros
-       .Where(e => sugerencias.Contains(e.Nombre))
-       .Select(e => new EjercicioIARespuesta
-       {
-           Nombre = e.Nombre,
-           Descripcion = e.Descripcion,
-           AreaMuscular = e.AreaMuscular,
-           Dificultad = e.Dificultad,
-           Repeticiones = e.Repeticiones,
-           AreaAfectada = e.AreaMuscularAfectada ?? e.AreaMuscular // fallback si no hay otra
-       })
-       .ToList();
+                .Where(e => sugerencias.Contains(e.Nombre))
+                .Select(e => new EjercicioIARespuesta
+                {
+                    Nombre = e.Nombre,
+                    Descripcion = e.Descripcion,
+                    AreaMuscular = e.AreaMuscular,
+                    Dificultad = e.Dificultad,
+                    Repeticiones = e.Repeticiones,
+                    AreaAfectada = e.AreaMuscularAfectada ?? e.AreaMuscular
+                })
+                .ToList();
 
             return Ok(new { ejerciciosRecomendados = resultado });
-
-
-
-
-
         }
+
+
     }
 }
