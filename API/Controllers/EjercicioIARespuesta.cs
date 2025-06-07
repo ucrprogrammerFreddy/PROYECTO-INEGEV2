@@ -8,5 +8,6 @@
         public string Dificultad { get; set; }
         public int Repeticiones { get; set; }
         public string AreaAfectada { get; set; }
+        public string GuiaEjercicio { get; internal set; }
     }
 }

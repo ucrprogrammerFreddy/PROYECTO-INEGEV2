@@ -142,7 +142,6 @@ function generarRutina(clienteId) {
     },
   });
 }
-
 function mostrarTablaRutina() {
   const $tbody = $("#tablaRutina tbody");
   $tbody.empty();
@@ -150,7 +149,7 @@ function mostrarTablaRutina() {
   if (!rutinaSugerida || rutinaSugerida.length === 0) {
     $tbody.append(`
       <tr>
-        <td colspan="8" class="text-center text-muted">
+        <td colspan="9" class="text-center text-muted">
           No hay ejercicios en la rutina actual.
         </td>
       </tr>
@@ -159,6 +158,10 @@ function mostrarTablaRutina() {
   }
 
   rutinaSugerida.forEach((ej, index) => {
+    const guia = ej.GuiaEjercicio
+      ? `<a href="${escapeHtml(ej.GuiaEjercicio)}" target="_blank">Ver Guía</a>`
+      : "Sin guía";
+
     $tbody.append(`
       <tr>
         <td>${escapeHtml(ej.Nombre)}</td>
@@ -167,8 +170,11 @@ function mostrarTablaRutina() {
         <td>${escapeHtml(ej.Dificultad)}</td>
         <td>${escapeHtml(ej.AreaAfectada)}</td>
         <td>
-          <input type="number" class="form-control reps-input" value="12" min="1" data-index="${index}">
+          <input type="number" class="form-control reps-input" value="${
+            escapeHtml(ej.Repeticiones) || 12
+          }" min="1" data-index="${index}">
         </td>
+        <td>${guia}</td>
         <td>
           <input type="text" class="form-control comentario-input" placeholder="Comentario opcional" data-index="${index}">
         </td>
@@ -187,8 +193,8 @@ function mostrarTablaRutina() {
 // ===============================
 
 function escapeHtml(text) {
-  if (!text) return "";
-  return text
+  if (text === null || text === undefined) return "";
+  return String(text)
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
@@ -332,4 +338,3 @@ function mostrarRutinaAgrupada() {
     `);
   }
 }
-

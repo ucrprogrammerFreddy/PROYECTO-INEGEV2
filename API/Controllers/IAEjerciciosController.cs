@@ -68,6 +68,9 @@ namespace PowerVital.Controllers
                 .Distinct()
                 .ToList();
         }
+
+
+
         [HttpPost("recomendar")]
         public async Task<IActionResult> Recomendar([FromBody] RecomendacionIARequest request)
         {
@@ -88,6 +91,7 @@ namespace PowerVital.Controllers
                 })
                 .ToList();
 
+            // 🚀 CARGAMOS TAMBIÉN LA GUIA
             var ejerciciosDisponibles = await _context.Ejercicios
                 .Select(e => new EjercicioDTO
                 {
@@ -96,7 +100,8 @@ namespace PowerVital.Controllers
                     AreaMuscular = e.AreaMuscular,
                     AreaMuscularAfectada = e.AreaMuscularAfectada,
                     Dificultad = e.Dificultad,
-                    Repeticiones = e.Repeticiones
+                    Repeticiones = e.Repeticiones,
+                    GuiaEjercicio = e.GuiaEjercicio // 🚀 AQUI ESTÁ EL CAMPO QUE FALTABA
                 })
                 .ToListAsync();
 
@@ -183,7 +188,6 @@ Debes recomendar ejercicios seguros para el cliente {request.NombreCliente} seg�
                     prompt += $"\n- {z}";
             }
 
-            // 🚀 BLOQUE OPTIMIZADO → agrupado por área
             prompt += "\n\nEjercicios disponibles (agrupados por área, NO inventes nuevos):";
 
             var ejerciciosPorArea = ejerciciosSeguros
@@ -196,8 +200,8 @@ Debes recomendar ejercicios seguros para el cliente {request.NombreCliente} seg�
                 prompt += $"\n{grupo.Key.ToUpper()}: {string.Join(", ", nombres)}";
             }
 
-            // 🚀 INSTRUCCIONES PRO
             prompt += @"
+
 
 INSTRUCCIONES:
 1. Devuelve los ejercicios AGRUPADOS POR ÁREA MUSCULAR. Ejemplo:
@@ -225,7 +229,6 @@ ESPALDA:
             Console.WriteLine(prompt);
             Console.WriteLine("========================================");
 
-            // 🚀 MAX TOKENS = 2000
             var requestBody = new
             {
                 model = "gpt-3.5-turbo",
@@ -293,13 +296,13 @@ ESPALDA:
                     AreaMuscular = e.AreaMuscular,
                     Dificultad = e.Dificultad,
                     Repeticiones = e.Repeticiones,
-                    AreaAfectada = e.AreaMuscularAfectada ?? e.AreaMuscular
+                    AreaAfectada = e.AreaMuscularAfectada ?? e.AreaMuscular,
+                    GuiaEjercicio = e.GuiaEjercicio // 🚀 AQUI ESTA EL CAMPO QUE FALTABA
                 })
                 .ToList();
 
             return Ok(new { ejerciciosRecomendados = resultado });
         }
-
 
     }
 }
