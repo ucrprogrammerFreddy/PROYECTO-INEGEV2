@@ -70,7 +70,8 @@ function cargarInfoCliente(clienteId) {
     $("#clienteNombre").text(cliente.Nombre);
     $("#clientePeso").text(cliente.Peso + " kg");
     $("#clienteAltura").text(cliente.Altura + " cm");
-    $("#clienteEntrenador").text(cliente.Entrenador?.Nombre || "-");
+   $("#clienteEntrenador").text(cliente.NombreEntrenador || "-");
+
 
     $.get(
       `${API_PADECIMIENTO_CLIENTE}/obtenerPadecimientos/${clienteId}`,
@@ -337,4 +338,9 @@ function mostrarRutinaAgrupada() {
       </div>
     `);
   }
+}
+// 🗑 ELIMINAR EJERCICIO
+function eliminarEjercicio(index) {
+  rutinaSugerida.splice(index, 1);
+  mostrarTablaRutina();
 }
