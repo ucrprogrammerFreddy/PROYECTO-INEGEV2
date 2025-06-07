@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -10,21 +11,17 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
   <!-- Hoja de estilos del administrador (compartida para tarjetas unificadas) -->
-  <link rel="stylesheet" href="/Proyecto sistemas/Complementos/css/AdministradorEstilos.css" />
+  <link rel="stylesheet" href="../Ejercicio/css/indexadmin.css" />
 </head>
 
 <body>
-  <!-- Header con logo centrado -->
-  <header class="header">
-    <div class="header-content">
-      <img src="../../Complementos/img/logoof.png" alt="Logo" class="header-logo" />
-    </div>
-  </header>
+
+  <!-- Header, menú lateral y footer los genera MenuEntren.js -->
 
   <!-- Contenido principal -->
   <main class="contenedor-main" id="mainContent">
     <div class="card-grid">
-      
+
       <a href="../../View/Ejercicio/editarEjercicio.html" class="custom-card">
         <div class="icon-section bg-light-brown icon-brown">
           <i class="fas fa-dumbbell"></i>
@@ -53,9 +50,10 @@
   </main>
 
   <!-- Script del menú lateral -->
-  <script type="module">
-    import { renderTrainerLayout } from "/Proyecto sistemas/Complementos/Components/MenuEntren.js";
-    renderTrainerLayout();
-  </script>
+ <!-- Script del menú lateral -->
+<script type="module" src="../../Complementos/Components/MenuEntren.js"></script>
+
+
 </body>
+
 </html>

@@ -113,7 +113,7 @@ export function renderAdminLayout() {
               <li><a href="ListaClientes.html">Clientes</a></li>
             </ul>
           </li>
-          <li><a href="../../View/Ejercicio/editarEjercicio.html"><i class="fas fa-dumbbell"></i> Ejercicios</a></li>
+          <li><a href="../../View/Administrador/ListaEjercicios.html"><i class="fas fa-dumbbell"></i> Ejercicios</a></li>
           <li><a href="../../View/Login/Login.html"><i class="fas fa-sign-out-alt"></i> Salir</a></li>
         </ul>
       </nav>

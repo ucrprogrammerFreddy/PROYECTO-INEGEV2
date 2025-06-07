@@ -165,24 +165,29 @@ document.addEventListener("DOMContentLoaded", function () {
 
       tbody.innerHTML = "";
       lista.forEach((ej) => {
-        tbody.insertAdjacentHTML(
-          "beforeend",
-          `
-          <tr>
-            <td>${ej.Nombre}</td>
-            <td>${ej.Descripcion}</td>
-            <td>${ej.Repeticiones}</td>
-            <td><a href="${ej.GuiaEjercicio}" target="_blank">Ver video</a></td>
-            <td>${ej.AreaMuscular}</td>
-            <td>${ej.AreaMuscularAfectada}</td>
-            <td>${ej.Dificultad}</td>
-            <td>
-              <button class="btn btn-sm btn-primary btn-editar" data-id="${ej.IdEjercicio}"><i class="fas fa-edit"></i> Editar</button>
-              <button class="btn btn-sm btn-danger btn-borrar" data-id="${ej.IdEjercicio}"><i class="fas fa-trash-alt"></i> Borrar</button>
-            </td>
-          </tr>
-          `
-        );
+       tbody.insertAdjacentHTML(
+  "beforeend",
+  `
+  <tr>
+    <td>${ej.Nombre}</td>
+    <td>${ej.Descripcion}</td>
+    <td>${ej.Repeticiones}</td>
+    <td><a href="${ej.GuiaEjercicio}" target="_blank">Ver video</a></td>
+    <td>${ej.AreaMuscular}</td>
+    <td>${ej.AreaMuscularAfectada}</td>
+    <td>${ej.Dificultad}</td>
+    <td>
+      <button class="btn btn-warning btn-sm btn-editar" data-id="${ej.IdEjercicio}">
+        <i class="fas fa-pen-to-square"></i>
+      </button>
+      <button class="btn btn-danger btn-sm btn-borrar" data-id="${ej.IdEjercicio}">
+        <i class="fas fa-trash"></i>
+      </button>
+    </td>
+  </tr>
+  `
+);
+
       });
     } catch (err) {
       mostrarMensaje("Error al cargar ejercicios: " + err.message, "danger");

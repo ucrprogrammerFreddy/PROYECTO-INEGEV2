@@ -1,3 +1,4 @@
+/* -------------------- RESET -------------------- */
 * {
   margin: 0;
   padding: 0;
@@ -17,7 +18,7 @@ body {
   position: fixed;
   top: 0;
   width: 100%;
-  z-index: 1000;
+  z-index: 1200;
 }
 
 .header-content {
@@ -41,7 +42,7 @@ body {
   color: #4f316d;
 }
 
-/* -------------------- SIDEBAR -------------------- */
+/* -------------------- MENU LATERAL -------------------- */
 .slide {
   position: fixed;
   top: 0;
@@ -51,7 +52,7 @@ body {
   background-color: #316163;
   transform: translateX(-100%);
   transition: transform 0.3s ease;
-  z-index: 1100;
+  z-index: 1300;
   color: white;
   padding-top: 70px;
 }
@@ -81,10 +82,9 @@ body {
   cursor: pointer;
 }
 
-/* -------------------- MENÚ PRINCIPAL -------------------- */
 .slide ul {
   list-style: none;
-  padding:1px;
+  padding: 1px;
   font-size: 20px;
 }
 
@@ -109,36 +109,20 @@ body {
   border-left: 4px solid white;
 }
 
-.caret {
-  font-size: 12px;
-  margin-left: 5px;
-}
-
-/* -------------------- SUBMENÚ -------------------- */
-.submenu {
+/* -------------------- OVERLAY -------------------- */
+#menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 1250;
   display: none;
-  flex-direction: column;
-  background-color: #316163;
 }
 
-.submenu.visible {
-  display: flex;
-}
-
-
-
-.submenu li a {
-  padding: 10px 35px;
-  font-size: 14px;
-  color: #e4f4f3;
-}
-
-.submenu li a:hover,
-.submenu li a.active {
-  background-color: #b66447;
-  color: white;
-  font-weight: bold;
-  border-left: 4px solid white;
+#menu-overlay.visible {
+  display: block;
 }
 
 /* -------------------- CONTENIDO PRINCIPAL -------------------- */
@@ -152,38 +136,36 @@ body {
 }
 
 /* -------------------- FOOTER -------------------- */
- footer {
-    background-color: #022227;
-    color: #ffffff;
-    padding: 0.5rem;
-    text-align: center;
-    width: 100%;
-    /* Si quieres el footer fijo abajo, descomenta las siguientes líneas: */
-    /* position: absolute;
-    bottom: 0; */
+.footer {
+  background-color: #022227;
+  color: #ffffff;
+  padding: 0.5rem;
+  text-align: center;
+  width: 100%;
 }
 
-footer img {
-    width: 50px;        /* El tamaño de los íconos */
-    height: auto;
-    margin: 0 10px;
-    justify-content: center;
-    filter: grayscale(100%);
-    transition: filter 0.3s ease;
+.footer img {
+  width: 50px;
+  height: auto;
+  margin: 0 10px;
+  filter: grayscale(100%);
+  transition: filter 0.3s ease;
 }
 
-footer img:hover {
-    filter: grayscale(0%);
+.footer img:hover {
+  filter: grayscale(0%);
 }
 
-footer p {
-    color: #ffffff;
+.footer p {
+  color: #ffffff;
 }
-/* -------------------- TARJETAS -------------------- */
+
+/* -------------------- CARD GRID (para Panel Entrenador) -------------------- */
 .card-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 1rem;
+  padding: 20px 0;
 }
 
 .custom-card {
@@ -209,13 +191,12 @@ footer p {
 }
 
 .bg-light-brown { background-color: #d3a87c; }
-.bg-light-green { background-color: #a3d3a1; }
 .bg-light-yellow { background-color: #f7e99d; }
-.bg-light-pink { background-color: #f7c7db; }
+.bg-light-pink   { background-color: #f7c7db; }
 
-.icon-brown { color: #5a3e2b; }
-.icon-green { color: #275d27; }
-.icon-olive { color: #6b6b2d; }
+.icon-brown  { color: #5a3e2b; }
+.icon-olive  { color: #6b6b2d; }
+.icon-red    { color: #a10000; }
 
 /* -------------------- RESPONSIVE -------------------- */
 @media (max-width: 768px) {

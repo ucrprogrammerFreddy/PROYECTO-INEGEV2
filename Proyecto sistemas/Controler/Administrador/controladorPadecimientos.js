@@ -1,7 +1,7 @@
-// ✅ Controlador actualizado SIN severidad en el modelo de Padecimiento
 const API_URL = "https://localhost:7086/api/padecimiento";
 
 let filaEnEdicion = null;
+let datosOriginales = {}; // Para cancelar
 
 document.addEventListener("DOMContentLoaded", () => {
   const accion = document.body.dataset.accion;
@@ -16,9 +16,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   switch (accion) {
     case "listar":
-      listarPadecimientos();
-      buscarPorId();
-      break;
+  listarPadecimientos();
+  buscarPadecimientosAvanzado();
+  break;
+
     case "agregar":
       configurarFormularioAgregar();
       break;
@@ -45,17 +46,17 @@ function listarPadecimientos() {
 
       lista.forEach(p => {
         const fila = document.createElement("tr");
-        fila.classList.add();
+        fila.setAttribute("data-id", p.IdPadecimiento); // 🔥 Ahora sí tiene data-id
         fila.innerHTML = `
           <td>${p.IdPadecimiento}</td>
           <td>${p.Nombre}</td>
           <td style="max-width:500px;">${p.Descripcion}</td>
           <td>${p.AreaMuscularAfectada}</td>
           <td>
-            <button class="btn btn-warning  btn-editar" data-id="${p.IdPadecimiento}">
+            <button class="btn btn-warning btn-editar" data-id="${p.IdPadecimiento}">
               <i class="fas fa-pen-to-square"></i>
             </button>
-            <button class="btn btn-danger " onclick="eliminarPadecimiento(${p.IdPadecimiento})">
+            <button class="btn btn-danger" onclick="eliminarPadecimiento(${p.IdPadecimiento})">
               <i class="fas fa-trash"></i>
             </button>
           </td>
@@ -65,7 +66,6 @@ function listarPadecimientos() {
     })
     .catch(err => console.error("❌ Error al listar:", err.message));
 }
-
 
 document.addEventListener("click", function (e) {
   if (e.target.closest(".btn-editar")) {
@@ -85,16 +85,25 @@ function activarEdicionEnFila(id) {
     .then(p => {
       const fila = document.querySelector(`button[data-id="${id}"]`).closest("tr");
       filaEnEdicion = fila;
+
+      // 🔥 Guardamos los valores originales para cancelar
+      datosOriginales = {
+        id: p.IdPadecimiento,
+        nombre: p.Nombre,
+        descripcion: p.Descripcion,
+        area: p.AreaMuscularAfectada
+      };
+
       fila.innerHTML = `
-        <td>${p.idPadecimiento}</td>
+        <td>${p.IdPadecimiento}</td>
         <td><input class="form-control form-control-sm" type="text" value="${p.Nombre}" id="edit-nombre-${id}"></td>
         <td><input class="form-control form-control-sm" type="text" value="${p.Descripcion}" id="edit-descripcion-${id}"></td>
         <td><input class="form-control form-control-sm" type="text" value="${p.AreaMuscularAfectada}" id="edit-area-${id}"></td>
         <td>
-          <button class="btn btn-success btn-sm" onclick="guardarEdicion(${id})">
+          <button class="btn btn-success btn-sm" onclick="guardarEdicionPadecimiento(${id})">
             <i class="bi bi-check-circle-fill"></i>
           </button>
-          <button class="btn btn-secondary btn-sm" onclick="cancelarEdicion(${id})">
+          <button class="btn btn-secondary btn-sm" onclick="cancelarEdicionPadecimiento(${id})">
             <i class="bi bi-x-circle-fill"></i>
           </button>
         </td>
@@ -102,26 +111,16 @@ function activarEdicionEnFila(id) {
     });
 }
 
-function cancelarEdicion(id) {
-  filaEnEdicion = null;
-  actualizarFilaVisual(id);
-}
-
-function guardarEdicion(id) {
-  const nombre = document.getElementById(`edit-nombre-${id}`).value.trim();
-  const descripcion = document.getElementById(`edit-descripcion-${id}`).value.trim();
-  const areaMuscularAfectada = document.getElementById(`edit-area-${id}`).value.trim();
-
-  if (!nombre || !descripcion || !areaMuscularAfectada) {
-    mostrarToast("⚠️ Todos los campos son obligatorios", "warning");
-    return;
-  }
+function guardarEdicionPadecimiento(id) {
+  const nuevoNombre = document.getElementById(`edit-nombre-${id}`).value.trim();
+  const nuevaDescripcion = document.getElementById(`edit-descripcion-${id}`).value.trim();
+  const nuevaArea = document.getElementById(`edit-area-${id}`).value.trim();
 
   const dto = {
     idPadecimiento: parseInt(id),
-    nombre,
-    descripcion,
-    areaMuscularAfectada
+    nombre: nuevoNombre,
+    descripcion: nuevaDescripcion,
+    areaMuscularAfectada: nuevaArea
   };
 
   fetch(`${API_URL}/editarPadecimiento/${id}`, {
@@ -133,7 +132,7 @@ function guardarEdicion(id) {
       if (!res.ok) throw new Error("No se pudo guardar la edición.");
       mostrarToast("✅ Padecimiento actualizado correctamente.", "success");
       filaEnEdicion = null;
-      actualizarFilaVisual(id);
+      listarPadecimientos(); // 🔥 Recargamos la tabla para reflejar cambios
     })
     .catch(err => {
       console.error("Error:", err);
@@ -141,33 +140,31 @@ function guardarEdicion(id) {
     });
 }
 
-function actualizarFilaVisual(id) {
-  fetch(`${API_URL}/obtenerPadecimientoPorId/${id}`)
-    .then(res => res.json())
-    .then(p => {
-      const fila = document.querySelector(`button[data-id="${id}"]`)?.closest("tr");
-      if (!fila) return;
-      fila.innerHTML = `
-        <td>${p.IdPadecimiento}</td>
-        <td>${p.Nombre}</td>
-        <td>${p.Descripcion}</td>
-        <td>${p.AreaMuscularAfectada}</td>
-        <td>
-          <button class="btn btn-warning btn-sm btn-editar" data-id="${p.IdPadecimiento}">
-            <i class="bi bi-pencil-fill"></i>
-          </button>
-          <button class="btn btn-danger btn-sm" onclick="eliminarPadecimiento(${p.IdPadecimiento})">
-            <i class="bi bi-trash-fill"></i>
-          </button>
-        </td>
-      `;
-    });
+function cancelarEdicionPadecimiento(id) {
+  const fila = document.querySelector(`tr[data-id='${id}']`);
+  if (fila) {
+    fila.innerHTML = `
+      <td>${datosOriginales.id}</td>
+      <td>${datosOriginales.nombre}</td>
+      <td>${datosOriginales.descripcion}</td>
+      <td>${datosOriginales.area}</td>
+      <td>
+        <button class="btn btn-warning btn-editar" data-id="${datosOriginales.id}">
+          <i class="fas fa-pen-to-square"></i>
+        </button>
+        <button class="btn btn-danger" onclick="eliminarPadecimiento(${datosOriginales.id})">
+          <i class="fas fa-trash"></i>
+        </button>
+      </td>
+    `;
+    filaEnEdicion = null; // 🔥 Liberamos la edición
+    datosOriginales = {}; // Limpiamos datos
+    mostrarToast("❌ Edición cancelada.", "warning");
+  }
 }
 
 function eliminarPadecimiento(id) {
   if (!confirm("¿Seguro que deseas eliminar este padecimiento?")) return;
-
-  console.log("ID a eliminar:", id); // Agrega esto para ver el valor del ID
 
   fetch(`${API_URL}/eliminarPadecimiento/${id}`, { method: "DELETE" })
     .then(res => {
@@ -180,132 +177,69 @@ function eliminarPadecimiento(id) {
     });
 }
 
-
-function configurarFormularioAgregar() {
-  const form = document.querySelector(".formulario");
-
-  form.addEventListener("submit", async function (e) {
-    e.preventDefault();
-    const dto = obtenerDatosFormulario();
-
-    if (!dto.nombre || !dto.descripcion || !dto.areaMuscularAfectada) {
-      alert("⚠️ Por favor completa todos los campos antes de registrar.");
-      return;
-    }
-
-    try {
-      const res = await fetch(`${API_URL}/crearPadecimiento`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(dto)
-      });
-
-      if (!res.ok) throw new Error("No se pudo registrar.");
-      alert("✅ Padecimiento agregado.");
-      form.reset();
-      window.location.href = "../../View/Administrador/ListaPadecimientos.html";
-    } catch (err) {
-      alert("❌ Error al registrar: " + err.message);
-    }
-  });
-}
-
-function configurarFormularioEditar(id) {
-  const form = document.querySelector(".formulario");
-
-  fetch(`${API_URL}/obtenerPadecimientoPorId/${id}`)
-    .then(res => res.json())
-    .then(p => {
-      document.getElementById("nombre").value = p.nombre;
-      document.getElementById("Descripcion").value = p.descripcion;
-
-      const areas = p.areaMuscularAfectada.split(",");
-      areas.forEach(area => {
-        const checkbox = document.querySelector(`input[name="AreaMuscularAfectada"][value="${area}"]`);
-        if (checkbox) checkbox.checked = true;
-      });
-    });
-
-  form.addEventListener("submit", async function (e) {
-    e.preventDefault();
-    const dto = obtenerDatosFormulario();
-    dto.idPadecimiento = parseInt(id);
-
-    try {
-      const res = await fetch(`${API_URL}/editarPadecimiento/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(dto)
-      });
-
-      if (!res.ok) throw new Error("No se pudo editar.");
-      alert("✅ Padecimiento actualizado.");
-    } catch (err) {
-      alert("❌ Error al editar: " + err.message);
-    }
-  });
-}
-
-function obtenerDatosFormulario() {
-  const nombre = document.getElementById("nombre").value.trim();
-  const descripcion = document.getElementById("Descripcion").value.trim();
-  const areas = Array.from(document.querySelectorAll('input[name="AreaMuscularAfectada"]:checked'))
-    .map(cb => cb.value).join(",");
-
-  return { nombre, descripcion, areaMuscularAfectada: areas };
-}
-
-function buscarPorId() {
-  const input = document.getElementById("inputBuscarId");
+function buscarPadecimientosAvanzado() {
+  const input = document.getElementById("inputBuscar");
   if (!input) return;
 
   input.addEventListener("input", function () {
-    const id = input.value.trim();
+    const texto = input.value.trim().toLowerCase();
 
-    if (id === "") {
+    if (texto === "") {
       listarPadecimientos();
       return;
     }
 
-    if (isNaN(id)) return;
+    fetch(`${API_URL}/listaPadecimientos`)
+      .then(res => res.json())
+      .then(lista => {
+        const resultados = lista.filter(p => {
+          return (
+            p.IdPadecimiento.toString().includes(texto) ||
+            p.Nombre.toLowerCase().includes(texto) ||
+            p.Descripcion.toLowerCase().includes(texto) ||
+            p.AreaMuscularAfectada.toLowerCase().includes(texto)
+          );
+        });
 
-    fetch(`${API_URL}/obtenerPadecimientoPorId/${id}`)
-      .then(res => {
-        if (!res.ok) throw new Error("No encontrado");
-        return res.json();
-      })
-      .then(p => {
         const tbody = document.querySelector("tbody.table-group-divider");
         tbody.innerHTML = "";
 
-        const fila = document.createElement("tr");
-        fila.classList.add("table-primary");
-        fila.innerHTML = `
-          <td>${p.IdPadecimiento}</td>
-          <td>${p.Nombre}</td>
-          <td>${p.Descripcion}</td>
-          <td>${p.AreaMuscularAfectada}</td>
-          <td>
-            <button class="btn btn-warning btn-sm btn-editar" data-id="${p.IdPadecimiento}">
-              <i class="bi bi-pencil-fill"></i>
-            </button>
-            <button class="btn btn-danger btn-sm" onclick="eliminarPadecimiento(${p.IdPadecimiento})">
-              <i class="bi bi-trash-fill"></i>
-            </button>
-          </td>
-        `;
-        tbody.appendChild(fila);
+        if (resultados.length === 0) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="5" class="text-danger">No se encontraron resultados.</td>
+            </tr>
+          `;
+          return;
+        }
+
+        resultados.forEach(p => {
+          const fila = document.createElement("tr");
+          fila.setAttribute("data-id", p.IdPadecimiento);
+          fila.innerHTML = `
+            <td>${p.IdPadecimiento}</td>
+            <td>${p.Nombre}</td>
+            <td>${p.Descripcion}</td>
+            <td>${p.AreaMuscularAfectada}</td>
+            <td>
+              <button class="btn btn-warning btn-sm btn-editar" data-id="${p.IdPadecimiento}">
+                <i class="bi bi-pencil-fill"></i>
+              </button>
+              <button class="btn btn-danger btn-sm" onclick="eliminarPadecimiento(${p.IdPadecimiento})">
+                <i class="bi bi-trash-fill"></i>
+              </button>
+            </td>
+          `;
+          tbody.appendChild(fila);
+        });
       })
-      .catch(() => {
-        const tbody = document.querySelector("tbody.table-group-divider");
-        tbody.innerHTML = `
-          <tr>
-            <td colspan="5" class="text-danger">No se encontró ningún padecimiento con ese ID.</td>
-          </tr>
-        `;
+      .catch(err => {
+        console.error("Error en búsqueda:", err);
       });
   });
 }
+
+
 function mostrarToast(mensaje, tipo = "info") {
   const toastElemento = document.getElementById("liveToast");
   const toastMensaje = document.getElementById("toastMensaje");

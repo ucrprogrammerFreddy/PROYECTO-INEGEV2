@@ -9,24 +9,19 @@
   <link rel="stylesheet" href="css/indexadmin.css" />
   <link rel="stylesheet" href="css/formulario.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-
 </head>
 
 <body>
-  <header class="container-fluid">
-    <div class="header-content">
-      <img src="img/logoof.png" alt="Logo" class="header-logo" />
-      <div class="menu-toggle" id="openMenu">
-        <i class="fas fa-bars"></i>
-      </div>
-    </div>
-  </header>
 
-  <div id="idMenuHambEjercicio"></div>
-  <div class="  container-fluid">
-    <main class="container mt-5">
+  <!-- Header, menú lateral y footer los genera MenuEntren.js -->
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="contenedor-main" id="mainContent">
+    <div class="container mt-5">
       <h2 class="mb-4">Ejercicios registrados</h2>
       <div id="alertPlaceholder"></div>
+
+      <!-- Tabla -->
       <div class="table-responsive mb-2">
         <table class="table table-striped align-middle" id="tablaEjercicios">
           <thead class="table-primary">
@@ -36,7 +31,7 @@
               <th>Repeticiones</th>
               <th>Guía</th>
               <th>Área Muscular</th>
-              <th>Área Muscular Afectada</th> <!-- esta es la columna que te falta -->
+              <th>Área Muscular Afectada</th>
               <th>Dificultad</th>
               <th>Acciones</th>
             </tr>
@@ -47,18 +42,13 @@
         </table>
       </div>
 
-
-      <!-- Modal para editar ejercicio -->
-
-      <!-- Modal para editar ejercicio -->
-      <div class="modal fade" id="modalEditarEjercicio" tabindex="-1" aria-labelledby="modalEditarEjercicioLabel"
-        aria-hidden="true">
+      <!-- Modal Editar Ejercicio -->
+      <div class="modal fade" id="modalEditarEjercicio" tabindex="-1" aria-labelledby="modalEditarEjercicioLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
           <form class="modal-content p-3" id="formEditarEjercicio">
             <div class="modal-header" style="background-color: #316163; color: white;">
               <h5 class="modal-title" id="modalEditarEjercicioLabel">Editar Ejercicio</h5>
-              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                aria-label="Cerrar"></button>
+              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
             </div>
 
             <div class="modal-body">
@@ -109,127 +99,107 @@
                   </select>
                 </div>
 
-                <!-- ✅ Área Muscular Afectada (como checkboxes) -->
+                <!-- ✅ Área Muscular Afectada (Checkboxes) -->
                 <div class="col-12">
                   <label class="form-label">Areas Musculares Afectadas</label>
                   <div id="edit-impedimentos" class="d-flex flex-wrap gap-3 bg-light p-3 rounded">
+
+                    <!-- AQUÍ van todos tus checkboxes (los copié completos de tu código) -->
                     <div class="form-check">
-                      <input class="form-check-input" type="checkbox" name="edit-impedimentos[]" value="Rodillas"
-                        id="impedimento-rodillas">
+                      <input class="form-check-input" type="checkbox" name="edit-impedimentos[]" value="Rodillas" id="impedimento-rodillas">
                       <label class="form-check-label" for="impedimento-rodillas">Rodillas</label>
                     </div>
+
                     <div class="form-check">
-                      <input class="form-check-input" type="checkbox" name="edit-impedimentos[]" value="Tobillos"
-                        id="impedimento-tobillos">
+                      <input class="form-check-input" type="checkbox" name="edit-impedimentos[]" value="Tobillos" id="impedimento-tobillos">
                       <label class="form-check-label" for="impedimento-tobillos">Tobillos</label>
                     </div>
+
                     <div class="form-check">
-                      <input class="form-check-input" type="checkbox" name="edit-impedimentos[]" value="Hombros"
-                        id="impedimento-hombros">
+                      <input class="form-check-input" type="checkbox" name="edit-impedimentos[]" value="Hombros" id="impedimento-hombros">
                       <label class="form-check-label" for="impedimento-hombros">Hombros</label>
                     </div>
+
                     <div class="form-check">
-                      <input class="form-check-input" type="checkbox" name="edit-impedimentos[]" value="Muñecas"
-                        id="impedimento-munecas">
+                      <input class="form-check-input" type="checkbox" name="edit-impedimentos[]" value="Muñecas" id="impedimento-munecas">
                       <label class="form-check-label" for="impedimento-munecas">Muñecas</label>
                     </div>
+
                     <div class="form-check">
-                      <input class="form-check-input" type="checkbox" name="edit-impedimentos[]"
-                        value="Columna vertebral" id="impedimento-columna">
+                      <input class="form-check-input" type="checkbox" name="edit-impedimentos[]" value="Columna vertebral" id="impedimento-columna">
                       <label class="form-check-label" for="impedimento-columna">Columna vertebral</label>
                     </div>
+
                     <div class="form-check">
-                      <input class="form-check-input" type="checkbox" name="edit-impedimentos[]" value="Cadera"
-                        id="impedimento-cadera">
+                      <input class="form-check-input" type="checkbox" name="edit-impedimentos[]" value="Cadera" id="impedimento-cadera">
                       <label class="form-check-label" for="impedimento-cadera">Cadera</label>
                     </div>
+
                     <div class="form-check">
-                      <input class="form-check-input" type="checkbox" name="edit-impedimentos[]" value="Cuello"
-                        id="impedimento-cuello">
+                      <input class="form-check-input" type="checkbox" name="edit-impedimentos[]" value="Cuello" id="impedimento-cuello">
                       <label class="form-check-label" for="impedimento-cuello">Cuello</label>
                     </div>
+
                     <div class="form-check">
-                      <input class="form-check-input" type="checkbox" name="edit-impedimentos[]" value="Hernia"
-                        id="impedimento-hernia">
+                      <input class="form-check-input" type="checkbox" name="edit-impedimentos[]" value="Hernia" id="impedimento-hernia">
                       <label class="form-check-label" for="impedimento-hernia">Hernia</label>
                     </div>
+
                     <div class="form-check">
-                      <input class="form-check-input" type="checkbox" name="edit-impedimentos[]"
-                        value="Debilidad muscular" id="impedimento-debilidad">
+                      <input class="form-check-input" type="checkbox" name="edit-impedimentos[]" value="Debilidad muscular" id="impedimento-debilidad">
                       <label class="form-check-label" for="impedimento-debilidad">Debilidad muscular</label>
                     </div>
+
                     <div class="form-check">
-                      <input class="form-check-input" type="checkbox" name="edit-impedimentos[]"
-                        value="Condición cardíaca" id="impedimento-cardiaca">
+                      <input class="form-check-input" type="checkbox" name="edit-impedimentos[]" value="Condición cardíaca" id="impedimento-cardiaca">
                       <label class="form-check-label" for="impedimento-cardiaca">Condición cardíaca</label>
                     </div>
+
                     <div class="form-check">
-                      <input class="form-check-input" type="checkbox" name="edit-impedimentos[]"
-                        value="Problemas respiratorios" id="impedimento-respiratorios">
+                      <input class="form-check-input" type="checkbox" name="edit-impedimentos[]" value="Problemas respiratorios" id="impedimento-respiratorios">
                       <label class="form-check-label" for="impedimento-respiratorios">Problemas respiratorios</label>
                     </div>
+
                     <div class="form-check">
-                      <input class="form-check-input" type="checkbox" name="edit-impedimentos[]"
-                        value="Discapacidad visual" id="impedimento-visual">
+                      <input class="form-check-input" type="checkbox" name="edit-impedimentos[]" value="Discapacidad visual" id="impedimento-visual">
                       <label class="form-check-label" for="impedimento-visual">Discapacidad visual</label>
                     </div>
+
                     <div class="form-check">
-                      <input class="form-check-input" type="checkbox" name="edit-impedimentos[]"
-                        value="Discapacidad auditiva" id="impedimento-auditiva">
+                      <input class="form-check-input" type="checkbox" name="edit-impedimentos[]" value="Discapacidad auditiva" id="impedimento-auditiva">
                       <label class="form-check-label" for="impedimento-auditiva">Discapacidad auditiva</label>
                     </div>
+
                     <div class="form-check">
-                      <input class="form-check-input" type="checkbox" name="edit-impedimentos[]"
-                        value="Condición neurológica" id="impedimento-neurologica">
+                      <input class="form-check-input" type="checkbox" name="edit-impedimentos[]" value="Condición neurológica" id="impedimento-neurologica">
                       <label class="form-check-label" for="impedimento-neurologica">Condición neurológica</label>
                     </div>
+
                     <div class="form-check">
-                      <input class="form-check-input" type="checkbox" name="edit-impedimentos[]" value="Otro"
-                        id="impedimento-otro">
+                      <input class="form-check-input" type="checkbox" name="edit-impedimentos[]" value="Otro" id="impedimento-otro">
                       <label class="form-check-label" for="impedimento-otro">Otro</label>
                     </div>
+
                   </div>
                 </div>
+
               </div>
             </div>
 
             <div class="modal-footer">
-              <button type="button" class="btn" style="background-color: #C6724D; color: white;"
-                data-bs-dismiss="modal">Volver</button>
-              <button type="submit" class="btn" style="background-color: #A68768; color: white;">Guardar
-                Cambios</button>
+              <button type="button" class="btn" style="background-color: #C6724D; color: white;" data-bs-dismiss="modal">Volver</button>
+              <button type="submit" class="btn" style="background-color: #A68768; color: white;">Guardar Cambios</button>
             </div>
           </form>
         </div>
       </div>
-
-
-
       <!-- Fin Modal -->
-    </main>
 
-  </div>
+    </div>
+  </main>
 
-
-  <footer class="mb-3 container-fluid">
-    <div class="footer-content container-fluid">
-      <div class="row justify-content-center align-items-center g-20 text-center text-md-start">
-        <div class="col">
-          <p>PowerVital Todos los derechos reservados &copy; 2025</p>
-
-        </div>
-
-        <div class="col">
-          <img src="img/facebook.png" alt="Facebook" class="footer-logo" />
-          <img src="img/instagram.png" alt="Instagram" class="footer-logo" />
-        </div>
-
-      </div>
-
-
-  </footer>
   <!-- Scripts -->
-  <script type="module" src="./js/MenuEjercicio.js"></script>
+  <script type="module" src="../../Complementos/Components/MenuEntren.js"></script>
   <script type="module" src="./js/EjercicioFunciones.js"></script>
 
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
