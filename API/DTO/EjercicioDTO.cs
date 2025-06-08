@@ -4,6 +4,8 @@ namespace PowerVital.DTOs
 {
     public class EjercicioDTO
     {
+        public int IdEjercicio { get; set; } // ✅
+
         [Required(ErrorMessage = "El nombre es obligatorio.")]
         [StringLength(100, ErrorMessage = "El nombre no puede tener más de 100 caracteres.")]
         public string Nombre { get; set; }

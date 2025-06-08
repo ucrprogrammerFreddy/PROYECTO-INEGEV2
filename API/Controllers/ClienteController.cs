@@ -237,7 +237,7 @@ namespace PowerVital.Controllers
         public async Task<IActionResult> ObtenerRutinaActual(int id)
         {
             var rutina = await _context.Rutinas
-                .Where(r => r.IdCliente == id && r.FechaFin >= DateTime.Now)
+                .Where(r => r.ClienteIdUsuario == id && r.FechaFin >= DateTime.Now)
                 .OrderByDescending(r => r.FechaInicio)
                 .Select(r => new
                 {

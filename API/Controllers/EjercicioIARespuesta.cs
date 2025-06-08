@@ -2,6 +2,9 @@
 {
     internal class EjercicioIARespuesta
     {
+
+
+        public int IdEjercicio { get; set; } // ✅ AÑADIR ESTA LÍNEA
         public string Nombre { get; set; }
         public string Descripcion { get; set; }
         public string AreaMuscular { get; set; }

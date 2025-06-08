@@ -95,6 +95,7 @@ namespace PowerVital.Controllers
             var ejerciciosDisponibles = await _context.Ejercicios
                 .Select(e => new EjercicioDTO
                 {
+                    IdEjercicio = e.IdEjercicio,
                     Nombre = e.Nombre,
                     Descripcion = e.Descripcion,
                     AreaMuscular = e.AreaMuscular,
@@ -288,18 +289,20 @@ ESPALDA:
             }
 
             var resultado = ejerciciosSeguros
-                .Where(e => sugerencias.Contains(e.Nombre))
-                .Select(e => new EjercicioIARespuesta
-                {
-                    Nombre = e.Nombre,
-                    Descripcion = e.Descripcion,
-                    AreaMuscular = e.AreaMuscular,
-                    Dificultad = e.Dificultad,
-                    Repeticiones = e.Repeticiones,
-                    AreaAfectada = e.AreaMuscularAfectada ?? e.AreaMuscular,
-                    GuiaEjercicio = e.GuiaEjercicio // 🚀 AQUI ESTA EL CAMPO QUE FALTABA
-                })
-                .ToList();
+    .Where(e => sugerencias.Contains(e.Nombre))
+    .Select(e => new EjercicioIARespuesta
+    {
+        IdEjercicio = e.IdEjercicio, // ✅ AGREGA ESTE CAMPO
+        Nombre = e.Nombre,
+        Descripcion = e.Descripcion,
+        AreaMuscular = e.AreaMuscular,
+        Dificultad = e.Dificultad,
+        Repeticiones = e.Repeticiones,
+        AreaAfectada = e.AreaMuscularAfectada ?? e.AreaMuscular,
+        GuiaEjercicio = e.GuiaEjercicio
+    })
+    .ToList();
+
 
             return Ok(new { ejerciciosRecomendados = resultado });
         }
