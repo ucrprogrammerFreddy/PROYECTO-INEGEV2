@@ -6,12 +6,9 @@ using PowerVital.DTOs;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
-using PowerVital.DTO; // 👈 Esto importa el DTO necesario
 
 namespace PowerVital.Controllers
 {
-
-
     [ApiController]
     [Route("api/[controller]")]
     public class IAEjerciciosController : ControllerBase
@@ -26,8 +23,6 @@ namespace PowerVital.Controllers
             _httpClient = new HttpClient();
             _context = context;
         }
-
-
 
         private string NormalizarZona(string zona)
         {
@@ -47,7 +42,6 @@ namespace PowerVital.Controllers
 
             return zona;
         }
-
 
         private List<string> ObtenerZonasAfectadas(List<PadecimientoIADTO> padecimientos)
         {
@@ -69,8 +63,6 @@ namespace PowerVital.Controllers
                 .ToList();
         }
 
-
-
         [HttpPost("recomendar")]
         public async Task<IActionResult> Recomendar([FromBody] RecomendacionIARequest request)
         {
@@ -91,7 +83,6 @@ namespace PowerVital.Controllers
                 })
                 .ToList();
 
-            // 🚀 CARGAMOS TAMBIÉN LA GUIA
             var ejerciciosDisponibles = await _context.Ejercicios
                 .Select(e => new EjercicioDTO
                 {
@@ -102,7 +93,7 @@ namespace PowerVital.Controllers
                     AreaMuscularAfectada = e.AreaMuscularAfectada,
                     Dificultad = e.Dificultad,
                     Repeticiones = e.Repeticiones,
-                    GuiaEjercicio = e.GuiaEjercicio // 🚀 AQUI ESTÁ EL CAMPO QUE FALTABA
+                    GuiaEjercicio = e.GuiaEjercicio
                 })
                 .ToListAsync();
 
@@ -161,11 +152,6 @@ namespace PowerVital.Controllers
             foreach (var e in ejerciciosSeguros)
                 Console.WriteLine($"- {e.Nombre} ({e.AreaMuscular})");
 
-            if (ejerciciosSeguros.Count == 0)
-            {
-                return Ok(new { ejerciciosRecomendados = new List<string> { "Ningún ejercicio es apto para este cliente" } });
-            }
-
             var zonasAfectadas = ObtenerZonasAfectadas(padecimientos);
             var zonasNoAfectadas = ObtenerTodasZonas(ejerciciosDisponibles)
                 .Where(z => !zonasAfectadas.Contains(z))
@@ -189,8 +175,23 @@ Debes recomendar ejercicios seguros para el cliente {request.NombreCliente} seg�
                     prompt += $"\n- {z}";
             }
 
+            // 🚀 Aquí va el prompt de agrupación por área:
             prompt += "\n\nEjercicios disponibles (agrupados por área, NO inventes nuevos):";
 
+            // 🚀 BLOQUE DE CONSISTENCIA PRO 🚀
+            prompt += $"\n\nCantidad de ejercicios seguros detectados: {ejerciciosSeguros.Count}";
+
+            prompt += @"
+
+IMPORTANTE:
+
+- Si la cantidad de ejercicios seguros es MAYOR A CERO, debes generar la rutina usando esos ejercicios.
+- NO devuelvas la frase 'Ningún ejercicio es apto para este cliente' si hay al menos 1 ejercicio seguro.
+- Solo puedes devolver 'Ningún ejercicio es apto para este cliente' si la cantidad de ejercicios seguros es CERO.
+- No inventes ejercicios nuevos.
+";
+
+            // 🚀 AGRUPACIÓN DE EJERCICIOS
             var ejerciciosPorArea = ejerciciosSeguros
                 .GroupBy(e => NormalizarZona(e.AreaMuscular))
                 .OrderBy(g => g.Key);
@@ -201,6 +202,7 @@ Debes recomendar ejercicios seguros para el cliente {request.NombreCliente} seg�
                 prompt += $"\n{grupo.Key.ToUpper()}: {string.Join(", ", nombres)}";
             }
 
+            // 🚀 INSTRUCCIONES FINALES
             prompt += @"
 
 
@@ -225,7 +227,6 @@ ESPALDA:
 
 6. Si el cliente no puede realizar ningún ejercicio, responde exactamente: 'Ningún ejercicio es apto para este cliente'.
 ";
-
             Console.WriteLine("======== PROMPT ENVIADO A OPENAI ========");
             Console.WriteLine(prompt);
             Console.WriteLine("========================================");
@@ -289,23 +290,21 @@ ESPALDA:
             }
 
             var resultado = ejerciciosSeguros
-    .Where(e => sugerencias.Contains(e.Nombre))
-    .Select(e => new EjercicioIARespuesta
-    {
-        IdEjercicio = e.IdEjercicio, // ✅ AGREGA ESTE CAMPO
-        Nombre = e.Nombre,
-        Descripcion = e.Descripcion,
-        AreaMuscular = e.AreaMuscular,
-        Dificultad = e.Dificultad,
-        Repeticiones = e.Repeticiones,
-        AreaAfectada = e.AreaMuscularAfectada ?? e.AreaMuscular,
-        GuiaEjercicio = e.GuiaEjercicio
-    })
-    .ToList();
-
+                .Where(e => sugerencias.Contains(e.Nombre))
+                .Select(e => new EjercicioIARespuesta
+                {
+                    IdEjercicio = e.IdEjercicio,
+                    Nombre = e.Nombre,
+                    Descripcion = e.Descripcion,
+                    AreaMuscular = e.AreaMuscular,
+                    Dificultad = e.Dificultad,
+                    Repeticiones = e.Repeticiones,
+                    AreaAfectada = e.AreaMuscularAfectada ?? e.AreaMuscular,
+                    GuiaEjercicio = e.GuiaEjercicio
+                })
+                .ToList();
 
             return Ok(new { ejerciciosRecomendados = resultado });
-        }
-
-    }
-}
+        } // ← Fin del método Recomendar
+    } // ← Fin de la clase IAEjerciciosController
+} // ← Fin del namespace

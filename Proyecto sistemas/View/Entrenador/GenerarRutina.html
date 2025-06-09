@@ -8,6 +8,7 @@
 
   <!-- 🚀 Bootstrap 5 para el accordion PRO -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
   <style>
     :root {
@@ -110,86 +111,103 @@
 </head>
 
 <body>
-  <div class="container-fliuid py-3">
-    <!-- 🏋️‍♂️ Título de la página -->
-    <h1>Generar Rutina Personalizada</h1>
+  <!-- Estructura general con container -->
+  <div class="container py-3">
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-10">
+        <!-- 🏋️‍♂️ Título -->
+        <h1 class="mb-4 text-center">Generar Rutina Personalizada</h1>
 
-    <!-- 🔍 Buscar cliente -->
-    <div class="mb-3">
-      <label for="clienteBuscador"><strong>Buscar cliente:</strong></label><br />
-      <input type="text" id="clienteBuscador" placeholder="Nombre o correo..." autocomplete="off" />
-      <ul id="listaResultados"></ul>
-    </div>
+        <!-- 🔍 Buscar cliente -->
+        <div class="mb-3 position-relative">
+          <label for="clienteBuscador"><strong>Buscar cliente:</strong></label><br />
+          <input type="text" id="clienteBuscador" class="form-control" placeholder="Nombre o correo..."
+            autocomplete="off" />
+          <ul id="listaResultados"></ul>
+        </div>
 
-    <!-- ℹ️ Info Cliente -->
-    <div id="infoCliente" style="display: none; margin-top: 10px;">
-      <h3>Esta rutina es para:</h3>
-      <table>
-        <tbody>
-          <tr>
-            <th>Nombre:</th>
-            <td id="clienteNombre"></td>
-          </tr>
-          <tr>
-            <th>Peso:</th>
-            <td id="clientePeso"></td>
-          </tr>
-          <tr>
-            <th>Altura:</th>
-            <td id="clienteAltura"></td>
-          </tr>
-          <tr>
-            <th>Entrenador:</th>
-            <td id="clienteEntrenador"></td>
-          </tr>
-          <tr>
-            <th>Padecimientos:</th>
-            <td id="clientePadecimientos"></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+        <!-- ℹ️ Info Cliente -->
+        <div id="infoCliente" style="display: none; margin-top: 10px;">
+          <h3>Esta rutina es para:</h3>
+          <table class="table table-bordered mt-2">
+            <tbody>
+              <tr>
+                <th>Nombre:</th>
+                <td id="clienteNombre"></td>
+              </tr>
+              <tr>
+                <th>Peso:</th>
+                <td id="clientePeso"></td>
+              </tr>
+              <tr>
+                <th>Altura:</th>
+                <td id="clienteAltura"></td>
+              </tr>
+              <tr>
+                <th>Entrenador:</th>
+                <td id="clienteEntrenador"></td>
+              </tr>
+              <tr>
+                <th>Padecimientos:</th>
+                <td id="clientePadecimientos"></td>
+              </tr>
+            </tbody>
+          </table>
 
-    <!-- Sección para la rutina generada -->
-    <section id="rutinaGenerada" style="display: none;">
-      <h3 class="mt-4 mb-3">Ejercicios Generados:</h3>
-
-      <!-- TABLA -->
-      <div class="table-responsive mb-4">
-        <table class="table table-bordered bg-white" id="tablaRutina">
-          <thead class="table-light">
-            <tr>
-              <th>Nombre</th>
-              <th>Descripción</th>
-              <th>Área Muscular</th>
-              <th>Dificultad</th>
-              <th>Área Afectada</th>
-              <th>Repeticiones</th> <!-- Aquí irá el input de reps -->
-              <th>Guía Ejercicio</th>
-              <th>Comentario</th>
-              <th>Acción</th>
-            </tr>
-          </thead>
-          <tbody>
-            <!-- Aquí se insertarán los ejercicios sugeridos -->
-          </tbody>
-        </table>
+          <!-- 🚀 Botón para generar rutina -->
+          <div class="d-flex justify-content-start mt-3" id="botonGenerarRutinaContainer" style="display: none;">
+            <button class="btn btn-primary" id="btnGenerarRutina">
+              <i class="fas fa-dumbbell"></i> Generar Rutina
+            </button>
+          </div>
+        </div>
       </div>
-
-      <!-- Botón para guardar rutina -->
-      <div class="d-flex justify-content-end mt-3">
-        <button class="btn btn-success" id="guardarRutina">
-          <i class="fas fa-save"></i> Guardar Rutina
-        </button>
-      </div>
-    </section>
-
-
+    </div>
   </div>
+
+  <!-- 🚀 Sección de rutina generada: con container-fluid para la tabla -->
+  <section id="rutinaGenerada" class="container-fluid mt-4" style="display: none;">
+    <h3 class="mb-3 text-center">Ejercicios Generados:</h3>
+
+    <div class="row justify-content-center">
+      <div class="col-12">
+        <!-- TABLA FULL WIDTH -->
+        <div class="table-responsive">
+          <table class="table table-bordered bg-white" id="tablaRutina">
+            <thead class="table-light">
+              <tr>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Área Muscular</th>
+                <th>Dificultad</th>
+                <th>Área Afectada</th>
+                <th>Repeticiones</th>
+                <th>Guía Ejercicio</th>
+                <th>Comentario</th>
+                <th>Acción</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Aquí se insertarán los ejercicios sugeridos -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Botón para guardar rutina -->
+        <div class="d-flex justify-content-end mt-3">
+          <button class="btn btn-success" id="guardarRutina">
+            <i class="fas fa-save"></i> Guardar Rutina
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <!-- 🚀 Scripts -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="../../Controler/Entrenador/ControladorRutina.js"></script>
 </body>
+
+
 
 </html>
