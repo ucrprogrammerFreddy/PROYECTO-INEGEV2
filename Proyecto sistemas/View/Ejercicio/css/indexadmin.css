@@ -1,0 +1,210 @@
+/* -------------------- RESET -------------------- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #ECF0F1;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* -------------------- HEADER -------------------- */
+.header {
+  background-color: #ECF0F1;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  padding: 10px 20px;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1200;
+}
+
+.header-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.header-logo {
+  height: 60px;
+}
+
+.menu-toggle {
+  position: absolute;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 24px;
+  cursor: pointer;
+  color: #4f316d;
+}
+
+/* -------------------- MENU LATERAL -------------------- */
+.slide {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 220px;
+  background-color: #316163;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+  z-index: 1300;
+  color: white;
+  padding-top: 70px;
+}
+
+.slide.open {
+  transform: translateX(0);
+}
+
+.menu-header {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  background: #316163;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+}
+
+.menu-header h1 {
+  color: #fff;
+  font-weight: 800;
+}
+
+.close-btn {
+  font-size: 30px;
+  cursor: pointer;
+}
+
+.slide ul {
+  list-style: none;
+  padding: 1px;
+  font-size: 20px;
+}
+
+.slide ul li a {
+  display: flex;
+  align-items: center;
+  color: #ecf1f1;
+  font-weight: 500;
+  padding: 10px 20px;
+  text-decoration: none;
+  transition: 0.2s ease-out;
+}
+
+.slide ul li a i {
+  margin-right: 10px;
+}
+
+.slide ul li a:hover {
+  background-color: #b66447;
+  color: white;
+  font-weight: bold;
+  border-left: 4px solid white;
+}
+
+/* -------------------- OVERLAY -------------------- */
+#menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 1250;
+  display: none;
+}
+
+#menu-overlay.visible {
+  display: block;
+}
+
+/* -------------------- CONTENIDO PRINCIPAL -------------------- */
+.contenedor-main {
+  transition: margin-left 0.3s ease;
+  padding: 90px 20px 90px;
+}
+
+.contenedor-main.shifted {
+  margin-left: 220px;
+}
+
+/* -------------------- FOOTER -------------------- */
+.footer {
+  background-color: #022227;
+  color: #ffffff;
+  padding: 0.5rem;
+  text-align: center;
+  width: 100%;
+}
+
+.footer img {
+  width: 50px;
+  height: auto;
+  margin: 0 10px;
+  filter: grayscale(100%);
+  transition: filter 0.3s ease;
+}
+
+.footer img:hover {
+  filter: grayscale(0%);
+}
+
+.footer p {
+  color: #ffffff;
+}
+
+/* -------------------- CARD GRID (para Panel Entrenador) -------------------- */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  padding: 20px 0;
+}
+
+.custom-card {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 0 6px rgba(0,0,0,0.1);
+  text-align: center;
+  transition: transform 0.2s ease;
+  text-decoration: none;
+  color: inherit;
+}
+
+.custom-card:hover {
+  transform: translateY(-5px);
+}
+
+.icon-section {
+  font-size: 2rem;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.bg-light-brown { background-color: #d3a87c; }
+.bg-light-yellow { background-color: #f7e99d; }
+.bg-light-pink   { background-color: #f7c7db; }
+
+.icon-brown  { color: #5a3e2b; }
+.icon-olive  { color: #6b6b2d; }
+.icon-red    { color: #a10000; }
+
+/* -------------------- RESPONSIVE -------------------- */
+@media (max-width: 768px) {
+  .slide {
+    width: 200px;
+  }
+
+  .contenedor-main.shifted {
+    margin-left: 200px;
+  }
+}

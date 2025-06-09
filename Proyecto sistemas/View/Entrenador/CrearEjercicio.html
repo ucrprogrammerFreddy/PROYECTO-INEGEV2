@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestión de Ejercicios</title>
+  <link rel="stylesheet" href="/Proyecto sistemas/Complementos/css/ejercicios.css">
+</head>
+<body>
+  <div class="container" id="top">
+
+    <!-- LOGO CENTRADO -->
+    <div style="text-align: center; margin-top: 20px;">
+        <img src="/Proyecto sistemas/Complementos/img/logoof.png" alt="Logo" class="header-logo" alt="Logo" width="100"/>
+    </div>
+
+    <form id="ejercicioForm">
+
+      <section>
+        <label>Nombre:</label>
+        <input type="text" name="nombre" required>
+
+        <label>Descripción:</label>
+        <input type="text" name="descripcion" required>
+      </section>
+
+      <section>
+        <label>Área Muscular:</label>
+        <select name="areaMuscular" required>
+          <option value="">Seleccione</option>
+          <option value="Pecho">Pecho</option>
+          <option value="Espalda">Espalda</option>
+          <option value="Piernas">Piernas</option>
+          <option value="Brazos">Brazos</option>
+        </select>
+
+        <label>Dificultad:</label>
+        <select name="dificultad" required>
+          <option value="">Seleccione</option>
+          <option value="Leve">Leve</option>
+          <option value="Moderada">Moderada</option>
+          <option value="Alta">Alta</option>
+        </select>
+      </section>
+
+      <section>
+        <label>Impedimentos:</label>
+        <div class="impedimentos-grid">
+          <label><input type="checkbox" name="impedimentos" value="Rodillas"> Rodillas</label>
+          <label><input type="checkbox" name="impedimentos" value="Corazon"> Corazón</label>
+          <label><input type="checkbox" name="impedimentos" value="Tobillo"> Tobillo</label>
+          <label><input type="checkbox" name="impedimentos" value="Hombro"> Hombro</label>
+          <label><input type="checkbox" name="impedimentos" value="Pulmones"> Pulmones</label>
+          <label><input type="checkbox" name="impedimentos" value="Muñecas"> Muñecas</label>
+          <label><input type="checkbox" name="impedimentos" value="Columna"> Columna</label>
+        </div>
+      </section>
+
+      <div class="form-buttons">
+        <button type="button" class="salir" onclick="window.history.back()">SALIR</button>
+        <button type="submit" class="agregar">AGREGAR</button>
+      </div>
+
+    </form>
+  </div>
+
+  <script>
+    // Aquí puedes agregar lógica para validación o envío de datos
+    document.getElementById("ejercicioForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+      alert("Ejercicio agregado correctamente (simulación)");
+    });
+  </script>
+</body>
+</html>
