@@ -73,6 +73,7 @@ namespace PowerVital.Controllers
 
                 _httpClient.Timeout = TimeSpan.FromSeconds(60);
 
+                // Buscar cliente y sus padecimientos
                 var cliente = await _context.Clientes
                     .Include(c => c.PadecimientosClientes)
                         .ThenInclude(pc => pc.Padecimiento)
@@ -81,6 +82,7 @@ namespace PowerVital.Controllers
                 if (cliente == null)
                     return NotFound("Cliente no encontrado");
 
+                // Listar padecimientos del cliente
                 var padecimientos = cliente.PadecimientosClientes
                     .Select(pc => new PadecimientoIADTO
                     {
@@ -90,6 +92,7 @@ namespace PowerVital.Controllers
                     })
                     .ToList();
 
+                // Listar ejercicios disponibles
                 var ejerciciosDisponibles = await _context.Ejercicios
                     .Select(e => new EjercicioDTO
                     {
@@ -104,6 +107,12 @@ namespace PowerVital.Controllers
                     })
                     .ToListAsync();
 
+                // Debug datos de entrada
+                Console.WriteLine($"Cliente: {cliente.Nombre} (ID: {cliente.IdUsuario})");
+                Console.WriteLine($"Padecimientos: {string.Join(", ", padecimientos.Select(p => $"{p.Nombre} [{p.AreaMuscular}] ({p.Severidad})"))}");
+                Console.WriteLine($"Ejercicios disponibles: {ejerciciosDisponibles.Count}");
+
+                // Filtrar ejercicios seguros según la lógica de las áreas y dificultad
                 var ejerciciosSeguros = ejerciciosDisponibles
                     .Where(ej =>
                     {
@@ -145,13 +154,34 @@ namespace PowerVital.Controllers
                     })
                     .ToList();
 
+                // Más debug
                 Console.WriteLine($"✅ Ejercicios seguros encontrados: {ejerciciosSeguros.Count}");
+
+                // Zonas afectadas y no afectadas
+                List<string> ObtenerZonasAfectadas(List<PadecimientoIADTO> pades) =>
+                    pades
+                        .SelectMany(p => (p.AreaMuscular ?? "")
+                            .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                            .Select(z => NormalizarZona(z)))
+                        .Distinct()
+                        .ToList();
+
+                List<string> ObtenerTodasZonas(List<EjercicioDTO> ejercicios) =>
+                    ejercicios
+                        .SelectMany(e => (e.AreaMuscularAfectada ?? e.AreaMuscular ?? "")
+                            .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                            .Select(z => NormalizarZona(z)))
+                        .Distinct()
+                        .ToList();
 
                 var zonasAfectadas = ObtenerZonasAfectadas(padecimientos);
                 var zonasNoAfectadas = ObtenerTodasZonas(ejerciciosDisponibles)
                     .Where(z => !zonasAfectadas.Contains(z))
                     .ToList();
 
+                // ===================
+                // Lógica del PROMPT AI
+                // ===================
                 var prompt = $@"Eres un experto en salud y entrenamiento físico.
 Debes recomendar ejercicios seguros para el cliente {request.NombreCliente} según sus padecimientos y severidad.";
 
@@ -189,12 +219,13 @@ INSTRUCCIONES:
 1. Devuelve los ejercicios AGRUPADOS POR ÁREA MUSCULAR.
 2. Incluye áreas sin ejercicios como: 'Sin ejercicios recomendables'.
 3. Si el cliente no tiene padecimientos, recomienda mínimo 2 por área.
-4. Si tiene padecimientos, sugiere seguros por área.
+4. Si tiene padecimientos, sugiere ejercicios seguros por área.
 5. No inventes ejercicios nuevos.
 6. Si no puede hacer ninguno, responde: 'Ningún ejercicio es apto para este cliente'.
 ";
 
                 Console.WriteLine("📤 Enviando prompt a OpenAI...");
+                // ===================
 
                 var requestBody = new
                 {
@@ -232,28 +263,46 @@ INSTRUCCIONES:
                 Console.WriteLine("📩 Respuesta de OpenAI:");
                 Console.WriteLine(raw);
 
-                if (raw.Contains("Ningún ejercicio es apto para este cliente", StringComparison.OrdinalIgnoreCase))
+                // 📌 NUEVO PARSER ROBUSTO PARA RESPUESTAS DE OPENAI
+                var sugerencias = new List<string>();
+                foreach (var line in raw.Split('\n', StringSplitOptions.RemoveEmptyEntries))
                 {
-                    return Ok(new { ejerciciosRecomendados = new List<string> { "Ningún ejercicio es apto para este cliente" } });
-                }
+                    var cleanLine = line.TrimStart('-', '.', ' ', '"').Trim();
+                    if (string.IsNullOrWhiteSpace(cleanLine)) continue;
+                    if (cleanLine.Contains("Ningún ejercicio es apto para este cliente", StringComparison.OrdinalIgnoreCase) ||
+                        cleanLine.Contains("Sin ejercicios recomendables", StringComparison.OrdinalIgnoreCase))
+                        continue;
 
-                var sugerencias = raw.Split('\n', StringSplitOptions.RemoveEmptyEntries)
-                    .Select(line =>
+                    // Ejemplo: "PECHO: Press banca plano, Flexiones"
+                    var colonIdx = cleanLine.IndexOf(':');
+                    if (colonIdx > 0 && colonIdx < cleanLine.Length - 1)
                     {
-                        var match = System.Text.RegularExpressions.Regex.Match(line, @"\d+\.\s*(.*)");
-                        string nombre = match.Success ? match.Groups[1].Value.Trim() : line.TrimStart('-', '.', ' ', '"').Trim();
-
-                        int parenIndex = nombre.LastIndexOf(" (");
-                        if (parenIndex > 0)
-                            nombre = nombre.Substring(0, parenIndex).Trim();
-
-                        return nombre;
-                    })
+                        // Hay área: ejercicios
+                        var ejerciciosStr = cleanLine.Substring(colonIdx + 1).Trim();
+                        var ejerciciosArr = ejerciciosStr.Split(',', StringSplitOptions.RemoveEmptyEntries);
+                        foreach (var ej in ejerciciosArr)
+                        {
+                            var nombre = ej.Trim();
+                            if (!string.IsNullOrWhiteSpace(nombre))
+                                sugerencias.Add(nombre);
+                        }
+                    }
+                    else
+                    {
+                        // Línea suelta, intenta agregar como está
+                        int parenIndex = cleanLine.LastIndexOf(" (");
+                        var nombre = (parenIndex > 0) ? cleanLine.Substring(0, parenIndex).Trim() : cleanLine;
+                        if (!string.IsNullOrWhiteSpace(nombre))
+                            sugerencias.Add(nombre);
+                    }
+                }
+                sugerencias = sugerencias
                     .Where(nombre => ejerciciosSeguros.Any(e => e.Nombre.Equals(nombre, StringComparison.OrdinalIgnoreCase)))
                     .Distinct()
                     .Take(50)
                     .ToList();
 
+                // Si no hay sugerencias, ahí sí mostrar el mensaje global
                 if (sugerencias.Count == 0)
                 {
                     return Ok(new { ejerciciosRecomendados = new List<string> { "Ningún ejercicio es apto para este cliente" } });
@@ -283,19 +332,5 @@ INSTRUCCIONES:
                 return StatusCode(500, "Error interno del servidor: " + ex.Message);
             }
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    } // ← Fin de la clase IAEjerciciosController
-} // ← Fin del namespace
+    }
+}
