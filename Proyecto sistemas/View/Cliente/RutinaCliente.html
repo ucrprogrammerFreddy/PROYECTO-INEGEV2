@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="/Proyecto sistemas/Complementos/css/ClienteEstilos.css">
 </head>
-<body>
+<body id="vista-rutinas">
 
   <!-- Header con logo -->
   <header class="encabezado">
@@ -25,40 +25,70 @@
     <div class="main-wrapper" id="mainWrapper">
       <main class="contenido">
         <div class="container mt-5 pt-3">
-          <h5 class="mb-4 fw-bold">Rutinas</h5>
+          <!-- Encabezado con información del cliente -->
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+              <h5 class="mb-0 fw-bold">
+                <i class="fas fa-dumbbell text-primary"></i> 
+                Mis Rutinas de Ejercicio
+              </h5>
+              <small class="text-muted">Rutinas asignadas por tu instructor personal</small>
+            </div>
+            <div class="text-end">
+              <span class="badge bg-info fs-6" id="totalRutinas">Cargando...</span>
+            </div>
+          </div>
+
+          <!-- Tabla de rutinas -->
           <div class="table-responsive">
-            <table class="table table-bordered align-middle">
-              <thead class="table-light text-center">
+            <table class="table table-bordered table-hover align-middle">
+              <thead class="table-dark text-center">
                 <tr>
-                  <th>Instructor</th>
-                  <th>Nombre Ejercicio</th>
-                  <th>Área Muscular</th>
-                  <th># Rutina</th>
-                  <th>Descripción</th>
-                  <th>Cant de repeticiones</th>
-                  <th>Ver Video</th>
+                  <th><i class="fas fa-user-tie"></i> Instructor</th>
+                  <th><i class="fas fa-running"></i> Ejercicio</th>
+                  <th><i class="fas fa-bullseye"></i> Área Muscular</th>
+                  <th><i class="fas fa-hashtag"></i> Rutina #</th>
+                  <th><i class="fas fa-info-circle"></i> Descripción</th>
+                  <th><i class="fas fa-repeat"></i> Repeticiones</th>
+                  <th><i class="fas fa-play-circle"></i> Video</th>
                 </tr>
               </thead>
               <tbody id="tablaRutinas">
                 <tr>
-                  <td colspan="7" class="text-center text-muted">No hay rutina asignada</td>
+                  <td colspan="7" class="text-center text-muted py-4">
+                    <div class="spinner-border text-primary" role="status">
+                      <span class="visually-hidden">Cargando...</span>
+                    </div>
+                    <p class="mt-2 mb-0">Cargando rutinas...</p>
+                  </td>
                 </tr>
               </tbody>
             </table>
           </div>
 
+          <!-- Botones de acción -->
           <div class="d-flex justify-content-between mt-4">
-            <button class="btn btn-secondary" onclick="window.location.href='/Proyecto sistemas/View/Cliente/Inicio.html'">Regresar</button>
-            <button class="btn btn-success" onclick="window.location.href='/Proyecto sistemas/View/Cliente/ReporteRutina.html'">Descargar</button>
+            <button class="btn btn-secondary" onclick="window.location.href='/Proyecto sistemas/View/Cliente/Inicio.html'">
+              <i class="fas fa-arrow-left"></i> Regresar
+            </button>
+            <button class="btn btn-success" onclick="window.location.href='/Proyecto sistemas/View/Cliente/ReporteRutina.html'">
+              <i class="fas fa-download"></i> Descargar Reporte
+            </button>
           </div>
         </div>
       </main>
     </div>
   </div>
 
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  
   <!-- Inyección de menú y footer -->
   <script type="module" src="/Proyecto sistemas/Complementos/Components/MenuCliente.js"></script>
-  <script type="module" src="/Proyecto sistemas/Complementos/Components/FooterCliente.js"></script>
-  <script type="module" src="/Proyecto sistemas/Complementos/Controllers/RutinasController.js"></script>
+  <script type="module" src="../../Complementos/Components/FooterCliente.js"></script>
+  
+  <!-- Script principal para cargar rutinas -->
+  <script src="../../Controler/Cliente/ClienteFunciones.js"></script>
+
 </body>
 </html>
