@@ -2,7 +2,7 @@
 import { EjercicioModel } from "../Modelo/EjercicioModel.js";
 
 // URL base de la API de ejercicios
-const URL_API = "https://localhost:7086/api/Ejercicio";
+const URL_API = "http://mi-api-powergym-2025.somee.com/api";
 
 // Espera a que todo el DOM esté cargado antes de ejecutar el código
 document.addEventListener("DOMContentLoaded", function () {
@@ -100,7 +100,8 @@ document.addEventListener("DOMContentLoaded", function () {
       };
 
       try {
-        const response = await fetch(`${URL_API}/editarEjercicio/${idEditar}`, {
+        // ✅ CORREGIDO: Agregar controlador Ejercicio
+        const response = await fetch(`${URL_API}/Ejercicio/editarEjercicio/${idEditar}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(ejercicioDTO),
@@ -140,7 +141,8 @@ document.addEventListener("DOMContentLoaded", function () {
     tbody.innerHTML = "<tr><td colspan='8'>Cargando...</td></tr>";
 
     try {
-      const resp = await fetch(`${URL_API}/listaEjercicios`);
+      // ✅ CORREGIDO: Agregar controlador Ejercicio
+      const resp = await fetch(`${URL_API}/Ejercicio/listaEjercicios`);
       if (!resp.ok) throw new Error("No se pudo obtener la lista");
       const ejercicios = await resp.json();
 
@@ -198,7 +200,8 @@ document.addEventListener("DOMContentLoaded", function () {
   // --- Mostrar modal editar ---
   async function mostrarModalEditar(id) {
     try {
-      const resp = await fetch(`${URL_API}/obtenerEjercicioPorId/${id}`);
+      // ✅ CORREGIDO: Agregar controlador Ejercicio
+      const resp = await fetch(`${URL_API}/Ejercicio/obtenerEjercicioPorId/${id}`);
       if (!resp.ok) throw new Error("No se pudo obtener el ejercicio");
       const ejercicio = await resp.json();
 
@@ -245,7 +248,8 @@ document.addEventListener("DOMContentLoaded", function () {
         mostrarMensaje("ID de ejercicio inválido.", "danger");
         return;
       }
-      const resp = await fetch(`${URL_API}/eliminarEjericicio/${id}`, {
+      // ✅ CORREGIDO: Agregar controlador Ejercicio (y arreglar typo "eliminarEjericicio")
+      const resp = await fetch(`${URL_API}/Ejercicio/eliminarEjercicio/${id}`, {
         method: "DELETE",
       });
       if (!resp.ok) {

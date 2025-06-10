@@ -1,5 +1,5 @@
 // ===============================
-// 🔗 APIs
+// 🔗 APIs   CControladorRutina.Js
 // ===============================
 const API_BASE = "http://mi-api-powergym-2025.somee.com/api";
 
@@ -83,24 +83,27 @@ $("#clienteBuscador").on("blur", function () {
 });
 
 // ===============================
-// ✅ Seleccionar cliente
+// ✅ Seleccionar cliente - CORREGIDO
 // ===============================
 function seleccionarCliente($li) {
   const id = $li.data("id");
   const nombre = $li.text();
+  
+  // 🚀 PRIMERO resetear TODO antes de cambiar cliente
+  resetUI();
+  
   clienteSeleccionado = parseInt(id);
 
   $("#nombreCliente").text(nombre);
   $("#infoCliente").show();
   $("#botonGenerarRutinaContainer").show();
 
-  // 🚀 Limpiar rutina anterior
-  resetUI();
-
   cargarInfoCliente(id);
 
   $("#listaResultados").empty();
   $("#clienteBuscador").val("");
+  
+  console.log("✅ Cliente seleccionado:", nombre, "ID:", clienteSeleccionado);
 }
 
 // ===============================
@@ -134,7 +137,7 @@ function cargarInfoCliente(clienteId) {
 }
 
 // ===============================
-// 🚀 BOTÓN GENERAR RUTINA
+// 🚀 BOTÓN GENERAR RUTINA - CORREGIDO
 // ===============================
 $("#btnGenerarRutina").on("click", function () {
   if (!clienteSeleccionado) {
@@ -143,10 +146,14 @@ $("#btnGenerarRutina").on("click", function () {
   }
 
   if (rutinaYaGenerada) {
-    alert(
-      "⚠️ Ya has generado una rutina para este cliente. Guarda la rutina o busca otro cliente para generar otra."
-    );
-    return;
+    // Permitir regenerar rutina con confirmación
+    if (!confirm("⚠️ Ya has generado una rutina para este cliente. ¿Quieres generar una nueva rutina?")) {
+      return;
+    }
+    // Resetear para regenerar
+    rutinaSugerida = [];
+    rutinaYaGenerada = false;
+    $("#rutinaGenerada").hide();
   }
 
   // 🚀 Bloquear botón
@@ -156,12 +163,12 @@ $("#btnGenerarRutina").on("click", function () {
 });
 
 // ===============================
-// 📃 GENERAR RUTINA (IA)
+// 📃 GENERAR RUTINA (IA) - CORREGIDO
 // ===============================
 function generarRutina(clienteId) {
   console.log("Generando rutina con IA para clienteId:", clienteId);
 
-  const nombreCliente = $("#nombreCliente").text();
+  const nombreCliente = $("#clienteNombre").text(); // CORREGIDO: usar clienteNombre
 
   $.ajax({
     url: `${API_IA_EJERCICIOS}/recomendar`,
@@ -177,6 +184,11 @@ function generarRutina(clienteId) {
 
       rutinaSugerida = response.ejerciciosRecomendados || [];
 
+      // Reactivar botón primero
+      $("#btnGenerarRutina")
+        .prop("disabled", false)
+        .html('<i class="fas fa-dumbbell"></i> Generar Rutina');
+
       if (
         !rutinaSugerida.length ||
         (rutinaSugerida.length === 1 &&
@@ -184,13 +196,16 @@ function generarRutina(clienteId) {
       ) {
         alert("⚠️ Ningún ejercicio es apto para este cliente.");
         rutinaSugerida = [];
-        $("#btnGenerarRutina")
-          .prop("disabled", false)
-          .html('<i class="fas fa-dumbbell"></i> Generar Rutina');
+        rutinaYaGenerada = false;
       } else {
         rutinaYaGenerada = true;
         $("#rutinaGenerada").show();
         mostrarTablaRutina();
+        
+        // Scroll automático a la tabla
+        $('html, body').animate({
+          scrollTop: $("#rutinaGenerada").offset().top - 50
+        }, 500);
       }
     },
     error(xhr) {
@@ -264,7 +279,137 @@ function eliminarEjercicio(index) {
 }
 
 // ===============================
-// 🔄 FUNCIÓN resetUI → limpia rutina
+// 💾 GUARDAR RUTINA - CORREGIDO CON REFRESH
+// ===============================
+$("#guardarRutina").on("click", function () {
+  if (!clienteSeleccionado || !rutinaSugerida.length) {
+    alert("Selecciona un cliente y asegúrate de que la rutina tenga ejercicios.");
+    return;
+  }
+
+  // Bloquear botón mientras guarda
+  $("#guardarRutina").prop("disabled", true).text("Guardando...");
+
+  const dtoRutina = {
+    FechaInicio: new Date().toISOString(),
+    FechaFin: new Date(new Date().setMonth(new Date().getMonth() + 1)).toISOString(),
+    IdCliente: parseInt(clienteSeleccionado),
+    Ejercicios: []
+  };
+
+  console.log("Creando rutina:", dtoRutina);
+
+  $.ajax({
+    url: `${API_RUTINA}/crearRutina`,
+    method: "POST",
+    contentType: "application/json",
+    data: JSON.stringify(dtoRutina),
+    success: function (rutinaCreada) {
+      const idRutina = rutinaCreada.IdRutina || rutinaCreada.idRutina;
+      console.log("✅ Rutina creada con ID:", idRutina);
+
+      let ejerciciosGuardados = 0;
+      let totalEjercicios = rutinaSugerida.length;
+
+      rutinaSugerida.forEach((ej, idx) => {
+        const reps = parseInt($(`[data-index="${idx}"].reps-input`).val()) || 0;
+        const comentario = $(`[data-index="${idx}"].comentario-input`).val() || "";
+
+        const dtoEj = {
+          IdRutina: idRutina,
+          IdEjercicio: ej.IdEjercicio,
+          Comentario: comentario,
+          NombreEjercicio: ej.Nombre,
+          DescripcionEjercicio: ej.Descripcion,
+          AreaMuscular: ej.AreaMuscular,
+          AreaMuscularAfectada: ej.AreaAfectada,
+          Repeticiones: reps,
+          GuiaEjercicio: ej.GuiaEjercicio,
+          Dificultad: ej.Dificultad
+        };
+
+        if (!ej.IdEjercicio) {
+          console.warn("❌ El ejercicio no tiene IdEjercicio:", ej);
+          totalEjercicios--;
+          return;
+        }
+
+        $.ajax({
+          url: `${API_EJERCICIO_RUTINA}/agregarEjercicioRutina`,
+          method: "POST",
+          contentType: "application/json",
+          data: JSON.stringify(dtoEj),
+          success: () => {
+            ejerciciosGuardados++;
+            
+            // Cuando todos los ejercicios se han procesado
+            if (ejerciciosGuardados === totalEjercicios) {
+              alert("✅ Rutina y ejercicios guardados correctamente.");
+              
+              // 🔄 REFRESH COMPLETO DE LA VISTA
+              refreshVista();
+            }
+          },
+          error: () => {
+            totalEjercicios--;
+            
+            // Si ya no quedan ejercicios por procesar
+            if (ejerciciosGuardados === totalEjercicios) {
+              alert(`⚠️ Rutina creada, pero algunos ejercicios fallaron.`);
+              refreshVista();
+            }
+          }
+        });
+      });
+    },
+    error: function (xhr) {
+      console.error("❌ Error creando rutina:", xhr.status, xhr.responseText);
+      alert(`❌ Error al crear la rutina (status ${xhr.status}).`);
+      
+      // Reactivar botón
+      $("#guardarRutina").prop("disabled", false).text("💾 Guardar Rutina");
+    }
+  });
+});
+
+// ===============================
+// 🔄 FUNCIÓN refreshVista → limpia TODO y vuelve al inicio
+// ===============================
+function refreshVista() {
+  // Resetear variables
+  clienteSeleccionado = null;
+  rutinaSugerida = [];
+  rutinaYaGenerada = false;
+  
+  // Limpiar campos
+  $("#clienteBuscador").val("");
+  $("#listaResultados").empty();
+  
+  // Ocultar secciones
+  $("#infoCliente").hide();
+  $("#botonGenerarRutinaContainer").hide();
+  $("#rutinaGenerada").hide();
+  
+  // Limpiar tabla
+  $("#tablaRutina tbody").empty();
+  
+  // Reactivar botones
+  $("#btnGenerarRutina")
+    .prop("disabled", false)
+    .html('<i class="fas fa-dumbbell"></i> Generar Rutina');
+    
+  $("#guardarRutina")
+    .prop("disabled", false)
+    .html('<i class="fas fa-save"></i> Guardar Rutina');
+  
+  // Enfocar el buscador para nueva búsqueda
+  $("#clienteBuscador").focus();
+  
+  console.log("🔄 Vista completamente refrescada");
+}
+
+// ===============================
+// 🔄 FUNCIÓN resetUI → limpia rutina pero mantiene cliente
 // ===============================
 function resetUI() {
   rutinaSugerida = [];
@@ -274,4 +419,8 @@ function resetUI() {
   $("#btnGenerarRutina")
     .prop("disabled", false)
     .html('<i class="fas fa-dumbbell"></i> Generar Rutina');
+    
+  $("#guardarRutina")
+    .prop("disabled", false)
+    .html('<i class="fas fa-save"></i> Guardar Rutina');
 }
