@@ -196,5 +196,40 @@ namespace PowerVital.Controllers
 
             return NoContent();
         }
+
+
+        [HttpGet("obtenerRutinasPorEntrenador/{idEntrenador}")]
+        public async Task<ActionResult<IEnumerable<RutinaDTO>>> GetRutinasPorEntrenador(int idEntrenador)
+        {
+            var rutinas = await _context.Rutinas
+                .Include(r => r.EjerciciosRutina)
+                .Include(r => r.Cliente)
+                .Where(r => r.Cliente.EntrenadorId == idEntrenador)
+                .Select(r => new RutinaDTO
+                {
+                    IdRutina = r.IdRutina,
+                    FechaInicio = r.FechaInicio,
+                    FechaFin = r.FechaFin,
+                    IdCliente = r.IdCliente,
+                    Ejercicios = r.EjerciciosRutina.Select(ej => new EjercicioRutinaDTO
+                    {
+                        IdRutina = ej.IdRutina,
+                        IdEjercicio = ej.IdEjercicio,
+                        Comentario = ej.Comentario,
+                        NombreEjercicio = ej.NombreEjercicio,
+                        DescripcionEjercicio = ej.DescripcionEjercicio,
+                        AreaMuscular = ej.AreaMuscular,
+                        AreaMuscularAfectada = ej.AreaMuscularAfectada,
+                        Repeticiones = ej.Repeticiones,
+                        GuiaEjercicio = ej.GuiaEjercicio,
+                        Dificultad = ej.Dificultad
+                    }).ToList()
+                }).ToListAsync();
+
+            return rutinas;
+        }
+
+
+
     }
 }

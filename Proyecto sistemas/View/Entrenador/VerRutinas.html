@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Vista Entrenador - Rutinas</title>
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="/Proyecto sistemas/Complementos/css/EntrenadorEstilo.css" />
@@ -16,6 +18,8 @@
 
   <!-- Sidebar (Menú dinámico) -->
   <script type="module" src="/Proyecto sistemas/Complementos/Components/MenuEntren.js"></script>
+  <script src="../../Controler/Entrenador/ControladorRutina.JS"></script>
+   
 
   <!-- Header -->
   <header>
@@ -44,76 +48,11 @@
           </thead>
           <tbody>
             <tr>
-              <td>Robles</td>
-              <td>press arnold con mancuernas</td>
-              <td>Hombros</td>
-              <td>1</td>
-              <td>El press Arnold con mancuernas es un ejercicio que consiste en elevar las mancuernas por encima de la cabeza mientras se rotan las muñecas.</td>
-              <td><i class="fas fa-check-circle text-success"></i> series de 8 a 12 repeticiones, de 3 a 5 series</td>
-              <td class="acciones text-center">
-                <button class="btn btn-sm btn-light text-primary" title="Editar">
-                  <i class="fas fa-pen-to-square"></i>
-                </button>
-                <button class="btn btn-sm btn-light text-danger" title="Eliminar">
-                  <i class="fas fa-trash"></i>
-                </button>
-              </td>
+              
             </tr>
-            <tr>
-              <td>Robles</td>
-              <td>levantamiento militar mancuernas</td>
-              <td>Hombros</td>
-              <td>1</td>
-              <td>El levantamiento militar con mancuernas es un ejercicio que consiste en empujar las mancuernas hacia arriba desde la altura de los hombros hasta por encima de la cabeza</td>
-              <td><i class="fas fa-check-circle text-success"></i> Para el press militar con mancuernas, se recomienda hacer 3 o 4 series de 8 a 12 repeticiones</td>
-              <td class="acciones text-center">
-                <button class="btn btn-sm btn-light text-primary" title="Editar">
-                  <i class="fas fa-pen-to-square"></i>
-                </button>
-                <button class="btn btn-sm btn-light text-danger" title="Eliminar">
-                  <i class="fas fa-trash"></i>
-                </button>
-              </td>
-            </tr>
-            <tr>
-              <td>Robles</td>
-              <td>Crunch Abdominal</td>
-              <td>Abdomen</td>
-              <td>1</td>
-              <td>
-                • Acuéstate boca arriba con las rodillas flexionadas y los pies apoyados en el suelo.<br>
-                • Coloca las manos detrás de la cabeza sin tirar del cuello.<br>
-                • Eleva el torso contrayendo el abdomen y vuelve lentamente a la posición inicial
-              </td>
-              <td><i class="fas fa-check-circle text-success"></i> Repeticiones: 3 series de 12-15 repeticiones.</td>
-              <td class="acciones text-center">
-                <button class="btn btn-sm btn-light text-primary" title="Editar">
-                  <i class="fas fa-pen-to-square"></i>
-                </button>
-                <button class="btn btn-sm btn-light text-danger" title="Eliminar">
-                  <i class="fas fa-trash"></i>
-                </button>
-              </td>
-            </tr>
-            <tr>
-              <td>Robles</td>
-              <td>Plancha (Plank)</td>
-              <td>Abdomen</td>
-              <td>1</td>
-              <td>
-                • Apoya los antebrazos y las puntas de los pies en el suelo, manteniendo el cuerpo alineado.<br>
-                • Activa el core (abdomen y glú­teos) y mantén la posición sin arquear la espalda.
-              </td>
-              <td><i class="fas fa-check-circle text-success"></i> Repeticiones: 3 series de 20 repeticiones (10 por lado)</td>
-              <td class="acciones text-center">
-                <button class="btn btn-sm btn-light text-primary" title="Editar">
-                  <i class="fas fa-pen-to-square"></i>
-                </button>
-                <button class="btn btn-sm btn-light text-danger" title="Eliminar">
-                  <i class="fas fa-trash"></i>
-                </button>
-              </td>
-            </tr>
+          
+            
+         
           </tbody>
         </table>
       </div>
@@ -129,9 +68,6 @@
     </div>
   </main>
 
-  <footer class="footer">
-    <img src="../../Complementos/img/facebook.png" alt="Facebook" class="footer-logo" />
-    <img src="../../Complementos/img/instagram.png" alt="Instagram" class="footer-logo" />
-  </footer>
+ 
 </body>
 </html>

@@ -1,3 +1,6 @@
+
+
+//ControaladorEntrenador.js
 const API_BASE = "http://mi-api-powergym-2025.somee.com/api";
 
 document.addEventListener("DOMContentLoaded", () => {

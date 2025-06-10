@@ -165,10 +165,14 @@ $("#btnGenerarRutina").on("click", function () {
 // ===============================
 // 📃 GENERAR RUTINA (IA) - CORREGIDO
 // ===============================
+
 function generarRutina(clienteId) {
   console.log("Generando rutina con IA para clienteId:", clienteId);
 
   const nombreCliente = $("#clienteNombre").text(); // CORREGIDO: usar clienteNombre
+
+  // Mostrar spinner
+  $("#spinnerIA").show();
 
   $.ajax({
     url: `${API_IA_EJERCICIOS}/recomendar`,
@@ -178,10 +182,9 @@ function generarRutina(clienteId) {
       IdCliente: clienteId,
       NombreCliente: nombreCliente,
     }),
+    timeout: 30000, // ⏱️ 30 segundos de espera máxima
     success(response) {
-      console.log("Respuesta IA:", response);
-      console.log("Ejercicios recomendados:", response.ejerciciosRecomendados);
-
+      console.log("✅ Respuesta IA:", response);
       rutinaSugerida = response.ejerciciosRecomendados || [];
 
       // Reactivar botón primero
@@ -190,12 +193,12 @@ function generarRutina(clienteId) {
         .html('<i class="fas fa-dumbbell"></i> Generar Rutina');
 
       if (
-        !rutinaSugerida.length ||
-        (rutinaSugerida.length === 1 &&
-          rutinaSugerida[0] === "Ningún ejercicio es apto para este cliente")
+        rutinaSugerida.length === 1 &&
+        rutinaSugerida[0] === "Ningún ejercicio es apto para este cliente"
       ) {
         alert("⚠️ Ningún ejercicio es apto para este cliente.");
         rutinaSugerida = [];
+<<<<<<< Updated upstream
         rutinaYaGenerada = false;
       } else {
         rutinaYaGenerada = true;
@@ -206,23 +209,94 @@ function generarRutina(clienteId) {
         $('html, body').animate({
           scrollTop: $("#rutinaGenerada").offset().top - 50
         }, 500);
+=======
+        $("#btnGenerarRutina")
+          .prop("disabled", false)
+          .html('<i class="fas fa-dumbbell"></i> Generar Rutina');
+        $("#spinnerIA").hide();
+        return;
+>>>>>>> Stashed changes
       }
-    },
-    error(xhr) {
-      console.error(
-        "Error recomendando ejercicios:",
-        xhr.status,
-        xhr.responseText
-      );
-      alert(`❌ Error al recomendar ejercicios.\nStatus: ${xhr.status}`);
 
-      // Reactivar botón
+      if (!rutinaSugerida.length) {
+        alert("⚠️ No se recibieron ejercicios. Inténtalo de nuevo.");
+        $("#btnGenerarRutina")
+          .prop("disabled", false)
+          .html('<i class="fas fa-dumbbell"></i> Generar Rutina');
+        $("#spinnerIA").hide();
+        return;
+      }
+
+      rutinaYaGenerada = true;
+      $("#rutinaGenerada").show();
+      mostrarTablaRutina();
+    },
+    error(xhr, status) {
+      console.error("❌ Error recomendando ejercicios:", status, xhr);
+      alert("❌ Ocurrió un error al recomendar ejercicios. Intenta de nuevo más tarde.");
+    },
+    complete() {
+      $("#spinnerIA").hide();
       $("#btnGenerarRutina")
         .prop("disabled", false)
         .html('<i class="fas fa-dumbbell"></i> Generar Rutina');
     },
   });
 }
+
+
+
+
+// function generarRutina(clienteId) {
+//   console.log("Generando rutina con IA para clienteId:", clienteId);
+
+//   const nombreCliente = $("#nombreCliente").text();
+
+//   $.ajax({
+//     url: `${API_IA_EJERCICIOS}/recomendar`,
+//     method: "POST",
+//     contentType: "application/json",
+//     data: JSON.stringify({
+//       IdCliente: clienteId,
+//       NombreCliente: nombreCliente,
+//     }),
+//     success(response) {
+//       console.log("Respuesta IA:", response);
+//       console.log("Ejercicios recomendados:", response.ejerciciosRecomendados);
+
+//       rutinaSugerida = response.ejerciciosRecomendados || [];
+
+//       if (
+//         !rutinaSugerida.length ||
+//         (rutinaSugerida.length === 1 &&
+//           rutinaSugerida[0] === "Ningún ejercicio es apto para este cliente")
+//       ) {
+//         alert("⚠️ Ningún ejercicio es apto para este cliente.");
+//         rutinaSugerida = [];
+//         $("#btnGenerarRutina")
+//           .prop("disabled", false)
+//           .html('<i class="fas fa-dumbbell"></i> Generar Rutina');
+//       } else {
+//         rutinaYaGenerada = true;
+//         $("#rutinaGenerada").show();
+//         mostrarTablaRutina();
+//       }
+//     },
+//     error(xhr) {
+//       console.error(
+//         "Error recomendando ejercicios:",
+//         xhr.status,
+//         xhr.responseText
+//       );
+//       alert(`❌ Error al recomendar ejercicios.\nStatus: ${xhr.status}`);
+
+//       // Reactivar botón
+//       $("#btnGenerarRutina")
+//         .prop("disabled", false)
+//         .html('<i class="fas fa-dumbbell"></i> Generar Rutina');
+//     },
+//   });
+// }
 
 // ===============================
 // 📃 MOSTRAR TABLA
@@ -277,6 +351,105 @@ function eliminarEjercicio(index) {
   rutinaSugerida.splice(index, 1);
   mostrarTablaRutina();
 }
+
+
+
+
+$("#guardarRutina").on("click", function () {
+  if (!clienteSeleccionado || !rutinaSugerida.length) {
+    alert("Selecciona un cliente y asegúrate de que la rutina tenga ejercicios.");
+    return;
+  }
+
+const dtoRutina = {
+
+  FechaInicio: new Date().toISOString(),
+  FechaFin: new Date(new Date().setMonth(new Date().getMonth() + 1)).toISOString(),
+IdCliente: parseInt(clienteSeleccionado),
+  Ejercicios: []
+};
+
+
+  console.log("Creando rutina:", dtoRutina);
+
+  $.ajax({
+    url: `${API_RUTINA}/crearRutina`,
+    method: "POST",
+    contentType: "application/json",
+    data: JSON.stringify(dtoRutina),
+    success: function (rutinaCreada) {
+      const idRutina = rutinaCreada.IdRutina || rutinaCreada.idRutina;
+      console.log("✅ Rutina creada con ID:", idRutina);
+
+      let errores = 0;
+
+      rutinaSugerida.forEach((ej, idx) => {
+        const reps = parseInt($(`[data-index="${idx}"].reps-input`).val()) || 0;
+        const comentario = $(`[data-index="${idx}"].comentario-input`).val() || "";
+
+        const dtoEj = {
+          IdRutina: idRutina,
+          IdEjercicio: ej.IdEjercicio,
+          Comentario: comentario,
+          NombreEjercicio: ej.Nombre,
+          DescripcionEjercicio: ej.Descripcion,
+          AreaMuscular: ej.AreaMuscular,
+          AreaMuscularAfectada: ej.AreaAfectada,
+          Repeticiones: reps,
+          GuiaEjercicio: ej.GuiaEjercicio,
+          Dificultad: ej.Dificultad
+        };
+
+        if (!ej.IdEjercicio) {
+  console.warn("❌ El ejercicio no tiene IdEjercicio:", ej);
+  errores++;
+  return;
+}
+
+
+
+        $.ajax({
+          url: `${API_EJERCICIO_RUTINA}/agregarEjercicioRutina`,
+          method: "POST",
+          contentType: "application/json",
+          data: JSON.stringify(dtoEj),
+          error: () => errores++
+        });
+      });
+
+      setTimeout(() => {
+        if (errores === 0) {
+          alert("✅ Rutina y ejercicios guardados correctamente.");
+        } else {
+          alert(`⚠️ Rutina creada, pero fallaron ${errores} ejercicios.`);
+        }
+      }, 500);
+    },
+    error: function (xhr) {
+      console.error("❌ Error creando rutina:", xhr.status, xhr.responseText);
+      alert(`❌ Error al crear la rutina (status ${xhr.status}).`);
+    }
+  });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // ===============================
 // 💾 GUARDAR RUTINA - CORREGIDO CON REFRESH
@@ -419,8 +592,55 @@ function resetUI() {
   $("#btnGenerarRutina")
     .prop("disabled", false)
     .html('<i class="fas fa-dumbbell"></i> Generar Rutina');
+<<<<<<< Updated upstream
     
   $("#guardarRutina")
     .prop("disabled", false)
     .html('<i class="fas fa-save"></i> Guardar Rutina');
 }
+=======
+}
+
+
+
+// document.addEventListener("DOMContentLoaded", () => {
+//   const idEntrenador = sessionStorage.getItem("idEntrenador");
+//   if (!idEntrenador) {
+//     alert("⚠️ Sesión expirada. Inicia sesión nuevamente.");
+//     return;
+//   }
+
+//   fetch(`${API_RUTINA}/obtenerRutinasPorEntrenador/${idEntrenador}`)
+//     .then((response) => {
+//       if (!response.ok) throw new Error("❌ Error al cargar rutinas");
+//       return response.json();
+//     })
+//     .then((rutinas) => {
+//       const tbody = document.querySelector(".table-rutinas tbody");
+//       tbody.innerHTML = "";
+
+//       rutinas.forEach((rutina) => {
+//         rutina.ejercicios.forEach((ej) => {
+//           const fila = `
+//             <tr>
+//               <td>${sessionStorage.getItem("nombreEntrenador") || "-"}</td>
+//               <td>${ej.nombreEjercicio}</td>
+//               <td>${ej.areaMuscular}</td>
+//               <td>#${rutina.idRutina}</td>
+//               <td>${ej.descripcionEjercicio}</td>
+//               <td>${ej.repeticiones}</td>
+//               <td>
+//                 <button class="btn btn-danger btn-sm">Eliminar</button>
+//               </td>
+//             </tr>
+//           `;
+//           tbody.insertAdjacentHTML("beforeend", fila);
+//         });
+//       });
+//     })
+//     .catch((err) => {
+//       console.error(err);
+//       alert("❌ No se pudieron cargar las rutinas.");
+//     });
+// });
+>>>>>>> Stashed changes
