@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rutinas PowerVital</title>
+  <title>Mis Rutinas - PowerVital</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="/Proyecto sistemas/Complementos/css/ClienteEstilos.css">
@@ -23,43 +23,48 @@
   <!-- Contenedor layout -->
   <div class="layout" id="layout">
     <div class="main-wrapper" id="mainWrapper">
-      <main class="contenido">
-        <div class="container mt-5 pt-3">
-          <!-- Encabezado con información del cliente -->
-          <div class="d-flex justify-content-between align-items-center mb-4">
-            <div>
-              <h5 class="mb-0 fw-bold">
-                <i class="fas fa-dumbbell text-primary"></i> 
-                Mis Rutinas de Ejercicio
-              </h5>
-              <small class="text-muted">Rutinas asignadas por tu instructor personal</small>
-            </div>
-            <div class="text-end">
-              <span class="badge bg-info fs-6" id="totalRutinas">Cargando...</span>
+      <main class="contenido contenido-rutinas">
+        <div class="container mt-5 pt-3 fade-in-up">
+          
+          <!-- Encabezado personalizado -->
+          <div class="encabezado-rutinas">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <h5 class="mb-1">
+                  <i class="fas fa-dumbbell"></i> 
+                  Mis Rutinas de Ejercicio
+                </h5>
+                <small>Haz clic en una rutina para ver sus ejercicios</small>
+              </div>
+              <div class="text-end">
+                <span class="contador-rutinas" id="totalRutinas">Cargando...</span>
+              </div>
             </div>
           </div>
 
           <!-- Tabla de rutinas -->
-          <div class="table-responsive">
+          <div class="table-responsive table-responsive-rutinas">
             <table class="table table-bordered table-hover align-middle">
               <thead class="table-dark text-center">
-                <tr>
-                  <th><i class="fas fa-user-tie"></i> Instructor</th>
-                  <th><i class="fas fa-running"></i> Ejercicio</th>
-                  <th><i class="fas fa-bullseye"></i> Área Muscular</th>
-                  <th><i class="fas fa-hashtag"></i> Rutina #</th>
-                  <th><i class="fas fa-info-circle"></i> Descripción</th>
-                  <th><i class="fas fa-repeat"></i> Repeticiones</th>
-                  <th><i class="fas fa-play-circle"></i> Video</th>
+                <tr> 
+                  <th><i class="fas fa-user-tie"></i> Instructor</th> 
+                  <th><i class="fas fa-running"></i> Descripcion Rutina</th> 
+                  <th><i class="fas fa-bullseye"></i> Área Muscular</th> 
+                  <th><i class="fas fa-hashtag"></i> Rutina </th> 
+                  <th><i class="fas fa-info-circle"></i> Descripción</th> 
+                  <th><i class="fas fa-repeat"></i> Ejercicios</th>
+                  <th><i class="fas fa-play-circle"></i> Rutina Completa</th> 
                 </tr>
               </thead>
               <tbody id="tablaRutinas">
                 <tr>
                   <td colspan="7" class="text-center text-muted py-4">
-                    <div class="spinner-border text-primary" role="status">
-                      <span class="visually-hidden">Cargando...</span>
+                    <div class="loading-rutinas">
+                      <div class="spinner-border spinner-border-custom" role="status">
+                        <span class="visually-hidden">Cargando...</span>
+                      </div>
+                      <p class="mt-2 mb-0">Cargando rutinas...</p>
                     </div>
-                    <p class="mt-2 mb-0">Cargando rutinas...</p>
                   </td>
                 </tr>
               </tbody>
@@ -68,11 +73,11 @@
 
           <!-- Botones de acción -->
           <div class="d-flex justify-content-between mt-4">
-            <button class="btn btn-secondary" onclick="window.location.href='/Proyecto sistemas/View/Cliente/Inicio.html'">
+            <button class="btn btn-secondary btn-navegacion" onclick="window.location.href='/Proyecto sistemas/View/Cliente/Index.html'">
               <i class="fas fa-arrow-left"></i> Regresar
             </button>
-            <button class="btn btn-success" onclick="window.location.href='/Proyecto sistemas/View/Cliente/ReporteRutina.html'">
-              <i class="fas fa-download"></i> Descargar Reporte
+            <button class="btn btn-info btn-navegacion" onclick="descargarTodasLasRutinas()">
+              <i class="fas fa-download"></i> Descargar Todas las Rutinas
             </button>
           </div>
         </div>

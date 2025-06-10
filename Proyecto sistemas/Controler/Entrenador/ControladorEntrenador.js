@@ -226,7 +226,7 @@ window.nuevaRutina = function (idCliente) {
   sessionStorage.setItem("clienteParaRutina", idCliente);
   
   // Redirigir a la página de generar rutina
-  window.location.href = "../Rutina/GenerarRutina.html";
+  window.location.href = "../../View/Entrenador/GenerarRutina.html";
 };
 
 // ✅ Nueva función para ver perfil del cliente

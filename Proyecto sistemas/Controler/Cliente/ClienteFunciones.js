@@ -22,6 +22,10 @@ async function cargarRutinasCliente(clienteId) {
   mostrarCargando(true);
 
   try {
+    // Primero obtener datos del cliente para conseguir el nombre del entrenador
+    const datosCliente = await obtenerDatosCliente(clienteId);
+    
+    // Luego obtener las rutinas
     const endpoint = `${API_BASE}/Rutina/obtenerRutinasPorCliente/${clienteId}`;
     console.log(`🔍 Llamando al endpoint: ${endpoint}`);
 
@@ -39,20 +43,28 @@ async function cargarRutinasCliente(clienteId) {
     }
 
     const rutinas = await response.json();
-    console.log('✅ Rutinas básicas obtenidas:', rutinas);
+    console.log('✅ Rutinas obtenidas:', rutinas);
 
     if (!rutinas || rutinas.length === 0) {
-      mostrarRutinas([]);
-      actualizarContadorRutinas([]);
+      mostrarSinRutinas();
       return;
     }
 
-    // Procesar rutinas y expandir ejercicios
-    const ejerciciosCompletos = procesarRutinasYEjercicios(rutinas);
-    
-    console.log('✅ Ejercicios procesados:', ejerciciosCompletos);
-    mostrarRutinas(ejerciciosCompletos);
-    actualizarContadorRutinas(ejerciciosCompletos);
+    // Enriquecer rutinas con el nombre del entrenador del cliente
+    const rutinasConEntrenador = rutinas.map(rutina => ({
+      ...rutina,
+      NombreEntrenador: datosCliente?.NombreEntrenador || datosCliente?.NombreInstructor || 'Entrenador Asignado'
+    }));
+
+    console.log('✅ Rutinas enriquecidas con entrenador:', rutinasConEntrenador[0]);
+
+    // Guardar rutinas en sessionStorage para usar en la página de detalle
+    sessionStorage.setItem('rutinasCliente', JSON.stringify(rutinasConEntrenador));
+    sessionStorage.setItem('datosCliente', JSON.stringify(datosCliente));
+
+    // Mostrar rutinas en la tabla
+    mostrarRutinas(rutinasConEntrenador);
+    actualizarContadorRutinas(rutinasConEntrenador);
 
   } catch (error) {
     console.error('❌ Error al cargar rutinas:', error);
@@ -62,187 +74,241 @@ async function cargarRutinasCliente(clienteId) {
   }
 }
 
-// 🔹 PROCESAR RUTINAS Y EXTRAER EJERCICIOS
-function procesarRutinasYEjercicios(rutinas) {
-  const ejerciciosCompletos = [];
-  
-  rutinas.forEach((rutina, rutinaIndex) => {
-    if (rutina.Ejercicios && rutina.Ejercicios.length > 0) {
-      rutina.Ejercicios.forEach((ejercicio, ejercicioIndex) => {
-        ejerciciosCompletos.push({
-          // Información de la rutina
-          IdRutina: rutina.IdRutina,
-          FechaInicio: rutina.FechaInicio,
-          FechaFin: rutina.FechaFin,
-          NumeroRutina: rutinaIndex + 1,
+// 🔹 OBTENER DATOS DEL CLIENTE
+async function obtenerDatosCliente(clienteId) {
+  try {
+    // Intentar diferentes endpoints posibles para obtener datos del cliente
+    const endpointsPosibles = [
+      `${API_BASE}/Cliente/obtenerClientePorId/${clienteId}`,
+      `${API_BASE}/historialsalud/cliente/${clienteId}/estado-actual`,
+      `${API_BASE}/Cliente/${clienteId}`,
+      `${API_BASE}/Usuario/${clienteId}`
+    ];
+
+    for (const endpoint of endpointsPosibles) {
+      try {
+        console.log(`🔍 Intentando obtener datos del cliente desde: ${endpoint}`);
+        const response = await fetch(endpoint);
+        
+        if (response.ok) {
+          const data = await response.json();
+          console.log('✅ Datos del cliente obtenidos:', data);
+          console.log('🔍 ESTRUCTURA COMPLETA DEL CLIENTE:');
+          console.log('Propiedades disponibles:', Object.keys(data));
+          console.log('Datos completos:', JSON.stringify(data, null, 2));
           
-          // Información del ejercicio
-          IdEjercicio: ejercicio.IdEjercicio,
-          NombreEjercicio: ejercicio.NombreEjercicio,
-          DescripcionEjercicio: ejercicio.DescripcionEjercicio,
-          AreaMuscular: ejercicio.AreaMuscular,
-          AreaMuscularAfectada: ejercicio.AreaMuscularAfectada,
-          Repeticiones: ejercicio.Repeticiones,
-          VideoUrl: ejercicio.GuiaEjercicio,
-          Dificultad: ejercicio.Dificultad,
-          Comentario: ejercicio.Comentario,
+          // Si el endpoint devuelve datos en formato {Cliente: {...}}, extraer el cliente
+          let datosCliente = data.Cliente || data;
           
-          // Información adicional
-          NombreInstructor: 'Asignado', // Por defecto, ya que no viene en la estructura
-          NumeroEjercicioEnRutina: ejercicioIndex + 1
-        });
-      });
+          // Si viene en el formato del historial de salud, usar los datos del cliente anidados
+          if (data.Cliente && data.Cliente.NombreEntrenador) {
+            datosCliente = data.Cliente;
+            console.log('✅ Datos del cliente extraídos del historial:', datosCliente);
+            return datosCliente;
+          }
+          
+          // Si viene directamente el cliente con NombreEntrenador
+          if (datosCliente.NombreEntrenador || datosCliente.EntrenadorId) {
+            console.log('✅ Cliente encontrado con entrenador:', datosCliente);
+            return datosCliente;
+          }
+          
+          // Si es el endpoint principal y tiene datos básicos del cliente
+          if (endpoint.includes('obtenerClientePorId') && datosCliente.Nombre) {
+            console.log('✅ Datos básicos del cliente obtenidos:', datosCliente);
+            return datosCliente;
+          }
+        }
+      } catch (error) {
+        console.log(`⚠️ No se pudo obtener cliente desde ${endpoint}:`, error.message);
+      }
     }
-  });
+
+    console.log('⚠️ No se pudo obtener información del cliente desde ningún endpoint');
+    return null;
+
+  } catch (error) {
+    console.error('❌ Error al obtener datos del cliente:', error);
+    return null;
+  }
+}
+
+// 🔹 ENRIQUECER RUTINAS CON INFORMACIÓN DEL INSTRUCTOR
+async function enriquecerRutinasConInstructor(rutinas) {
+  // Intentar diferentes endpoints para obtener información del instructor
+  const endpointsPosibles = [
+    `${API_BASE}/Instructor/obtenerInstructorPorCliente/${sessionStorage.getItem("clienteId")}`,
+    `${API_BASE}/Cliente/${sessionStorage.getItem("clienteId")}/instructor`,
+    `${API_BASE}/Usuario/instructor/${sessionStorage.getItem("clienteId")}`
+  ];
+
+  for (const endpoint of endpointsPosibles) {
+    try {
+      console.log(`🔍 Intentando obtener instructor desde: ${endpoint}`);
+      const response = await fetch(endpoint);
+      
+      if (response.ok) {
+        const instructorData = await response.json();
+        console.log('✅ Datos del instructor obtenidos:', instructorData);
+        
+        // Enriquecer cada rutina con la información del instructor
+        return rutinas.map(rutina => ({
+          ...rutina,
+          NombreInstructor: instructorData.Nombre || instructorData.NombreCompleto || instructorData.NombreInstructor || 'Instructor Asignado'
+        }));
+      }
+    } catch (error) {
+      console.log(`⚠️ No se pudo obtener instructor desde ${endpoint}:`, error.message);
+    }
+  }
+
+  // Si no se pudo obtener el instructor, devolver rutinas originales
+  console.log('⚠️ No se pudo obtener información del instructor desde ningún endpoint');
+  return rutinas;
+}
+
+// 🔹 MOSTRAR RUTINAS EN LA TABLA (NO EJERCICIOS)
+function mostrarRutinas(rutinas) {
+  const tbody = document.getElementById('tablaRutinas');
   
-  return ejerciciosCompletos;
+  tbody.innerHTML = rutinas.map((rutina, index) => {
+    const totalEjercicios = rutina.Ejercicios ? rutina.Ejercicios.length : 0;
+    const musculosUnicos = obtenerMusculosUnicos(rutina.Ejercicios || []);
+    const duracion = calcularDuracionRutina(rutina.FechaInicio, rutina.FechaFin);
+    
+    // Usar el nombre del entrenador que viene enriquecido desde los datos del cliente
+    const nombreEntrenador = rutina.NombreEntrenador || 'Entrenador Asignado';
+    
+    return `
+      <tr class="rutina-row" style="cursor: pointer;" onclick="abrirDetalleRutina(${rutina.IdRutina}, ${index + 1})">
+        <td class="text-center">
+          <span class="fw-bold">${nombreEntrenador}</span>
+        </td>
+        <td>
+          <div>
+            <span class="fw-bold text-primary">Rutina Completa #${index + 1}</span>
+            <br>
+            <small class="text-muted">${totalEjercicios} ejercicios incluidos</small>
+          </div>
+        </td>
+        <td class="text-center">
+          <small class="text-muted">${musculosUnicos}</small>
+        </td>
+        <td class="text-center">
+          <span class="badge bg-primary fs-6"># ${index + 1}</span>
+        </td>
+        <td class="small">
+          <div style="max-width: 200px;">
+            <strong>Período:</strong><br>
+            <i class="fas fa-calendar"></i> ${formatearFecha(rutina.FechaInicio)} - ${formatearFecha(rutina.FechaFin)}
+            <br><strong>Duración:</strong> ${duracion}
+            <br><strong>Ejercicios:</strong> ${totalEjercicios}
+          </div>
+        </td>
+        <td class="text-center">
+          <span class="fw-bold text-success fs-5">${totalEjercicios}</span>
+          <br><small class="text-muted">ejercicios</small>
+        </td>
+        <td class="text-center">
+          <button class="btn btn-ver-detalle" onclick="event.stopPropagation(); abrirDetalleRutina(${rutina.IdRutina}, ${index + 1})">
+            <i class="fas fa-eye"></i> Ver Detalle
+          </button>
+        </td>
+      </tr>
+    `;
+  }).join('');
+
+  // Agregar efecto hover
+  const filas = document.querySelectorAll('.rutina-row');
+  filas.forEach(fila => {
+    fila.addEventListener('mouseenter', function() {
+      this.style.backgroundColor = '#f8f9fa';
+    });
+    fila.addEventListener('mouseleave', function() {
+      this.style.backgroundColor = '';
+    });
+  });
+}
+
+// 🔹 OBTENER INSTRUCTOR DEL PRIMER EJERCICIO (si no viene en la rutina principal)
+function obtenerInstructorDePrimerEjercicio(ejercicios) {
+  if (!ejercicios || ejercicios.length === 0) return null;
+  
+  // Buscar en el primer ejercicio si tiene información del instructor
+  const primerEjercicio = ejercicios[0];
+  return primerEjercicio.NombreInstructor || 
+         primerEjercicio.Instructor || 
+         primerEjercicio.InstructorAsignado || 
+         null;
+}
+
+// 🔹 FUNCIÓN PARA ABRIR DETALLE DE RUTINA
+function abrirDetalleRutina(idRutina, numeroRutina) {
+  // Guardar información de la rutina seleccionada
+  sessionStorage.setItem('rutinaSeleccionadaId', idRutina);
+  sessionStorage.setItem('rutinaSeleccionadaNumero', numeroRutina);
+  
+  // Redirigir a la página de detalle
+  window.location.href = '/Proyecto sistemas/View/Cliente/DetalleRutina.html';
+}
+
+// 🔹 OBTENER MÚSCULOS ÚNICOS
+function obtenerMusculosUnicos(ejercicios) {
+  if (!ejercicios || ejercicios.length === 0) return 'Sin ejercicios';
+  
+  const musculos = [...new Set(ejercicios.map(ej => ej.AreaMuscular))];
+  if (musculos.length <= 2) {
+    return musculos.join(', ');
+  }
+  return `${musculos.slice(0, 2).join(', ')} +${musculos.length - 2}`;
+}
+
+// 🔹 CALCULAR DURACIÓN DE LA RUTINA
+function calcularDuracionRutina(fechaInicio, fechaFin) {
+  const inicio = new Date(fechaInicio);
+  const fin = new Date(fechaFin);
+  const diferencia = fin - inicio;
+  const dias = Math.ceil(diferencia / (1000 * 60 * 60 * 24));
+  
+  if (dias <= 7) return `${dias} día${dias !== 1 ? 's' : ''}`;
+  if (dias <= 30) return `${Math.ceil(dias / 7)} semana${Math.ceil(dias / 7) !== 1 ? 's' : ''}`;
+  return `${Math.ceil(dias / 30)} mes${Math.ceil(dias / 30) !== 1 ? 'es' : ''}`;
+}
+
+// 🔹 FORMATEAR FECHA
+function formatearFecha(fechaISO) {
+  const date = new Date(fechaISO);
+  return date.toLocaleDateString("es-CR", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
 }
 
 // 🔹 ACTUALIZAR CONTADOR DE RUTINAS
-function actualizarContadorRutinas(ejercicios) {
+function actualizarContadorRutinas(rutinas) {
   const contador = document.getElementById('totalRutinas');
   if (contador) {
-    const total = ejercicios ? ejercicios.length : 0;
-    contador.textContent = `${total} ejercicio${total !== 1 ? 's' : ''} asignado${total !== 1 ? 's' : ''}`;
+    const total = rutinas ? rutinas.length : 0;
+    contador.textContent = `${total} rutina${total !== 1 ? 's' : ''} disponible${total !== 1 ? 's' : ''}`;
     contador.className = total > 0 ? 'badge bg-success fs-6' : 'badge bg-secondary fs-6';
   }
 }
 
-// 🔹 MOSTRAR RUTINAS EN LA TABLA
-function mostrarRutinas(ejercicios) {
+// 🔹 MOSTRAR CUANDO NO HAY RUTINAS
+function mostrarSinRutinas() {
   const tbody = document.getElementById('tablaRutinas');
-  
-  if (!ejercicios || ejercicios.length === 0) {
-    tbody.innerHTML = `
-      <tr>
-        <td colspan="7" class="text-center text-muted py-4">
-          <i class="fas fa-dumbbell mb-2 fs-1"></i><br>
-          <strong>No tienes rutinas asignadas actualmente</strong><br>
-          <small>Contacta a tu instructor para que te asigne una rutina personalizada</small>
-        </td>
-      </tr>
-    `;
-    return;
-  }
-
-  tbody.innerHTML = ejercicios.map((ejercicio, index) => `
+  tbody.innerHTML = `
     <tr>
-      <td class="text-center">
-        <span class="fw-bold">${ejercicio.NombreInstructor || 'Asignado'}</span>
-      </td>
-      <td class="fw-bold text-primary">${ejercicio.NombreEjercicio || 'N/A'}</td>
-      <td class="text-center">
-        <span class="badge bg-primary">${ejercicio.AreaMuscular || 'General'}</span>
-        ${ejercicio.AreaMuscularAfectada ? 
-          `<br><small class="text-muted">${ejercicio.AreaMuscularAfectada}</small>` : 
-          ''
-        }
-      </td>
-      <td class="text-center">
-        <span class="badge bg-secondary">#${ejercicio.NumeroRutina || (index + 1)}</span>
-        ${ejercicio.Dificultad ? 
-          `<br><span class="badge ${getDificultadColor(ejercicio.Dificultad)} mt-1">${ejercicio.Dificultad}</span>` : 
-          ''
-        }
-      </td>
-      <td class="small">
-        <div style="max-width: 200px;">
-          <strong>Descripción:</strong><br>
-          ${ejercicio.DescripcionEjercicio || 'Sin descripción disponible'}
-          ${ejercicio.Comentario ? 
-            `<br><br><strong>Comentario:</strong><br><em>${ejercicio.Comentario}</em>` : 
-            ''
-          }
-        </div>
-      </td>
-      <td class="text-center">
-        <span class="fw-bold text-success fs-5">
-          ${ejercicio.Repeticiones || 'N/A'}
-        </span>
-        <br><small class="text-muted">repeticiones</small>
-      </td>
-      <td class="text-center">
-        ${ejercicio.VideoUrl ? 
-          `<button class="btn btn-sm btn-outline-danger" onclick="verVideo('${ejercicio.VideoUrl}', '${ejercicio.NombreEjercicio}')">
-            <i class="fab fa-youtube"></i> Ver Video
-          </button>` : 
-          `<span class="text-muted small">
-            <i class="fas fa-video-slash"></i> Sin video
-          </span>`
-        }
+      <td colspan="7" class="text-center text-muted py-5">
+        <i class="fas fa-dumbbell mb-3 fs-1"></i><br>
+        <h5>No tienes rutinas asignadas</h5>
+        <p>Contacta a tu instructor para que te asigne una rutina personalizada</p>
       </td>
     </tr>
-  `).join('');
-}
-
-// 🔹 OBTENER COLOR SEGÚN DIFICULTAD
-function getDificultadColor(dificultad) {
-  switch(dificultad?.toLowerCase()) {
-    case 'baja': return 'bg-success';
-    case 'media': return 'bg-warning';
-    case 'alta': return 'bg-danger';
-    default: return 'bg-secondary';
-  }
-}
-
-// 🔹 VER VIDEO EN MODAL
-function verVideo(videoUrl, nombreEjercicio) {
-  // Crear modal dinámicamente
-  const modalHtml = `
-    <div class="modal fade" id="videoModal" tabindex="-1">
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">
-              <i class="fab fa-youtube text-danger"></i> 
-              ${nombreEjercicio}
-            </h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-          </div>
-          <div class="modal-body p-0">
-            <div class="ratio ratio-16x9">
-              <iframe src="${convertirUrlYoutube(videoUrl)}" 
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                      allowfullscreen>
-              </iframe>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
   `;
-
-  // Remover modal anterior si existe
-  const modalAnterior = document.getElementById('videoModal');
-  if (modalAnterior) {
-    modalAnterior.remove();
-  }
-
-  // Agregar nuevo modal
-  document.body.insertAdjacentHTML('beforeend', modalHtml);
   
-  // Mostrar modal
-  const modal = new bootstrap.Modal(document.getElementById('videoModal'));
-  modal.show();
-}
-
-// 🔹 CONVERTIR URL DE YOUTUBE PARA EMBED
-function convertirUrlYoutube(url) {
-  if (!url) return '';
-  
-  // Si ya es una URL de embed, devolverla tal como está
-  if (url.includes('embed')) return url;
-  
-  // Convertir URL normal de YouTube a embed
-  let videoId = '';
-  
-  if (url.includes('watch?v=')) {
-    videoId = url.split('watch?v=')[1].split('&')[0];
-  } else if (url.includes('youtu.be/')) {
-    videoId = url.split('youtu.be/')[1].split('?')[0];
-  }
-  
-  return videoId ? `https://www.youtube.com/embed/${videoId}` : url;
+  actualizarContadorRutinas([]);
 }
 
 // 🔹 MOSTRAR/OCULTAR INDICADOR DE CARGA
@@ -271,8 +337,9 @@ function mostrarError(mensaje) {
       <td colspan="7" class="text-center py-4">
         <div class="text-danger">
           <i class="fas fa-exclamation-triangle fs-1 mb-2"></i>
-          <p class="mb-0">${mensaje}</p>
-          <button class="btn btn-sm btn-outline-primary mt-2" onclick="location.reload()">
+          <h5 class="text-danger">Error al cargar</h5>
+          <p class="mb-3">${mensaje}</p>
+          <button class="btn btn-outline-primary" onclick="location.reload()">
             <i class="fas fa-redo"></i> Reintentar
           </button>
         </div>
@@ -280,7 +347,6 @@ function mostrarError(mensaje) {
     </tr>
   `;
 
-  // También actualizar el contador
   const contador = document.getElementById('totalRutinas');
   if (contador) {
     contador.textContent = 'Error';

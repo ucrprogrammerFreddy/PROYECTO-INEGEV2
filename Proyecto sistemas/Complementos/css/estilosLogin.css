@@ -20,15 +20,26 @@ header {
     }
 
 footer {
-    background-color: #316163;
-    color: #ffffff;
+    background-color: #022227; /* Verde oscuro */
+    color: #fffdfd;
     padding: 1rem 0;
 }
 
-    footer img {
-        width: 30px;
-        margin: 0 10px;
-    }
+footer img {
+    width: 30px;
+    height: auto;
+    filter: none !important; /* QUITAR FILTRO GRIS - MOSTRAR COLORES ORIGINALES */
+    transition: transform 0.3s ease;
+    margin: 0 10px;
+}
+
+footer img:hover {
+    transform: scale(1.1); /* EFECTO HOVER DE ESCALA */
+}
+
+footer p {
+    color: rgb(255, 255, 255); /* TEXTO BLANCO PARA CONTRASTE */
+}
 
 h1, h2 {
     margin-bottom: 1rem;
@@ -68,5 +79,5 @@ footer img {
     }
 
 footer p {
-    color: black;
+    color: rgb(255, 255, 255);
 }
