@@ -87,25 +87,27 @@ export function renderizarEntrenadores(lista) {
       <td>${entrenador.Clave}</td>
       <td>${entrenador.FormacionAcademica || ""}</td>
       <td>${entrenador.Rol || ""}</td>
-      <td>
-        <button class="btn btn-sm btn-warning" onclick="mostrarModalEditar(${
+      <td class="acciones-clientes">
+        <button class="btn-tabla-editar" title="Editar" onclick="mostrarModalEditar(
+          ${entrenador.idIdUsuario},
+          '${entrenador.Nombre}',
+          '${entrenador.Email}',
+          '${entrenador.Telefono}',
+          '${entrenador.Clave}',
+          '${entrenador.FormacionAcademica || ""}'
+        )">
+          <i class="fas fa-pen-to-square icono-btn"></i>
+        </button>
+        <button class="btn-tabla-eliminar" title="Eliminar" onclick="mostrarModalEliminar(${
           entrenador.idIdUsuario
-        }, 
-        '${entrenador.Nombre}', '${entrenador.Email}', '${
-      entrenador.Telefono
-    }', '${entrenador.Clave}',
-        '${
-          entrenador.FormacionAcademica || ""
-        }')"><i class="fas fa-pen-to-square"></i></button>
-        <button class="btn btn-sm btn-danger" onclick="mostrarModalEliminar(${
-          entrenador.idIdUsuario
-        })"><i class="fas fa-trash"></i></button>
+        })">
+          <i class="fas fa-trash icono-btn"></i>
+        </button>
       </td>
     `;
     tbody.appendChild(fila);
   });
 }
-
 //  Mostrar modal de edición con datos precargados
 window.mostrarModalEditar = function (
   Id,

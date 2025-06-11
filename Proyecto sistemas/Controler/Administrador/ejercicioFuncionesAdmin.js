@@ -1,8 +1,66 @@
 const URL_API = "http://mi-api-powergym-2025.somee.com/api/Ejercicio";
 
+let listaEjerciciosGlobal = [];
+
 document.addEventListener("DOMContentLoaded", function () {
   cargarEjerciciosAdmin();
+  inicializarFiltroEjercicios();
 
+  // Inicializador del filtro de búsqueda
+  function inicializarFiltroEjercicios() {
+    const filtroInput = document.getElementById("filtroEjercicio");
+    if (filtroInput) {
+      filtroInput.addEventListener("input", function () {
+        renderizarTablaEjercicios(this.value);
+      });
+    }
+  }
+
+  // Renderiza la tabla con o sin filtro
+  function renderizarTablaEjercicios(filtro = "") {
+    const table = document.getElementById("tablaEjercicios");
+    if (!table) return;
+    const tbody = table.querySelector("tbody");
+    if (!tbody) return;
+
+    let ejerciciosFiltrados = listaEjerciciosGlobal;
+
+    if (filtro) {
+      ejerciciosFiltrados = listaEjerciciosGlobal.filter(
+        (ej) =>
+          ej.Nombre && ej.Nombre.toLowerCase().includes(filtro.toLowerCase())
+      );
+    }
+
+    if (
+      !Array.isArray(ejerciciosFiltrados) ||
+      ejerciciosFiltrados.length === 0
+    ) {
+      tbody.innerHTML =
+        "<tr><td colspan='7'>No hay ejercicios registrados.</td></tr>";
+      return;
+    }
+
+    tbody.innerHTML = "";
+    ejerciciosFiltrados.forEach((ej) => {
+      tbody.insertAdjacentHTML(
+        "beforeend",
+        `
+        <tr>
+          <td>${ej.Nombre}</td>
+          <td>${ej.Descripcion}</td>
+          <td>${ej.Repeticiones}</td>
+          <td><a href="${ej.GuiaEjercicio}" target="_blank">Ver video</a></td>
+          <td>${ej.AreaMuscular}</td>
+          <td>${ej.AreaMuscularAfectada}</td>
+          <td>${ej.Dificultad}</td>
+        </tr>
+        `
+      );
+    });
+  }
+
+  // Carga y guarda la lista global de ejercicios
   async function cargarEjerciciosAdmin() {
     const table = document.getElementById("tablaEjercicios");
     if (!table) return;
@@ -29,29 +87,8 @@ document.addEventListener("DOMContentLoaded", function () {
         console.warn("Formato inesperado de la respuesta:", ejercicios);
       }
 
-      if (!Array.isArray(lista) || lista.length === 0) {
-        tbody.innerHTML =
-          "<tr><td colspan='7'>No hay ejercicios registrados.</td></tr>";
-        return;
-      }
-
-      tbody.innerHTML = "";
-      lista.forEach((ej) => {
-        tbody.insertAdjacentHTML(
-          "beforeend",
-          `
-          <tr>
-            <td>${ej.Nombre}</td>
-            <td>${ej.Descripcion}</td>
-            <td>${ej.Repeticiones}</td>
-            <td><a href="${ej.GuiaEjercicio}" target="_blank">Ver video</a></td>
-            <td>${ej.AreaMuscular}</td>
-            <td>${ej.AreaMuscularAfectada}</td>
-            <td>${ej.Dificultad}</td>
-          </tr>
-          `
-        );
-      });
+      listaEjerciciosGlobal = lista;
+      renderizarTablaEjercicios();
     } catch (err) {
       mostrarMensaje("Error al cargar ejercicios: " + err.message, "danger");
       tbody.innerHTML = "<tr><td colspan='7'>Error al cargar datos.</td></tr>";

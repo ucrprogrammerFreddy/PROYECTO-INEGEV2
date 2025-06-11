@@ -263,7 +263,7 @@ body {
     }
 /* -------------------- TABLAS -------------------- */
 table {
-  width: 100%;
+  width: 80%;
   border-collapse: collapse;
   background-color: white;
   box-shadow: 0 0 6px rgba(0, 0, 0, 0.05);
@@ -329,7 +329,7 @@ tr:hover {
 
 /* Botones del formulario */
 .form-wrapper .form-buttons {
-  display: flex;
+  display: grid;
   justify-content: center;
   gap: 1rem;
   margin-top: 1rem;
@@ -361,3 +361,57 @@ tr:hover {
   border-color: #4F6654 !important;
     color: #3d3d3d !important;
 }
+.acciones-clientes {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn-tabla-editar {
+  background-color: #4F6654;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 12px;
+  display: inline-flex;
+  align-items: center;
+  font-size: 1.1rem;
+  transition: background 0.2s;
+  cursor: pointer;
+}
+.btn-tabla-editar:hover {
+  background-color: #39503e;
+}
+
+.btn-tabla-eliminar {
+  background-color: #b8a88a;
+  color: #3d3d3d;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 12px;
+  display: inline-flex;
+  align-items: center;
+  font-size: 1.1rem;
+  transition: background 0.2s;
+  cursor: pointer;
+}
+.btn-tabla-eliminar:hover {
+  background-color: #a99677;
+}
+
+.btn-tabla-editar .icono-btn,
+.btn-tabla-eliminar .icono-btn {
+  font-size: 1.2em;
+}
+.tabla-scroll {
+  width: 100%;
+  overflow-x: auto;
+  /* Opcional: para que la tabla no sobresalga visualmente */
+  box-shadow: 0 0 6px rgba(0,0,0,0.05);
+  border-radius: 8px;
+}
+.tabla-scroll table {
+  min-width: 900px; /* Ajusta según tus columnas */
+}
+

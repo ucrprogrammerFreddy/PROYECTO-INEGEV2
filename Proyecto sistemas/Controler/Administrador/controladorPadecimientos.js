@@ -46,18 +46,18 @@ function listarPadecimientos() {
 
       lista.forEach((p) => {
         const fila = document.createElement("tr");
-        fila.setAttribute("data-id", p.IdPadecimiento); // 🔥 Ahora sí tiene data-id
+        fila.setAttribute("data-id", p.IdPadecimiento);
         fila.innerHTML = `
           <td>${p.IdPadecimiento}</td>
           <td>${p.Nombre}</td>
           <td style="max-width:500px;">${p.Descripcion}</td>
           <td>${p.AreaMuscularAfectada}</td>
-          <td>
-            <button class="btn btn-warning btn-editar" data-id="${p.IdPadecimiento}">
-              <i class="fas fa-pen-to-square"></i>
+          <td class="acciones-clientes">
+            <button class="btn-tabla-editar" data-id="${p.IdPadecimiento}" title="Editar" type="button">
+              <i class="fas fa-pen-to-square icono-btn"></i>
             </button>
-            <button class="btn btn-danger" onclick="eliminarPadecimiento(${p.IdPadecimiento})">
-              <i class="fas fa-trash"></i>
+            <button class="btn-tabla-eliminar" onclick="eliminarPadecimiento(${p.IdPadecimiento})" title="Eliminar" type="button">
+              <i class="fas fa-trash icono-btn"></i>
             </button>
           </td>
         `;
@@ -225,12 +225,12 @@ function buscarPadecimientosAvanzado() {
             <td>${p.Nombre}</td>
             <td>${p.Descripcion}</td>
             <td>${p.AreaMuscularAfectada}</td>
-            <td>
-              <button class="btn btn-warning btn-sm btn-editar" data-id="${p.IdPadecimiento}">
-                <i class="bi bi-pencil-fill"></i>
+            <td class="acciones-clientes">
+              <button class="btn-tabla-editar" data-id="${p.IdPadecimiento}" title="Editar" type="button">
+                <i class="fas fa-pen-to-square icono-btn"></i>
               </button>
-              <button class="btn btn-danger btn-sm" onclick="eliminarPadecimiento(${p.IdPadecimiento})">
-                <i class="bi bi-trash-fill"></i>
+              <button class="btn-tabla-eliminar" onclick="eliminarPadecimiento(${p.IdPadecimiento})" title="Eliminar" type="button">
+                <i class="fas fa-trash icono-btn"></i>
               </button>
             </td>
           `;
@@ -254,4 +254,56 @@ function mostrarToast(mensaje, tipo = "info") {
 
   const toast = new bootstrap.Toast(toastElemento);
   toast.show();
+}
+
+function configurarFormularioAgregar() {
+  const form = document.querySelector(".formulario");
+  if (!form) return;
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    // Recoger los datos del formulario
+    const nombre = form.nombre.value.trim();
+    const descripcion = form.Descripcion.value.trim();
+
+    // Recoger los checkboxes seleccionados
+    const areasSeleccionadas = Array.from(
+      form.querySelectorAll("input[name='AreaMuscularAfectada']:checked")
+    )
+      .map((cb) => cb.value)
+      .join(", ");
+
+    // Validación básica
+    if (!nombre || !descripcion || !areasSeleccionadas) {
+      alert(
+        "Por favor, completa todos los campos y selecciona al menos un área afectada."
+      );
+      return;
+    }
+
+    // Prepara el objeto para el backend
+    const dto = {
+      nombre: nombre,
+      descripcion: descripcion,
+      areaMuscularAfectada: areasSeleccionadas,
+    };
+
+    fetch(
+      "http://mi-api-powergym-2025.somee.com/api/Padecimiento/crearPadecimiento",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(dto),
+      }
+    )
+      .then((res) => {
+        if (!res.ok) throw new Error("No se pudo agregar el padecimiento.");
+        alert("✅ Padecimiento agregado correctamente.");
+        form.reset();
+      })
+      .catch((err) => {
+        alert("❌ Error al agregar: " + err.message);
+      });
+  });
 }

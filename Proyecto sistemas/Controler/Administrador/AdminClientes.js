@@ -149,9 +149,6 @@ function registrarHistorialPadecimientosParaCliente(
   });
 }
 
-
-
-
 export function validarEdadMinima() {
   const fechaNacimiento = document.getElementById("fechaNacimiento").value;
   if (!fechaNacimiento) return false;
@@ -164,14 +161,10 @@ export function validarEdadMinima() {
   const dia = hoy.getDate() - nacimiento.getDate();
 
   const tiene16Años =
-    edad > 16 ||
-    (edad === 16 && (mes > 0 || (mes === 0 && dia >= 0)));
+    edad > 16 || (edad === 16 && (mes > 0 || (mes === 0 && dia >= 0)));
 
   return tiene16Años;
 }
-
-
-
 
 /**
  * Registra un nuevo cliente. Si tiene padecimientos los asigna y guarda historial de padecimientos.
@@ -314,9 +307,12 @@ export function cargarClienteEditar() {
           .text("❌ El cliente debe tener al menos 16 años para continuar.");
 
         // Scroll animado hacia el mensaje de error
-        $("html, body").animate({
-          scrollTop: $("#alertaEdadEditar").offset().top - 100
-        }, 600);
+        $("html, body").animate(
+          {
+            scrollTop: $("#alertaEdadEditar").offset().top - 100,
+          },
+          600
+        );
 
         setTimeout(() => {
           $("#alertaEdadEditar").addClass("d-none");
@@ -330,7 +326,6 @@ export function cargarClienteEditar() {
       actualizarCliente(cliente.IdUsuario);
     });
 }
-
 
 /**
  * Actualiza la información de un cliente existente y sus padecimientos.
@@ -585,13 +580,11 @@ export function listarClientes() {
     tbody.empty();
 
     data.forEach((c) => {
-      // Padecimientos es ya un array de nombres
       const padecimientos =
         c.Padecimientos && c.Padecimientos.length > 0
           ? c.Padecimientos.join(", ")
           : "-";
 
-      // Construir la fila
       const fila = `
         <tr>
             <td>${c.Nombre}</td>
@@ -603,15 +596,20 @@ export function listarClientes() {
             <td>${c.EstadoPago}</td>
             <td>${padecimientos}</td>
             <td>
-                <button class='btn btn-sm btn-primary' onclick='editarCliente(${c.IdUsuario})'>Editar</button>
-                <button class='btn btn-sm btn-danger' onclick='eliminarCliente(${c.IdUsuario})'>Eliminar</button>
+              <div class="acciones-clientes">
+                <button class='btn-tabla-editar' onclick='editarCliente(${c.IdUsuario})'>
+                  <i class="fa fa-pen-to-square icono-btn"></i>
+                </button>
+                <button class='btn-tabla-eliminar' onclick='eliminarCliente(${c.IdUsuario})'>
+                  <i class="fa fa-trash-can icono-btn"></i>
+                </button>
+              </div>
             </td>
         </tr>`;
       tbody.append(fila);
     });
   });
 }
-
 /**
  * Función global para editar un cliente.
  * Almacena el cliente en localStorage y redirige a la página de edición.

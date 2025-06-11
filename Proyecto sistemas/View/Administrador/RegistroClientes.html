@@ -19,7 +19,7 @@
 
 <body>
   <main class="contenedor-main" id="mainContent">
-    <div class="container my-4">
+    <div class="container mt-5">
       <div class="row justify-content-center">
         <div class="col-auto">
           <span class="etiqueta-seccion">
@@ -35,7 +35,7 @@
             <div class="card-body">
               <h2 class="text-center mb-4">Formulario clientes</h2>
               <div id="alertaEdad" class="alert alert-danger d-none text-center" role="alert">
-           El cliente debe tener al menos 16 años para registrarse.
+                El cliente debe tener al menos 16 años para registrarse.
               </div>
 
               <form id="formularioCrear">
@@ -57,7 +57,7 @@
                 </div>
                 <div class="mb-3">
                   <label for="fechaNacimiento" class="form-label">Fecha Nacimiento:</label>
-                  <input type="date" class="form-control input-custom" id="fechaNacimiento"  required max="" />
+                  <input type="date" class="form-control input-custom" id="fechaNacimiento" required max="" />
                 </div>
                 <div class="mb-3">
                   <label for="genero" class="form-label">Género:</label>
@@ -70,8 +70,8 @@
                 </div>
                 <div class="mb-3">
                   <label for="altura" class="form-label">Altura:</label>
-                  <input type="number" step="0.01" inputmode="decimal" step="any" class="form-control input-custom" id="altura"
-                    required />
+                  <input type="number" step="0.01" inputmode="decimal" step="any" class="form-control input-custom"
+                    id="altura" required />
                 </div>
                 <div class="mb-3">
                   <label for="peso" class="form-label">Peso:</label>
@@ -142,7 +142,7 @@
     cargarEntrenadores,
     cargarPadecimientos,
     registrarCliente,
-     validarEdadMinima 
+    validarEdadMinima
   } from "../../Controler/Administrador/AdminClientes.js";
 
   // Usa SIEMPRE jQuery aquí, igual que en el JS importado
@@ -161,22 +161,22 @@
     $("#formularioCrear").on("submit", function (e) {
       e.preventDefault();
 
-       const edadValida = validarEdadMinima();
-        if (!edadValida) {
-  $("#alertaEdad")
-    .removeClass("d-none")
-    .text("❌ El cliente debe tener al menos 16 años para registrarse.");
+      const edadValida = validarEdadMinima();
+      if (!edadValida) {
+        $("#alertaEdad")
+          .removeClass("d-none")
+          .text("❌ El cliente debe tener al menos 16 años para registrarse.");
 
-  // Scroll animado hacia la alerta
-  $("html, body").animate({
-    scrollTop: $("#alertaEdad").offset().top - 100
-  }, 600);
+        // Scroll animado hacia la alerta
+        $("html, body").animate({
+          scrollTop: $("#alertaEdad").offset().top - 100
+        }, 600);
 
-  setTimeout(() => {
-    $("#alertaEdad").addClass("d-none");
-  }, 5000);
-  return;
-}
+        setTimeout(() => {
+          $("#alertaEdad").addClass("d-none");
+        }, 5000);
+        return;
+      }
 
 
 
