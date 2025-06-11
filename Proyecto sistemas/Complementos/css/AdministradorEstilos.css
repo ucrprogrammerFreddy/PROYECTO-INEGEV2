@@ -1,4 +1,6 @@
 /* -------------------- RESET -------------------- */
+
+/* AdministradorEstilos.css */
 * {
   margin: 0;
   padding: 0;
@@ -32,7 +34,7 @@ body {
 }
 
 .header-logo {
-  height: 60px;
+  height: 70px;
 }
 
 .menu-toggle {
@@ -145,10 +147,14 @@ body {
 
 /* -------------------- CONTENIDO PRINCIPAL -------------------- */
 .contenedor-main {
-  transition: margin-left 0.3s ease;
-  padding: 90px 20px 90px;
-  flex: 1;
+   transition: margin-left 0.3s ease; 
+  /* padding: 90px 20px 90px; */
+  padding: 60px 20px 60px; /* antes era 90px */
+   flex: 1; 
+  
 }
+
+
 
 .contenedor-main.shifted {
   margin-left: 220px;
@@ -338,9 +344,20 @@ tr:hover {
   font-weight: bold;
   font-size: 1rem;
   margin-top: 1rem;       /* separa del logo */
-  margin-bottom: 1.5rem;  /* separa del formulario */
+    /* separa del formulario */
   text-align: center;
 }
 
 
 
+.bg-danger {
+   background-color: #b8a88a !important;
+  border-color: #a99677 !important;
+
+}
+
+.bg-warning {
+ background-color: #4F6654 !important; /* Verde oscuro elegante */
+  border-color: #4F6654 !important;
+    color: #3d3d3d !important;
+}

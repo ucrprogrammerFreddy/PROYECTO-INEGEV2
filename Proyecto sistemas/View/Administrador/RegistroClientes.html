@@ -34,6 +34,10 @@
           <div class="card shadow form-wrapper">
             <div class="card-body">
               <h2 class="text-center mb-4">Formulario clientes</h2>
+              <div id="alertaEdad" class="alert alert-danger d-none text-center" role="alert">
+           El cliente debe tener al menos 16 años para registrarse.
+              </div>
+
               <form id="formularioCrear">
                 <div class="mb-3">
                   <label for="nombre" class="form-label">Nombre:</label>
@@ -53,7 +57,7 @@
                 </div>
                 <div class="mb-3">
                   <label for="fechaNacimiento" class="form-label">Fecha Nacimiento:</label>
-                  <input type="date" class="form-control input-custom" id="fechaNacimiento" required />
+                  <input type="date" class="form-control input-custom" id="fechaNacimiento"  required max="" />
                 </div>
                 <div class="mb-3">
                   <label for="genero" class="form-label">Género:</label>
@@ -137,7 +141,8 @@
   import {
     cargarEntrenadores,
     cargarPadecimientos,
-    registrarCliente
+    registrarCliente,
+     validarEdadMinima 
   } from "../../Controler/Administrador/AdminClientes.js";
 
   // Usa SIEMPRE jQuery aquí, igual que en el JS importado
@@ -155,6 +160,27 @@
 
     $("#formularioCrear").on("submit", function (e) {
       e.preventDefault();
+
+       const edadValida = validarEdadMinima();
+        if (!edadValida) {
+  $("#alertaEdad")
+    .removeClass("d-none")
+    .text("❌ El cliente debe tener al menos 16 años para registrarse.");
+
+  // Scroll animado hacia la alerta
+  $("html, body").animate({
+    scrollTop: $("#alertaEdad").offset().top - 100
+  }, 600);
+
+  setTimeout(() => {
+    $("#alertaEdad").addClass("d-none");
+  }, 5000);
+  return;
+}
+
+
+
+
       console.log("Registrando cliente..."); // Para depuración
       registrarCliente();
     });

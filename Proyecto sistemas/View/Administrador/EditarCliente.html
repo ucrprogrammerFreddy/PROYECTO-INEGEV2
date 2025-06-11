@@ -34,6 +34,10 @@
         <div class="col-12 col-md-8 col-lg-6">
           <div class="card shadow form-wrapper">
             <div class="card-body">
+
+              <div id="alertaEdadEditar" class="alert alert-danger d-none text-center" role="alert">
+            El cliente debe tener al menos 16 años para registrarse.
+            </div>
               <form id="formularioEditar">
                 <div class="mb-3">
                   <label for="nombre" class="form-label">Nombre:</label>
@@ -52,7 +56,7 @@
                   <input type="text" class="form-control input-custom" id="telefono" required />
                 </div>
                 <div class="mb-3">
-                  <label for="fechaNacimiento" class="form-label">Fecha Nacimiento:</label>
+                  <label for="fechaNacimiento" class="form-label"  required max="">Fecha Nacimiento:</label>
                   <input type="date" class="form-control input-custom" id="fechaNacimiento" required />
                 </div>
                 <div class="mb-3">
@@ -102,6 +106,7 @@
       cargarClienteEditar,
       cargarEntrenadores,
       cargarPadecimientos
+   
     } from "../../Controler/Administrador/AdminClientes.js";
 
     import { renderAdminLayout } from "../../Controler/Administrador/AdminLayout.js";

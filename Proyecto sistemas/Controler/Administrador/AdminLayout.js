@@ -94,6 +94,7 @@ export function renderAdminLayout() {
   `;
 
   const sidebarHTML = `
+     
     <div id="idMenuHambAdmin">
       <nav id="sidebar" class="slide">
         <div class="menu-header">
@@ -121,6 +122,7 @@ export function renderAdminLayout() {
   `;
 
   const footerHTML = `
+     <div>
     <footer class="footer ">
     <div class="container">
     <div class="row align-items-center justify-content-center">
@@ -134,6 +136,7 @@ export function renderAdminLayout() {
     </div>
   </div>
     </footer>
+    </div>
   `;
 
   const main = document.querySelector("main");

@@ -7,28 +7,23 @@
   <title>Panel Administrador</title>
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <link rel="stylesheet" href="../../Complementos/css/AdministradorEstilos.css" />
+  <link rel="stylesheet" href="../../Complementos/css/indexadmin.css" />
 
 
 </head>
 
 <body>
+   <div id="main-wrapper">
 
   <!-- Header -->
-  <header class="header">
-    <div class="header-content">
-
-      <img src="../../Complementos/img/logoof.png" alt="Logo" class="header-logo" />
-
-    </div>
-  </header>
+ 
   <!-- Sidebar overlay -->
 
 
   <!-- Este es el munu y solo lo invocamos por el id, primero debemos exportar la funcion que esta abajo -->
 
   <!-- Contenido principal -->
-  <main class="contenedor-main" id="mainContent">
+  <main class="contenedor-main mt-5" id="mainContent">
     <div class="card-grid">
 
       <a href="../../View/Administrador/Empleados.html" class="custom-card">
@@ -52,7 +47,7 @@
 
     </div>
   </main>
-
+</div>
 
   <script type="module">
     import { renderAdminLayout } from "../../Controler/Administrador/AdminLayout.js";

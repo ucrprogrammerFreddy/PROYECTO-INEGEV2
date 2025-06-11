@@ -498,7 +498,7 @@ button[onclick*="verPerfil"] {
   padding: 0.5rem;
   text-align: center;
   width: 100%;
-  position: fixed;
+ 
   bottom: 0;
   z-index: 1000;
 }

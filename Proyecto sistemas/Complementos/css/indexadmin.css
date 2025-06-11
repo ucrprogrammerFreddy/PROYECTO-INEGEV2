@@ -1,3 +1,6 @@
+
+/* indexadmin.css */
+
 * {
   margin: 0;
   padding: 0;
@@ -197,21 +200,52 @@ body {
   margin-left: 220px;
 }
 
-/* -------------------- FOOTER -------------------- */
-.footer {
+/* -------------------- FOOTER -------------------- */.footer {
 
+display: grid;
+min-height: 100dvh;;
+grid-template-rows:auto 1fr auto;
   background-color: #316163; /* mismo color del menú lateral */
   background-color: #022227;
-margin-top: 0.5 rem;
+ margin-top: 0.5 rem;
   color: white;
   padding: 10px 15px;
-  text-align: center;
-height: 80px;
-  width: 100%;
-  bottom: 0;
-  z-index: 10;
+  text-align: center; 
 
 }
+
+
+
+
+#main-wrapper {
+  flex: 1; /* que el contenido crezca para ocupar el espacio restante */
+}
+
+.footer {
+  background-color: #022227;
+  color: white;
+  padding: 15px 20px;
+  text-align: center;
+}
+
+
+
+
+.footer {
+  background-color: #022227;
+  color: white;
+  padding: 15px 20px;
+  text-align: center;
+  margin-top: 0.5rem;
+
+  /* Estilos para asegurar altura mínima sin exagerar */
+  min-height: auto;
+  height: auto;
+}
+
+
+
+
 
 .footer-logo {
   height: 50px;

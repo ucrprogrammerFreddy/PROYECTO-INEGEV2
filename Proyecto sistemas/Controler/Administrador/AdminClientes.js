@@ -149,6 +149,30 @@ function registrarHistorialPadecimientosParaCliente(
   });
 }
 
+
+
+
+export function validarEdadMinima() {
+  const fechaNacimiento = document.getElementById("fechaNacimiento").value;
+  if (!fechaNacimiento) return false;
+
+  const hoy = new Date();
+  const nacimiento = new Date(fechaNacimiento);
+
+  const edad = hoy.getFullYear() - nacimiento.getFullYear();
+  const mes = hoy.getMonth() - nacimiento.getMonth();
+  const dia = hoy.getDate() - nacimiento.getDate();
+
+  const tiene16Años =
+    edad > 16 ||
+    (edad === 16 && (mes > 0 || (mes === 0 && dia >= 0)));
+
+  return tiene16Años;
+}
+
+
+
+
 /**
  * Registra un nuevo cliente. Si tiene padecimientos los asigna y guarda historial de padecimientos.
  */
@@ -281,9 +305,32 @@ export function cargarClienteEditar() {
     .off("submit")
     .submit(function (e) {
       e.preventDefault();
+
+      const esMayor = validarEdadMinima();
+
+      if (!esMayor) {
+        $("#alertaEdadEditar")
+          .removeClass("d-none")
+          .text("❌ El cliente debe tener al menos 16 años para continuar.");
+
+        // Scroll animado hacia el mensaje de error
+        $("html, body").animate({
+          scrollTop: $("#alertaEdadEditar").offset().top - 100
+        }, 600);
+
+        setTimeout(() => {
+          $("#alertaEdadEditar").addClass("d-none");
+        }, 5000);
+
+        return;
+      } else {
+        $("#alertaEdadEditar").addClass("d-none");
+      }
+
       actualizarCliente(cliente.IdUsuario);
     });
 }
+
 
 /**
  * Actualiza la información de un cliente existente y sus padecimientos.
