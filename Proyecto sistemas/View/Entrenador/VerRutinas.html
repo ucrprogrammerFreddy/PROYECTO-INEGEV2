@@ -3,71 +3,69 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Vista Entrenador - Rutinas</title>
-  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-
+  <title>Rutinas por Entrenador</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <link rel="stylesheet" href="/Proyecto sistemas/Complementos/css/EntrenadorEstilo.css" />
-
 </head>
-<body>
-  <button class="btn btn-outline-dark position-absolute m-3" id="openSidebar">
-    <i class="fas fa-bars"></i>
-  </button>
+<body class="bg-light">
 
-  <!-- Sidebar (Menú dinámico) -->
-  <script type="module" src="/Proyecto sistemas/Complementos/Components/MenuEntren.js"></script>
-  <script src="../../Controler/Entrenador/ControladorRutina.JS"></script>
-   
-
-  <!-- Header -->
-  <header>
-    <nav class="d-flex justify-content-between align-items-center px-4 py-3 bg-white">
-      <div></div>
-      <img src="../../Complementos/img/logoof.png" alt="Logo del gimnasio" height="60" />
-      <div></div>
-    </nav>
+  <!-- 🔙 Header con botón volver -->
+  <header class="bg-white shadow-sm py-3 px-4 d-flex justify-content-between align-items-center">
+    <img src="../../Complementos/img/logoof.png" height="60" />
+    <h4 class="text-muted m-0">Rutinas del Entrenador</h4>
+    <button class="btn btn-outline-dark" onclick="window.history.back()">
+      <i class="fas fa-arrow-left me-2"></i>Volver
+    </button>
   </header>
 
-  <main class="container-fluid my-4">
-    <div class="rutinas-wrapper">
-      <h6 class="text-muted">Rutinas</h6>
-      <div class="table-responsive">
-        <table class="table table-bordered bg-white table-rutinas">
-          <thead class="table-light">
-            <tr>
-              <th>Instructor</th>
-              <th>Nombre Ejercicio</th>
-              <th>Área Muscular</th>
-              <th># Rutina</th>
-              <th>Descripción</th>
-              <th>Cant. de repeticiones</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              
-            </tr>
-          
-            
-         
-          </tbody>
-        </table>
+  <!-- 📋 Tabla de rutinas -->
+  <main class="container mt-4">
+    <div class="card shadow-sm">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0"><i class="fas fa-list me-2"></i>Listado de Rutinas</h5>
       </div>
-
-      <div class="d-flex justify-content-end gap-3 mt-4">
-        <button class="btn-volver">
-          Regresar <i class="fas fa-arrow-right ms-1"></i>
-        </button>
-        <button class="btn-enviar">
-          Enviar
-        </button>
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-hover table-bordered mb-0">
+            <thead class="table-light">
+              <tr>
+                <th>Rutina</th>
+                <th>Cliente</th>
+                <th>Fecha Inicio</th>
+                <th>Fecha Fin</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="tablaRutinas">
+              <tr>
+                <td colspan="5" class="text-center py-4 text-muted">Cargando rutinas...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </main>
 
- 
+  <!-- 🔍 Modal para ver detalle de rutina -->
+  <div class="modal fade" id="modalRutina" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header bg-dark text-white">
+          <h5 class="modal-title"><i class="fas fa-dumbbell me-2"></i>Detalle de Rutina</h5>
+          <button class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body" id="detalleRutinaModal">
+          <p class="text-center my-4">
+            <i class="fas fa-spinner fa-spin"></i> Cargando detalles...
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 📜 Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../../Controler/Entrenador/ControladorEntrenador.js"></script>
 </body>
 </html>

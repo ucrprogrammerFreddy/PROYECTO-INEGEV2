@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (!rutinaId || !rutinasData) {
     alert("Error: No se encontró información de la rutina.");
-    window.location.href = '/Proyecto sistemas/View/Cliente/Rutinas.html';
+  window.location.href = '../../View/Cliente/RutinaCliente.html';
     return;
   }
 
@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (!rutinaSeleccionada) {
     alert("Error: Rutina no encontrada.");
-    window.location.href = '/Proyecto sistemas/View/Cliente/Rutinas.html';
+   window.location.href = '../../View/Cliente/RutinaCliente.html';
     return;
   }
 

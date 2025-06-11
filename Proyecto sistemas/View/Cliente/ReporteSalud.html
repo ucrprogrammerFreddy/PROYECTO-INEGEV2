@@ -18,6 +18,17 @@
       gap: 1rem;
       flex-wrap: wrap;
     }
+    #pdfCanvas {
+      border: 1px solid #dee2e6;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      background: white;
+    }
+    .loading-pdf {
+      text-align: center;
+      padding: 3rem;
+      color: #6c757d;
+    }
   </style>
 </head> 
 <body id="vista-pdf">
@@ -37,43 +48,99 @@
     <div class="main-wrapper" id="mainWrapper">
       <main class="contenido">
         <div class="container mt-5 pt-3">
-          <h4 class="text-center fw-bold mb-4">Vista previa del Historial Médico (PDF)</h4>
+          <h4 class="text-center fw-bold mb-4">
+            <i class="fas fa-file-pdf text-danger me-2"></i>
+            Vista previa del Historial Médico (PDF)
+          </h4>
+
+          <!-- Loading -->
+          <div id="loadingPDF" class="loading-pdf">
+            <div class="spinner-border text-primary mb-3" role="status">
+              <span class="visually-hidden">Generando PDF...</span>
+            </div>
+            <p>Generando reporte médico...</p>
+          </div>
 
           <!-- Visor de PDF -->
-          <div class="mb-4">
-            <!-- Contenedor donde dibujarás el PDF -->
-            <canvas id="pdfCanvas" style="width: 100%; height: auto; max-width: 900px; margin: auto; display: block;"></canvas>
-
-
-          
+          <div class="mb-4 text-center">
+            <canvas id="pdfCanvas" style="width: 100%; height: auto; max-width: 900px; margin: auto; display: none;"></canvas>
           </div>
 
           <!-- Botones -->
           <div class="d-flex justify-content-center action-buttons mt-4">
-            <a href="javascript:history.back()" class="btn btn-secondary">
+            <a href="/Proyecto sistemas/View/Cliente/SaludCliente.html" class="btn btn-secondary">
               <i class="fas fa-arrow-left me-2"></i>Volver
             </a>
 
-            <a id="btnDescargarPDF" class="btn btn-success">
+            <button id="btnDescargarPDF" class="btn btn-success" disabled>
               <i class="fas fa-download me-2"></i>Descargar PDF
-            </a>
+            </button>
 
-            <button class="btn btn-primary" id="btnEnviarCorreo">
+            <button class="btn btn-primary" id="btnEnviarCorreo" disabled>
               <i class="fas fa-envelope me-2"></i>Enviar por correo
             </button>
+          </div>
+
+          <!-- Información adicional -->
+          <div class="row mt-5">
+            <div class="col-md-6">
+              <div class="card">
+                <div class="card-body">
+                  <h6 class="card-title">
+                    <i class="fas fa-info-circle text-info me-2"></i>
+                    Información del reporte
+                  </h6>
+                  <ul class="list-unstyled mb-0">
+                    <li><small><strong>Fecha de generación:</strong> <span id="fechaGeneracion"></span></small></li>
+                    <li><small><strong>Cliente:</strong> <span id="nombreCliente">Cargando...</span></small></li>
+                    <li><small><strong>Formato:</strong> PDF</small></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="card">
+                <div class="card-body">
+                  <h6 class="card-title">
+                    <i class="fas fa-shield-alt text-success me-2"></i>
+                    Privacidad y seguridad
+                  </h6>
+                  <small class="text-muted">
+                    Este documento contiene información médica confidencial. 
+                    Manténgalo seguro y compártalo únicamente con personal autorizado.
+                  </small>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </main>
     </div>
   </div>
 
-  <!-- Incluye pdf.js desde CDN -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-
+  <!-- Librerías necesarias -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 
   <!-- Componentes -->
   <script type="module" src="/Proyecto sistemas/Complementos/Components/MenuCliente.js"></script>
   <script type="module" src="/Proyecto sistemas/Complementos/Components/FooterCliente.js"></script>
   <script type="module" src="/Proyecto sistemas/Controler/Cliente/ClienteFunciones.js"></script>
+
+  <script>
+    // Configurar PDF.js worker
+    if (typeof window !== 'undefined' && window['pdfjs-dist/build/pdf']) {
+      window['pdfjs-dist/build/pdf'].GlobalWorkerOptions.workerSrc = 
+        'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    }
+
+    // Actualizar fecha de generación
+    document.addEventListener('DOMContentLoaded', function() {
+      const fechaElement = document.getElementById('fechaGeneracion');
+      if (fechaElement) {
+        fechaElement.textContent = new Date().toLocaleString('es-CR');
+      }
+    });
+  </script>
 </body>
 </html>

@@ -770,3 +770,35 @@ td:last-child .d-flex {
   flex-direction: row !important;
   gap: 0.5rem !important;
 }
+.modal-custom-margin {
+  margin-top: 80px !important; /* desplaza el modal hacia abajo */
+}
+.btn-agregar {
+  background-color: #b8674a; /* Verde bonito */
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  font-weight: 500;
+  border-radius: 6px;
+  transition: background-color 0.3s ease;
+}
+
+.btn-agregar:hover {
+  background-color: #b8674a;
+  color: white;
+}
+
+.btn-regresar {
+  background-color: #9f5639; /* Gris neutro */
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  font-weight: 500;
+  border-radius: 6px;
+  transition: background-color 0.3s ease;
+}
+
+.btn-regresar:hover {
+  background-color: #9f5639;
+  color: white;
+}

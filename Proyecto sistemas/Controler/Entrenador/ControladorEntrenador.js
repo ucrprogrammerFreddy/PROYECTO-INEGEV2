@@ -82,7 +82,7 @@ function cargarClientes(idEntrenador) {
 
 // ✅ Función corregida para ver rutina con el endpoint correcto
 window.verRutina = function (idCliente) {
-  const modalContent = document.getElementById("contenidoRutina");
+ const modalContent = document.getElementById("contenidoRutinaDinamico");
   modalContent.innerHTML = "<div class='text-center'><i class='fas fa-spinner fa-spin'></i> Cargando rutina...</div>";
   
   const modal = new bootstrap.Modal(document.getElementById("modalRutina"));
@@ -258,7 +258,8 @@ window.verPerfil = function (idCliente) {
 };
 
 function mostrarPerfilCliente(cliente, padecimientos) {
-  const modalContent = document.getElementById("contenidoRutina");
+  const modalContent = document.getElementById("contenidoRutinaDinamico");
+
   
   let padecimientosHtml = "";
   if (padecimientos.length > 0) {
