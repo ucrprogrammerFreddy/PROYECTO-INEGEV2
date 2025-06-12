@@ -117,7 +117,7 @@ function cargarTabla(lista) {
       <tr class="table-primary">
         <td>${a.Nombre}</td>
         <td>${a.Email}</td>
-        <td>${a.Clave}</td>
+      
         <td>${a.Rol}</td>
         <td>${a.Telefono}</td>
         <td>${a.FormacionAcademica}</td>
@@ -139,34 +139,6 @@ function cargarTabla(lista) {
   });
 }
 
-// function cargarTabla(lista) {
-//   const $tabla = $(".table-group-divider");
-//   $tabla.empty();
-
-//   lista.forEach((a) => {
-//     const fila = `
-//       <tr class="table-primary">
-//         <td>${a.nombre}</td>
-//         <td>${a.email}</td>
-//         <td>${a.clave}</td>
-//         <td>${a.rol}</td>
-//         <td>${a.formacionAcademica}</td>
-//         <td>${a.telefono}</td>
-//         <td>
-//           <button class="btn btn-warning btn-sm" title="Modificar"
-//             onclick='editarAdministrador(${JSON.stringify(a).replace(/"/g, "&quot;")})'>
-//             <i class="bi bi-pencil-fill"></i>
-//           </button>
-//           <button class="btn btn-danger btn-sm" title="Eliminar"
-//             onclick="eliminarAdministrador(${a.idIdUsuario})">
-//             <i class="bi bi-trash-fill"></i>
-//           </button>
-//         </td>
-//       </tr>`;
-//     $tabla.append(fila);
-//   });
-// }
-
 function crearAdministrador() {
   const nuevo = construirDesdeFormulario();
 
@@ -185,25 +157,6 @@ function crearAdministrador() {
     },
   });
 }
-
-// function actualizarAdministrador() {
-//   const admin = construirDesdeFormulario();
-
-//   $.ajax({
-//     type: "PUT",
-//     url: `${URL_API}/actualizarAdministrador/${admin.idIdUsuario}`,
-//     data: JSON.stringify(admin),
-//     contentType: "application/json",
-//     success: function () {
-//       alert("✅ Administrador actualizado");
-//       localStorage.removeItem("adminEditar");
-//       window.location.href = "Empleados.html";
-//     },
-//     error: function (xhr) {
-//       alert("❌ Error al actualizar: " + xhr.responseText);
-//     },
-//   });
-// }
 
 //EDITAR ADMINISTRADOR
 

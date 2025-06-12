@@ -131,10 +131,10 @@ body {
   color: #fff !important;
 }
 
-.table-success th {
-  background-color: #316163 !important; /* asegura que también los <th> tengan el color */
-  color: #fff !important;
-}
+   .table thead th {
+      background-color: #316163 !important;
+      color: #fff !important;
+    }
 
 
 .slide ul li a {

@@ -9,16 +9,9 @@
   <link rel="stylesheet" href="../Ejercicio/css/indexadmin.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
-    .tabla-scroll {
-      width: 100%;
-      overflow-x: auto;
-      box-shadow: 0 0 6px rgba(0, 0, 0, 0.05);
-      border-radius: 8px;
-      margin-bottom: 1rem;
-    }
-
-    .tabla-scroll table {
-      min-width: 900px;
+    .table thead th {
+      background-color: #316163 !important;
+      color: #fff !important;
     }
   </style>
 </head>
@@ -29,9 +22,20 @@
 
   <!-- CONTENIDO PRINCIPAL -->
   <main class="contenedor-main" id="mainContent">
+
     <div class="container mt-5">
       <h2 class="mb-4">Ejercicios registrados</h2>
-      <div id="alertPlaceholder"></div>
+      <div id="alertPlaceholder">
+        <div class="d-flex justify-content-end">
+          <button class="btn btn-volver" onclick="window.location.href='../../View/Administrador/Index.html'">Regresar
+            al
+            Menú</button>
+          <button class="btn btn-sm btn-enviar" onclick="window.location.href='../Ejercicio/indexEjercicio.html'">
+            <i class="bi bi-plus-circle"></i>Agregar
+
+          </button>
+        </div>
+      </div>
 
       <!-- Filtro de búsqueda -->
       <div class="input-group mb-3" style="max-width: 350px;">

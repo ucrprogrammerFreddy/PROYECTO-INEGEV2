@@ -1,16 +1,7 @@
-
-
-// AdminClientes.js
-
 import { ClienteModel } from "../../Model/ClienteModel.js";
 
 // Definimos la base de la URL para las peticiones a la API
 const API_BASE = "http://mi-api-powergym-2025.somee.com/api";
-//const API_BASE = "http://localhost:7086/api";
-
-
-
-
 
 // Variable global para lista de padecimientos
 window.listaPadecimientos = [];
@@ -48,7 +39,6 @@ export function cargarEntrenadores(callback = null) {
  * @param {Array} padecimientosSeleccionados - IDs de padecimientos que deben aparecer seleccionados.
  * @param {Object} severidadesSeleccionadas - Diccionario idPadecimiento: severidad (opcional para edición)
  */
-
 export function cargarPadecimientos(
   padecimientosSeleccionados = [],
   severidadesSeleccionadas = {}
@@ -194,11 +184,11 @@ export function registrarCliente() {
     contentType: "application/json",
     data: JSON.stringify(cliente),
 
-     beforeSend: () => {
-    console.log("⏳ Enviando cliente:", cliente);
-  },
+    beforeSend: () => {
+      console.log("⏳ Enviando cliente:", cliente);
+    },
     success: (res) => {
-       console.log("✅ Respuesta recibida:", res);
+      console.log("✅ Respuesta recibida:", res);
       const clienteId = res.IdUsuario;
 
       if (!clienteId || clienteId === 0) {
@@ -236,7 +226,7 @@ export function registrarCliente() {
       );
     },
     error: (xhr) => {
-       console.error("❌ Error en el servidor:", xhr);
+      console.error("❌ Error en el servidor:", xhr);
       if (xhr.status === 409) {
         alert(
           "❌ " + (xhr.responseJSON?.mensaje || "El correo ya está registrado.")
@@ -509,91 +499,7 @@ function asignarPadecimientos(idCliente, padecimientosCompletos) {
 
 /**
  * Extrae los valores del formulario y los estructura como un objeto cliente.
-//  * @param {string} tipo - "Crear" o "Editar" para diferenciar el prefijo de los campos.
-//  * @returns {Object} Cliente estructurado para enviar al backend
-//  */
-// function obtenerClienteDesdeFormulario(tipo) {
-//   const padecimientosCompletos = [];
-
-//   function getCampo(id, isNumber = false, isFloat = false) {
-//     const val = $(`#${id}`).val();
-//     const clave = getCampo("clave");
-
-//     if (isNumber) {
-//       const num = isFloat ? parseFloat(val) : parseInt(val, 10);
-//       return isNaN(num) ? null : num;
-//     }
-//     return val ? val.trim() : "";
-//   }
-
-//   const entrenadorId = getCampo("entrenador", true);
-
-//   // Padecimientos y severidad
-//   $("#padecimientosList input:checked").each(function () {
-//     const idPadecimiento = parseInt(this.value, 10);
-//     const severidad = $(this)
-//       .closest("div")
-//       .find("select.severidad-padecimiento")
-//       .val();
-//     if (!isNaN(idPadecimiento) && severidad) {
-//       padecimientosCompletos.push({
-//         IdPadecimiento: idPadecimiento,
-//         Severidad: severidad,
-//       });
-//     }
-//   });
-
-//   // Fecha de nacimiento y validación
-//   let fechaNacStr = getCampo("fechaNacimiento").trim();
-//   if (!fechaNacStr) {
-//     alert("Debes ingresar la fecha de nacimiento.");
-//     throw new Error("Fecha de nacimiento vacía");
-//   }
-//   let fechaNacISO = fechaNacStr;
-//   const fechaNac = new Date(fechaNacISO);
-//   const hoy = new Date();
-//   if (isNaN(fechaNac.getTime()) || fechaNac > hoy) {
-//     alert("❌ La fecha de nacimiento no puede ser en el futuro o inválida.");
-//     throw new Error("Fecha de nacimiento inválida");
-//   }
-
-//   // Validación extra para campos requeridos
-//   const nombre = getCampo("nombre");
- 
-//   const email = getCampo("correo");
-//   const genero = getCampo("genero");
-//   if (!nombre || !clave || !email || !genero) {
-//     alert(
-//       "Por favor, rellena todos los campos obligatorios (nombre, clave, correo, género)."
-//     );
-//     throw new Error("Campos requeridos vacíos");
-//   }
-
-//   const cliente = {
-//     IdUsuario: tipo === "Crear" ? 0 : getCampo("idUsuario", true) || 0,
-//     Nombre: nombre,
-//     Email: email,
-//     Telefono: getCampo("telefono"),
-//     FechaNacimiento: fechaNacISO,
-//     Genero: genero,
-//     Altura: getCampo("altura", true, true) || 0,
-//     Peso: getCampo("peso", true, true) || 0,
-//     EstadoPago: true,
-//     EntrenadorId: entrenadorId || 0,
-//     Padecimientos: padecimientosCompletos.map((p) => p.IdPadecimiento),
-//     PadecimientosCompletos: padecimientosCompletos, // para asignar con severidad
-//   };
-
-//   return cliente;
-// }
-
-
-
-
-
-/**
- * Extrae los valores del formulario y los estructura como un objeto cliente.
- * @param {string} tipo - "Crear" o "Editar" para diferenciar el prefijo de los campos.
+ * @param {string} tipo - "Crear" o "Editar"
  * @returns {Object} Cliente estructurado para enviar al backend
  */
 function obtenerClienteDesdeFormulario(tipo) {
@@ -610,7 +516,7 @@ function obtenerClienteDesdeFormulario(tipo) {
 
   const entrenadorId = getCampo("entrenador", true);
 
-  // ✅ Padecimientos y severidad
+  // Padecimientos y severidad
   $("#padecimientosList input:checked").each(function () {
     const idPadecimiento = parseInt(this.value, 10);
     const severidad = $(this)
@@ -625,7 +531,7 @@ function obtenerClienteDesdeFormulario(tipo) {
     }
   });
 
-  // ✅ Fecha de nacimiento y validación
+  // Fecha de nacimiento y validación
   let fechaNacStr = getCampo("fechaNacimiento").trim();
   if (!fechaNacStr) {
     alert("Debes ingresar la fecha de nacimiento.");
@@ -640,18 +546,20 @@ function obtenerClienteDesdeFormulario(tipo) {
     throw new Error("Fecha de nacimiento inválida");
   }
 
-  // ✅ Validar campos obligatorios
+  // Validar campos obligatorios
   const nombre = getCampo("nombre");
-  const clave ="mi-clave-secreta" // ← ⚠️ Importante, causa error si falta
+  const clave = "mi-clave-secreta"; // Puedes ajustar esto según tu lógica real
   const email = getCampo("correo");
   const genero = getCampo("genero");
 
   if (!nombre || !clave || !email || !genero) {
-    alert("Por favor, rellena todos los campos obligatorios (nombre, clave, correo, género).");
+    alert(
+      "Por favor, rellena todos los campos obligatorios (nombre, clave, correo, género)."
+    );
     throw new Error("Campos requeridos vacíos");
   }
 
-  // ✅ Construir objeto cliente final
+  // Construir objeto cliente final
   const cliente = {
     IdUsuario: tipo === "Crear" ? 0 : getCampo("idUsuario", true) || 0,
     Nombre: nombre,
@@ -665,24 +573,11 @@ function obtenerClienteDesdeFormulario(tipo) {
     EstadoPago: true,
     EntrenadorId: entrenadorId || 0,
     Padecimientos: padecimientosCompletos.map((p) => p.IdPadecimiento),
-    PadecimientosCompletos: padecimientosCompletos // con severidad
+    PadecimientosCompletos: padecimientosCompletos, // con severidad
   };
 
   return cliente;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /**
  * Lista todos los clientes en la tabla HTML.
@@ -698,6 +593,10 @@ export function listarClientes() {
           ? c.Padecimientos.join(", ")
           : "-";
 
+      // Etiqueta de estado: Activo (verde) o Inactivo (rojo)
+      const estadoPagoLabel = c.EstadoPago ? "Activo" : "Inactivo";
+      const badgeClass = c.EstadoPago ? "bg-success" : "bg-danger";
+
       const fila = `
         <tr>
             <td>${c.Nombre}</td>
@@ -706,7 +605,9 @@ export function listarClientes() {
             <td>${c.Altura}</td>
             <td>${c.Peso}</td>
             <td>${c.NombreEntrenador}</td>
-            <td>${c.EstadoPago}</td>
+            <td>
+              <span class="badge ${badgeClass}">${estadoPagoLabel}</span>
+            </td>
             <td>${padecimientos}</td>
             <td>
               <div class="acciones-clientes">
@@ -755,3 +656,115 @@ window.eliminarCliente = function (id) {
     error: () => alert("Error al eliminar cliente"),
   });
 };
+
+/**
+ * Lista todos los clientes en la tabla HTML, mostrando solo Nombre, Email, Teléfono, Estado de Pago y botón para cambiar estado de pago.
+ * Esta función es independiente de listarClientes y puedes llamarla, por ejemplo, desde Pagos.html.
+ */
+export function listarClientesPagos() {
+  $.get(`${API_BASE}/Cliente/listaClientes`, function (data) {
+    const tbody = $("#clientes-tbody");
+    tbody.empty();
+
+    data.forEach((c) => {
+      // Etiqueta de estado: Activo (verde) o Inactivo (rojo)
+      const estadoPagoLabel = c.EstadoPago ? "Activo" : "Inactivo";
+      const badgeClass = c.EstadoPago ? "bg-success" : "bg-danger";
+      const nuevoEstado = !c.EstadoPago;
+      const nuevoEstadoLabel = nuevoEstado ? "Activo" : "Inactivo";
+      const nuevoBadgeClass = nuevoEstado ? "bg-success" : "bg-danger";
+
+      const fila = `
+        <tr>
+          <td>${c.Nombre}</td>
+          <td>${c.Email}</td>
+          <td>${c.Telefono}</td>
+          <td>
+            <span class="badge ${badgeClass}">${estadoPagoLabel}</span>
+          </td>
+          <td>
+            <button class="btn btn-sm ${
+              nuevoEstado ? "btn-success" : "btn-danger"
+            } btn-cambiar-pago"
+              data-id="${c.IdUsuario}" data-estado="${nuevoEstado}">
+              Cambiar a <span class="badge ${nuevoBadgeClass}">${nuevoEstadoLabel}</span>
+            </button>
+          </td>
+        </tr>
+      `;
+      tbody.append(fila);
+    });
+  });
+}
+
+/**
+ * Cambia el estado de pago de un cliente por su ID, asegurando que se manden sus padecimientos actuales.
+ * @param {number} idCliente - ID del cliente a modificar
+ * @param {boolean} nuevoEstadoPago - true para Activo, false para Inactivo
+ */
+export function actualizarEstadoPagoClientePorId(idCliente, nuevoEstadoPago) {
+  $.get(
+    `${API_BASE}/Cliente/obtenerClientePorId/${idCliente}`,
+    function (cliente) {
+      // Cambiamos el estado de pago
+      cliente.EstadoPago = nuevoEstadoPago;
+
+      // Reconstrucción robusta de padecimientos si no existen en el objeto
+      if (
+        !Array.isArray(cliente.PadecimientosCompletos) ||
+        cliente.PadecimientosCompletos.length === 0
+      ) {
+        if (
+          Array.isArray(cliente.PadecimientosClientes) &&
+          cliente.PadecimientosClientes.length > 0
+        ) {
+          cliente.PadecimientosCompletos = cliente.PadecimientosClientes.map(
+            (p) => ({
+              IdPadecimiento:
+                p.PadecimientoId ||
+                p.IdPadecimiento ||
+                (p.Padecimiento && p.Padecimiento.IdPadecimiento),
+              Severidad: p.Severidad || "",
+            })
+          );
+        } else {
+          cliente.PadecimientosCompletos = [];
+        }
+      }
+
+      if (
+        !Array.isArray(cliente.Padecimientos) ||
+        cliente.Padecimientos.length === 0
+      ) {
+        cliente.Padecimientos = cliente.PadecimientosCompletos.map(
+          (p) => p.IdPadecimiento
+        );
+      }
+
+      $.ajax({
+        url: `${API_BASE}/Cliente/editarCliente`,
+        method: "PUT",
+        contentType: "application/json",
+        data: JSON.stringify(cliente),
+        success: function () {
+          alert("Estado de pago actualizado correctamente");
+          if (typeof listarClientesPagos === "function") {
+            listarClientesPagos();
+          }
+        },
+        error: function (xhr) {
+          alert("Error al actualizar el estado de pago: " + xhr.responseText);
+        },
+      });
+    }
+  ).fail(function () {
+    alert("No se encontró el cliente con ese ID.");
+  });
+}
+
+// Delegación de evento para botón de cambio de estado de pago (solo para la tabla de pagos)
+$(document).on("click", ".btn-cambiar-pago", function () {
+  const idCliente = $(this).data("id");
+  const nuevoEstadoPago = $(this).data("estado");
+  actualizarEstadoPagoClientePorId(idCliente, nuevoEstadoPago);
+});

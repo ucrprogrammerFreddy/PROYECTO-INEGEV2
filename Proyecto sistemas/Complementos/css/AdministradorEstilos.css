@@ -263,7 +263,7 @@ body {
     }
 /* -------------------- TABLAS -------------------- */
 table {
-  width: 80%;
+  width: 100%;
   border-collapse: collapse;
   background-color: white;
   box-shadow: 0 0 6px rgba(0, 0, 0, 0.05);
@@ -271,9 +271,9 @@ table {
   overflow: hidden;
 }
 
-th {
-  background-color: white;
-  color: #000;
+table th {
+  background-color: #316163;
+  color: #fff;
   font-weight: bold;
   padding: 12px 16px;
   text-align: left;
@@ -404,14 +404,7 @@ tr:hover {
 .btn-tabla-eliminar .icono-btn {
   font-size: 1.2em;
 }
-.tabla-scroll {
-  width: 100%;
-  overflow-x: auto;
-  /* Opcional: para que la tabla no sobresalga visualmente */
-  box-shadow: 0 0 6px rgba(0,0,0,0.05);
-  border-radius: 8px;
-}
-.tabla-scroll table {
-  min-width: 900px; /* Ajusta según tus columnas */
-}
-
+    .table thead th {
+      background-color: #316163 !important;
+      color: #fff !important;
+    }

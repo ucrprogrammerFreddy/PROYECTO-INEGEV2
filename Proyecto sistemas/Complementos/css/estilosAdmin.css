@@ -164,7 +164,12 @@ table a {
   text-decoration: none;
   font-size: 0.95rem;
 }
-
+th{
+  background-color: #316163;
+  color: #fff;
+  padding: 12px;
+  text-align: left;
+}
 /* -------------------- RESPONSIVE -------------------- */
 @media (max-width: 768px) {
   body.sidebar-active main,
