@@ -1,5 +1,8 @@
 ﻿using PowerVital.Data;
 using Microsoft.EntityFrameworkCore;
+using PowerVital.Models;
+using PowerVital.Models; // <-- Necesario para EmailService
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,10 +30,14 @@ builder.Services.AddCors(options =>
 });
 
 // 👉 Servicios
+builder.Services.AddScoped<EmailService>();
+
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));

@@ -1,7 +1,16 @@
+
+
+// AdminClientes.js
+
 import { ClienteModel } from "../../Model/ClienteModel.js";
 
 // Definimos la base de la URL para las peticiones a la API
 const API_BASE = "http://mi-api-powergym-2025.somee.com/api";
+//const API_BASE = "http://localhost:7086/api";
+
+
+
+
 
 // Variable global para lista de padecimientos
 window.listaPadecimientos = [];
@@ -184,7 +193,12 @@ export function registrarCliente() {
     method: "POST",
     contentType: "application/json",
     data: JSON.stringify(cliente),
+
+     beforeSend: () => {
+    console.log("⏳ Enviando cliente:", cliente);
+  },
     success: (res) => {
+       console.log("✅ Respuesta recibida:", res);
       const clienteId = res.IdUsuario;
 
       if (!clienteId || clienteId === 0) {
@@ -222,6 +236,7 @@ export function registrarCliente() {
       );
     },
     error: (xhr) => {
+       console.error("❌ Error en el servidor:", xhr);
       if (xhr.status === 409) {
         alert(
           "❌ " + (xhr.responseJSON?.mensaje || "El correo ya está registrado.")
@@ -494,6 +509,90 @@ function asignarPadecimientos(idCliente, padecimientosCompletos) {
 
 /**
  * Extrae los valores del formulario y los estructura como un objeto cliente.
+//  * @param {string} tipo - "Crear" o "Editar" para diferenciar el prefijo de los campos.
+//  * @returns {Object} Cliente estructurado para enviar al backend
+//  */
+// function obtenerClienteDesdeFormulario(tipo) {
+//   const padecimientosCompletos = [];
+
+//   function getCampo(id, isNumber = false, isFloat = false) {
+//     const val = $(`#${id}`).val();
+//     const clave = getCampo("clave");
+
+//     if (isNumber) {
+//       const num = isFloat ? parseFloat(val) : parseInt(val, 10);
+//       return isNaN(num) ? null : num;
+//     }
+//     return val ? val.trim() : "";
+//   }
+
+//   const entrenadorId = getCampo("entrenador", true);
+
+//   // Padecimientos y severidad
+//   $("#padecimientosList input:checked").each(function () {
+//     const idPadecimiento = parseInt(this.value, 10);
+//     const severidad = $(this)
+//       .closest("div")
+//       .find("select.severidad-padecimiento")
+//       .val();
+//     if (!isNaN(idPadecimiento) && severidad) {
+//       padecimientosCompletos.push({
+//         IdPadecimiento: idPadecimiento,
+//         Severidad: severidad,
+//       });
+//     }
+//   });
+
+//   // Fecha de nacimiento y validación
+//   let fechaNacStr = getCampo("fechaNacimiento").trim();
+//   if (!fechaNacStr) {
+//     alert("Debes ingresar la fecha de nacimiento.");
+//     throw new Error("Fecha de nacimiento vacía");
+//   }
+//   let fechaNacISO = fechaNacStr;
+//   const fechaNac = new Date(fechaNacISO);
+//   const hoy = new Date();
+//   if (isNaN(fechaNac.getTime()) || fechaNac > hoy) {
+//     alert("❌ La fecha de nacimiento no puede ser en el futuro o inválida.");
+//     throw new Error("Fecha de nacimiento inválida");
+//   }
+
+//   // Validación extra para campos requeridos
+//   const nombre = getCampo("nombre");
+ 
+//   const email = getCampo("correo");
+//   const genero = getCampo("genero");
+//   if (!nombre || !clave || !email || !genero) {
+//     alert(
+//       "Por favor, rellena todos los campos obligatorios (nombre, clave, correo, género)."
+//     );
+//     throw new Error("Campos requeridos vacíos");
+//   }
+
+//   const cliente = {
+//     IdUsuario: tipo === "Crear" ? 0 : getCampo("idUsuario", true) || 0,
+//     Nombre: nombre,
+//     Email: email,
+//     Telefono: getCampo("telefono"),
+//     FechaNacimiento: fechaNacISO,
+//     Genero: genero,
+//     Altura: getCampo("altura", true, true) || 0,
+//     Peso: getCampo("peso", true, true) || 0,
+//     EstadoPago: true,
+//     EntrenadorId: entrenadorId || 0,
+//     Padecimientos: padecimientosCompletos.map((p) => p.IdPadecimiento),
+//     PadecimientosCompletos: padecimientosCompletos, // para asignar con severidad
+//   };
+
+//   return cliente;
+// }
+
+
+
+
+
+/**
+ * Extrae los valores del formulario y los estructura como un objeto cliente.
  * @param {string} tipo - "Crear" o "Editar" para diferenciar el prefijo de los campos.
  * @returns {Object} Cliente estructurado para enviar al backend
  */
@@ -511,7 +610,7 @@ function obtenerClienteDesdeFormulario(tipo) {
 
   const entrenadorId = getCampo("entrenador", true);
 
-  // Padecimientos y severidad
+  // ✅ Padecimientos y severidad
   $("#padecimientosList input:checked").each(function () {
     const idPadecimiento = parseInt(this.value, 10);
     const severidad = $(this)
@@ -526,12 +625,13 @@ function obtenerClienteDesdeFormulario(tipo) {
     }
   });
 
-  // Fecha de nacimiento y validación
+  // ✅ Fecha de nacimiento y validación
   let fechaNacStr = getCampo("fechaNacimiento").trim();
   if (!fechaNacStr) {
     alert("Debes ingresar la fecha de nacimiento.");
     throw new Error("Fecha de nacimiento vacía");
   }
+
   let fechaNacISO = fechaNacStr;
   const fechaNac = new Date(fechaNacISO);
   const hoy = new Date();
@@ -540,18 +640,18 @@ function obtenerClienteDesdeFormulario(tipo) {
     throw new Error("Fecha de nacimiento inválida");
   }
 
-  // Validación extra para campos requeridos
+  // ✅ Validar campos obligatorios
   const nombre = getCampo("nombre");
-  const clave = getCampo("clave");
+  const clave ="mi-clave-secreta" // ← ⚠️ Importante, causa error si falta
   const email = getCampo("correo");
   const genero = getCampo("genero");
+
   if (!nombre || !clave || !email || !genero) {
-    alert(
-      "Por favor, rellena todos los campos obligatorios (nombre, clave, correo, género)."
-    );
+    alert("Por favor, rellena todos los campos obligatorios (nombre, clave, correo, género).");
     throw new Error("Campos requeridos vacíos");
   }
 
+  // ✅ Construir objeto cliente final
   const cliente = {
     IdUsuario: tipo === "Crear" ? 0 : getCampo("idUsuario", true) || 0,
     Nombre: nombre,
@@ -565,11 +665,24 @@ function obtenerClienteDesdeFormulario(tipo) {
     EstadoPago: true,
     EntrenadorId: entrenadorId || 0,
     Padecimientos: padecimientosCompletos.map((p) => p.IdPadecimiento),
-    PadecimientosCompletos: padecimientosCompletos, // para asignar con severidad
+    PadecimientosCompletos: padecimientosCompletos // con severidad
   };
 
   return cliente;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /**
  * Lista todos los clientes en la tabla HTML.
