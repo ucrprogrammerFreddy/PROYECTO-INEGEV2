@@ -9,45 +9,45 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="../../Complementos/css/indexadmin.css" />
 
-
+  <style>
+    footer {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background-color: #f8f9fa;
+      text-align: center;
+      padding: 10px 0;
+      font-size: 14px;
+      color: #6c757d;
+    }
+  </style>
 </head>
 
 <body>
-   <div id="main-wrapper">
+  <div class="mt-4" id="main-wrapper">
+    <main class="contenedor-main pt-4" id="mainContent">
+      <div class="card-grid mt-4">
+        <a href="../../View/Administrador/Empleados.html" class="custom-card">
+          <div class="icon-section bg-light-brown icon-brown"><i class="fas fa-user-shield"></i></div>
+          <strong>Administradores</strong>
+          <p>Ver todos</p>
+        </a>
 
-  <!-- Header -->
- 
-  <!-- Sidebar overlay -->
+        <a href="../Administrador/ListaPadecimientos.html" class="custom-card">
+          <div class="icon-section bg-light-green icon-green"><i class="fas fa-heartbeat"></i></div>
+          <strong>Padecimientos</strong>
+          <p>Registrar / Ver</p>
+        </a>
 
+        <a href="../Administrador/ListaClientes.html" class="custom-card">
+          <div class="icon-section bg-light-yellow icon-olive"><i class="fas fa-users"></i></div>
+          <strong>Clientes</strong>
+          <p>Gestión de clientes</p>
+        </a>
+      </div>
+    </main>
 
-  <!-- Este es el munu y solo lo invocamos por el id, primero debemos exportar la funcion que esta abajo -->
-
-  <!-- Contenido principal -->
-  <main class="contenedor-main mt-5" id="mainContent">
-    <div class="card-grid">
-
-      <a href="../../View/Administrador/Empleados.html" class="custom-card">
-        <div class="icon-section bg-light-brown icon-brown"><i class="fas fa-user-shield"></i></div>
-        <strong>Administradores</strong>
-        <p>Ver todos</p>
-      </a>
-
-      <a href="../Administrador/ListaPadecimientos.html" class="custom-card">
-        <div class="icon-section bg-light-green icon-green"><i class="fas fa-heartbeat"></i></div>
-        <strong>Padecimientos</strong>
-        <p>Registrar / Ver</p>
-      </a>
-
-      <a href="../Administrador/ListaClientes.html" class="custom-card">
-        <div class="icon-section bg-light-yellow icon-olive"><i class="fas fa-users"></i></div>
-        <strong>Clientes</strong>
-        <p>Gestión de clientes</p>
-      </a>
-
-
-    </div>
-  </main>
-</div>
+  </div>
 
   <script type="module">
     import { renderAdminLayout } from "../../Controler/Administrador/AdminLayout.js";

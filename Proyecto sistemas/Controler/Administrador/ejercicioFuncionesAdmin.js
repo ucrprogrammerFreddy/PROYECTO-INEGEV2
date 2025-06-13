@@ -1,12 +1,13 @@
 const URL_API = "http://mi-api-powergym-2025.somee.com/api/Ejercicio";
-//const URL_API = "http://localhost:7086/api/Ejercicio";
+// const URL_API = "http://localhost:7086/api/Ejercicio";
+
 let listaEjerciciosGlobal = [];
 
 document.addEventListener("DOMContentLoaded", function () {
   cargarEjerciciosAdmin();
   inicializarFiltroEjercicios();
+  mostrarBotonAgregarSiEntrenador();
 
-  // Inicializador del filtro de búsqueda
   function inicializarFiltroEjercicios() {
     const filtroInput = document.getElementById("filtroEjercicio");
     if (filtroInput) {
@@ -16,7 +17,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  // Renderiza la tabla con o sin filtro
   function renderizarTablaEjercicios(filtro = "") {
     const table = document.getElementById("tablaEjercicios");
     if (!table) return;
@@ -60,7 +60,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // Carga y guarda la lista global de ejercicios
   async function cargarEjerciciosAdmin() {
     const table = document.getElementById("tablaEjercicios");
     if (!table) return;
@@ -110,5 +109,34 @@ document.addEventListener("DOMContentLoaded", function () {
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
       </div>
     `;
+  }
+
+  /**
+   * Muestra el botón "Agregar" solo si el usuario logeado es Entrenador.
+   * Oculta el botón para Admin.
+   */
+  function mostrarBotonAgregarSiEntrenador() {
+    try {
+      const usuarioActual = JSON.parse(
+        sessionStorage.getItem("usuarioActual") ||
+          localStorage.getItem("usuarioActual")
+      );
+      const btnAgregar = document.getElementById("btnAgregarEjercicio");
+      if (!usuarioActual || !btnAgregar) return;
+      if (
+        usuarioActual.Rol &&
+        usuarioActual.Rol.toLowerCase() === "entrenador"
+      ) {
+        // Mostrar botón si es entrenador
+        btnAgregar.style.display = "";
+      } else {
+        // Ocultar botón si es admin o cualquier otro rol
+        btnAgregar.style.display = "none";
+      }
+    } catch (e) {
+      // Si hay error en el parseo, por seguridad oculta el botón
+      const btnAgregar = document.getElementById("btnAgregarEjercicio");
+      if (btnAgregar) btnAgregar.style.display = "none";
+    }
   }
 });
