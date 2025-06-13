@@ -14,7 +14,7 @@ namespace PowerVital.DTO
         public decimal Altura { get; set; }
         public decimal Peso { get; set; }
         public bool EstadoPago { get; set; }
-        public int EntrenadorId { get; set; }
+        public int? EntrenadorId { get; set; }
 
         public string? NombreEntrenador { get; set; }
 

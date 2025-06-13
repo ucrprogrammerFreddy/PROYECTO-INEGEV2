@@ -9,11 +9,24 @@
   <link rel="stylesheet" href="../Ejercicio/css/indexadmin.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
-    .table thead th {
-      background-color: #316163 !important;
-      color: #fff !important;
+    .btn-regresar2 {
+      background-color: #b3644a;
+      /* Color marrón similar al de la imagen */
+      color: #fff;
+
+    }
+
+    .btn-regresar2 span {
+      margin-left: 4px;
+    }
+
+    .btn-regresar2:hover,
+    .btn-regresar2:focus {
+      background-color: #9b796d;
+      outline: none;
     }
   </style>
+
 </head>
 
 <body>
@@ -27,9 +40,9 @@
       <h2 class="mb-4">Ejercicios registrados</h2>
       <div id="alertPlaceholder">
         <div class="d-flex justify-content-end">
-          <button class="btn btn-volver" onclick="window.location.href='../../View/Administrador/Index.html'">Regresar
-            al
-            Menú</button>
+          <button class="btn btn-regresar2"
+            onclick="window.location.href='../../View/Administrador/Index.html'">Regresar
+            al Menú</button>
           <button id="btnAgregarEjercicio" class="btn btn-sm btn-enviar"
             onclick="window.location.href='../Ejercicio/indexEjercicio.html'">
             <i class="bi bi-plus-circle"></i>Agregar
@@ -55,7 +68,7 @@
               <th>Área Muscular</th>
               <th>Área Muscular Afectada</th>
               <th>Dificultad</th>
-              <!-- 🚫 NO hay columna "Acciones" -->
+              <!--NO hay columna "Acciones" -->
             </tr>
           </thead>
           <tbody>
@@ -72,107 +85,8 @@
     import { renderAdminLayout } from "../../Controler/Administrador/AdminLayout.js";
     renderAdminLayout();
   </script>
+  <!-- Importa solo el JS que ya trae la lógica de ocultar el botón -->
   <script type="module" src="../../Controler/Administrador/ejercicioFuncionesAdmin.js"></script>
-
-  <!-- Filtro de búsqueda y scroll funcional -->
-  <script>
-    let listaEjerciciosGlobal = [];
-
-    function renderizarTablaEjercicios(filtro = "") {
-      const table = document.getElementById("tablaEjercicios");
-      if (!table) return;
-      const tbody = table.querySelector("tbody");
-      if (!tbody) return;
-
-      let ejerciciosFiltrados = listaEjerciciosGlobal;
-
-      if (filtro) {
-        ejerciciosFiltrados = listaEjerciciosGlobal.filter(ej =>
-          ej.Nombre && ej.Nombre.toLowerCase().includes(filtro.toLowerCase())
-        );
-      }
-
-      if (!Array.isArray(ejerciciosFiltrados) || ejerciciosFiltrados.length === 0) {
-        tbody.innerHTML =
-          "<tr><td colspan='7'>No hay ejercicios registrados.</td></tr>";
-        return;
-      }
-
-      tbody.innerHTML = "";
-      ejerciciosFiltrados.forEach((ej) => {
-        tbody.insertAdjacentHTML(
-          "beforeend",
-          `
-          <tr>
-            <td>${ej.Nombre}</td>
-            <td>${ej.Descripcion}</td>
-            <td>${ej.Repeticiones}</td>
-            <td><a href="${ej.GuiaEjercicio}" target="_blank">Ver video</a></td>
-            <td>${ej.AreaMuscular}</td>
-            <td>${ej.AreaMuscularAfectada}</td>
-            <td>${ej.Dificultad}</td>
-          </tr>
-          `
-        );
-      });
-    }
-
-    // Busca y renderiza al escribir en el filtro
-    document.addEventListener("DOMContentLoaded", function () {
-      const filtroInput = document.getElementById("filtroEjercicio");
-      if (filtroInput) {
-        filtroInput.addEventListener("input", function () {
-          renderizarTablaEjercicios(this.value);
-        });
-      }
-    });
-
-    // Sobrescribe o envuelve la función de cargar (ajusta el URL_API según corresponda)
-    window.cargarEjerciciosAdmin = async function cargarEjerciciosAdmin() {
-      const URL_API = typeof window.URL_API !== "undefined" ? window.URL_API : ""; // Ajusta si tienes la URL global
-      const table = document.getElementById("tablaEjercicios");
-      if (!table) return;
-      const tbody = table.querySelector("tbody");
-      if (!tbody) return;
-
-      tbody.innerHTML = "<tr><td colspan='7'>Cargando...</td></tr>";
-
-      try {
-        const resp = await fetch(`${URL_API}/listaEjercicios`);
-        if (!resp.ok) throw new Error("No se pudo obtener la lista");
-        const ejercicios = await resp.json();
-
-        let lista = [];
-        if (Array.isArray(ejercicios)) {
-          lista = ejercicios;
-        } else if (Array.isArray(ejercicios.$values)) {
-          lista = ejercicios.$values;
-        } else if (Array.isArray(ejercicios.data)) {
-          lista = ejercicios.data;
-        } else if (Array.isArray(ejercicios.lista)) {
-          lista = ejercicios.lista;
-        } else {
-          console.warn("Formato inesperado de la respuesta:", ejercicios);
-        }
-
-        listaEjerciciosGlobal = lista;
-        renderizarTablaEjercicios();
-
-      } catch (err) {
-        if (typeof mostrarMensaje === "function") {
-          mostrarMensaje("Error al cargar ejercicios: " + err.message, "danger");
-        }
-        tbody.innerHTML = "<tr><td colspan='7'>Error al cargar datos.</td></tr>";
-      }
-    };
-
-    // Llama la función al cargar la página (si no la llama otro módulo)
-    document.addEventListener('DOMContentLoaded', () => {
-      if (typeof window.cargarEjerciciosAdmin === "function") {
-        window.cargarEjerciciosAdmin();
-      }
-    });
-  </script>
 
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
