@@ -55,12 +55,13 @@ namespace PowerVital.Controllers
             {
                 idIdUsuario = entrenador.IdUsuario,
                 Nombre = entrenador.Nombre,
-                Clave = entrenador.Rol,
-                Telefono = entrenador.Telefono,
-                Rol =entrenador.Rol,
                 Email = entrenador.Email,
-                FormacionAcademica = entrenador.FormacionAcademica
+                Telefono = entrenador.Telefono,
+                FormacionAcademica = entrenador.FormacionAcademica,
+                Rol = entrenador.Rol
+                // NO ENVÍES Clave en la edición (por seguridad)
             };
+
 
             return Ok(dto);
         }
@@ -152,18 +153,81 @@ namespace PowerVital.Controllers
         }
 
         // ✅ DELETE: api/Entrenador/{id}
+
+        //[HttpDelete("eliminarEntrenador/{id}")]
+        //public async Task<IActionResult> EliminarEntrenador(int id)
+        //{
+        //    try
+        //    {
+        //        var entrenador = await _context.Entrenadores.FindAsync(id);
+        //        if (entrenador == null)
+        //            return NotFound(new { message = "❌ Entrenador no encontrado." });
+
+        //        var tieneClientesAsignados = await _context.Clientes.AnyAsync(c => c.EntrenadorId == id);
+        //        if (tieneClientesAsignados)
+        //        {
+        //            return Conflict(new { message = "❌ No se puede eliminar el entrenador porque tiene clientes asignados." });
+        //        }
+
+        //        _context.Entrenadores.Remove(entrenador);
+        //        await _context.SaveChangesAsync();
+
+        //        return Ok(new { message = "✅ Entrenador eliminado correctamente." });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, new
+        //        {
+        //            message = "❌ Error interno al eliminar entrenador.",
+        //            detalle = ex.Message
+        //        });
+        //    }
+        //}
+
+
         [HttpDelete("eliminarEntrenador/{id}")]
         public async Task<IActionResult> EliminarEntrenador(int id)
         {
-            var entrenador = await _context.Entrenadores.FindAsync(id);
-            if (entrenador == null)
-                return NotFound();
+            try
+            {
+                var entrenador = await _context.Entrenadores.FindAsync(id);
+                if (entrenador == null)
+                    return NotFound(new { message = "❌ Entrenador no encontrado." });
 
-            _context.Entrenadores.Remove(entrenador);
-            await _context.SaveChangesAsync();
+                // Desasignar el entrenador de todos los clientes relacionados
+                var clientesAsignados = await _context.Clientes
+                    .Where(c => c.EntrenadorId == id)
+                    .ToListAsync();
 
-            return NoContent();
+                foreach (var cliente in clientesAsignados)
+                {
+                    cliente.EntrenadorId = null; // 🔓 Desasignar entrenador
+                }
+
+                _context.Entrenadores.Remove(entrenador);
+                await _context.SaveChangesAsync();
+
+                return Ok(new { message = "✅ Entrenador eliminado y clientes desasignados." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    message = "❌ Error interno al eliminar entrenador.",
+                    detalle = ex.Message
+                });
+            }
         }
+
+
+
+
+
+
+
+
+
+
 
         // 🔍 Verificar si el Entrenador existe
         private bool ExisteEntrenador(int id)

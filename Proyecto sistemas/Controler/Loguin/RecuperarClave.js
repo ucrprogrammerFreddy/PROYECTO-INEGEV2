@@ -1,6 +1,8 @@
 // Controler/Loguin/RecuperarClave.js
 
 const API_RECUPERAR_CLAVE = "http://mi-api-powergym-2025.somee.com/api/Login/RecuperarClave";
+//const API_RECUPERAR_CLAVE = "http://localhost:7086/api/Login/RecuperarClave";
+
 
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.querySelector("#form-recuperacion");

@@ -1,5 +1,6 @@
 
 const API_URL = "http://mi-api-powergym-2025.somee.com/api/padecimiento";
+
 //const API_URL = "http://localhost:7086/api/padecimiento";
 
 let filaEnEdicion = null;
@@ -15,6 +16,8 @@ document.addEventListener("DOMContentLoaded", () => {
     configurarFormularioEditar(id);
     return;
   }
+
+      
 
   switch (accion) {
     case "listar":
@@ -70,8 +73,8 @@ function listarPadecimientos() {
 }
 
 document.addEventListener("click", function (e) {
-  if (e.target.closest(".btn-editar")) {
-    const btn = e.target.closest(".btn-editar");
+  if (e.target.closest(".btn-tabla-editar")) {
+    const btn = e.target.closest(".btn-tabla-editar");
     const id = btn.dataset.id;
     if (filaEnEdicion !== null) {
       mostrarToast("⚠️ Solo puedes editar una fila a la vez.", "warning");
@@ -290,7 +293,9 @@ function configurarFormularioAgregar() {
       descripcion: descripcion,
       areaMuscularAfectada: areasSeleccionadas,
     };
-                
+   
+
+
     fetch(
       "http://mi-api-powergym-2025.somee.com/api/padecimiento",
       {

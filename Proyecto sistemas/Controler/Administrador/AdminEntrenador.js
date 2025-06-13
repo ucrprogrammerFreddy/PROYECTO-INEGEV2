@@ -1,6 +1,6 @@
 const URL_API = "http://mi-api-powergym-2025.somee.com/api/Entrenador/";
-//const URL_API = "http://localhost:7086/api/Entrenador/";
 
+//const URL_API = "http://localhost:7086/api/Entrenador/";
 // Función principal que se ejecuta al cargar la página
 document.addEventListener("DOMContentLoaded", () => {
   // Cargar lista si existe tabla
@@ -214,9 +214,14 @@ export async function eliminarEntrenador(id) {
     method: "DELETE",
   });
 
-  if (!response.ok) throw new Error("Error al eliminar el entrenador");
 
-  return response;
+if (!response.ok) {
+  const errorBody = await response.json();
+  throw new Error(errorBody.message || "Error al eliminar el entrenador");
+}
+
+
+
 }
 
 //Para buscar

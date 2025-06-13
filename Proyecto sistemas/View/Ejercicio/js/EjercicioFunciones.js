@@ -2,7 +2,8 @@
 import { EjercicioModel } from "../Modelo/EjercicioModel.js";
 
 // URL base de la API de ejercicios
-const URL_API = "http://mi-api-powergym-2025.somee.com/api";
+
+const URL_API = "http://localhost:7086/api"
 
 // Espera a que todo el DOM esté cargado antes de ejecutar el código
 document.addEventListener("DOMContentLoaded", function () {
