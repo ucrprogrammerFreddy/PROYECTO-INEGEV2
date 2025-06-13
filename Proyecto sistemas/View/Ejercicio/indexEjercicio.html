@@ -1,9 +1,8 @@
 <!doctype html>
-<html lang="en">
+<html lang="es">
 
 <head>
   <title>Registro Ejercicios</title>
-  <!-- Required meta tags -->
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 
@@ -20,46 +19,48 @@
 </head>
 
 <body>
-
   <!-- Aquí el header + menú lateral + footer serán generados por MenuEntren.js -->
 
   <!-- CONTENIDO PRINCIPAL -->
   <main class="contenedor-main" id="mainContent">
     <div class="container-fluid">
-      <h2 class="mb-4 mt-4">Registro de Ejercicios</h2>
+      <h2 class="mt-4">Registro de Ejercicios</h2>
 
-      <form>
+      <!-- ALERTAS -->
+      <div id="alertPlaceholder"></div>
+
+      <form id="formAgregarEjercicio" autocomplete="off">
         <input type="hidden" id="idEjercicio" name="idEjercicio">
 
         <div class="row">
           <div class="col-md-6 mb-3">
-            <label for="nombre" class="form-label">Nombre Del Ejercicio</label>
-            <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre" required>
+            <label for="add-nombre" class="form-label">Nombre Del Ejercicio</label>
+            <input type="text" class="form-control" id="add-nombre" name="nombre" placeholder="Nombre" required>
           </div>
           <div class="col-md-6 mb-3">
-            <label for="repeticiones" class="form-label">Repeticiones</label>
-            <input type="number" min="1" class="form-control" id="repeticiones" name="repeticiones"
-              placeholder="Repeticiones">
+            <label for="add-repeticiones" class="form-label">Repeticiones</label>
+            <input type="number" min="1" class="form-control" id="add-repeticiones" name="repeticiones"
+              placeholder="Repeticiones" required>
           </div>
         </div>
 
         <div class="row">
           <div class="col-md-6 mb-3">
-            <label for="descripcion" class="form-label">Descripción</label>
-            <input type="text" class="form-control" id="descripcion" name="descripcion" placeholder="Descripción"
+            <label for="add-descripcion" class="form-label">Descripción</label>
+            <input type="text" class="form-control" id="add-descripcion" name="descripcion" placeholder="Descripción"
               required>
           </div>
           <div class="col-md-6 mb-3">
-            <label for="guiaEjercicio" class="form-label">Guía del Ejercicio (URL)</label>
-            <input type="url" class="form-control" id="guiaEjercicio" name="guiaEjercicio"
+            <label for="add-guiaEjercicio" class="form-label">Guía del Ejercicio (URL)</label>
+            <input type="url" class="form-control" id="add-guiaEjercicio" name="guiaEjercicio"
               placeholder="Ej: https://youtube.com/ejemplo" pattern="https?://.+" required>
           </div>
         </div>
 
         <div class="row">
           <div class="col-md-6 mb-3">
-            <label for="areaMuscular" class="form-label">Área Muscular</label>
-            <select class="form-select" id="areaMuscular" name="areaMuscular" required>
+            <label for="add-areaMuscular" class="form-label">Área Muscular</label>
+            <select class="form-select" id="add-areaMuscular" name="areaMuscular" required>
               <option value="">Selecciona un área</option>
               <option value="Pecho">Pecho</option>
               <option value="Espalda">Espalda</option>
@@ -74,8 +75,8 @@
             </select>
           </div>
           <div class="col-md-6 mb-3">
-            <label for="dificultad" class="form-label">Dificultad</label>
-            <select class="form-select" id="dificultad" name="dificultad">
+            <label for="add-dificultad" class="form-label">Dificultad</label>
+            <select class="form-select" id="add-dificultad" name="dificultad" required>
               <option value="">Selecciona dificultad</option>
               <option value="Baja">Baja</option>
               <option value="Media">Media</option>
@@ -85,18 +86,20 @@
         </div>
 
         <!-- Impedimentos asociados (checkboxes) -->
-        <div class="row mb-3">
+        <div class="row mb-3" id="add-impedimentos">
           <label class="form-label">Impedimentos físicos o condiciones relevantes</label>
           <div class="col-md-12">
             <div class="row">
               <!-- Grupo 1 -->
               <div class="col-6 col-md-3">
                 <div class="form-check">
-                  <input class="form-check-input" type="checkbox" id="impRodillas" name="impedimentos[]" value="Rodillas">
+                  <input class="form-check-input" type="checkbox" id="impRodillas" name="impedimentos[]"
+                    value="Rodillas">
                   <label class="form-check-label" for="impRodillas">Rodillas</label>
                 </div>
                 <div class="form-check">
-                  <input class="form-check-input" type="checkbox" id="impTobillos" name="impedimentos[]" value="Tobillos">
+                  <input class="form-check-input" type="checkbox" id="impTobillos" name="impedimentos[]"
+                    value="Tobillos">
                   <label class="form-check-label" for="impTobillos">Tobillos</label>
                 </div>
                 <div class="form-check">
@@ -132,15 +135,18 @@
               <!-- Grupo 3 -->
               <div class="col-6 col-md-3">
                 <div class="form-check">
-                  <input class="form-check-input" type="checkbox" id="impFuerza" name="impedimentos[]" value="DebilidadMuscular">
+                  <input class="form-check-input" type="checkbox" id="impFuerza" name="impedimentos[]"
+                    value="DebilidadMuscular">
                   <label class="form-check-label" for="impFuerza">Debilidad muscular</label>
                 </div>
                 <div class="form-check">
-                  <input class="form-check-input" type="checkbox" id="impCardiaco" name="impedimentos[]" value="Cardiaco">
+                  <input class="form-check-input" type="checkbox" id="impCardiaco" name="impedimentos[]"
+                    value="Cardiaco">
                   <label class="form-check-label" for="impCardiaco">Condición cardíaca</label>
                 </div>
                 <div class="form-check">
-                  <input class="form-check-input" type="checkbox" id="impRespiratorio" name="impedimentos[]" value="Respiratorio">
+                  <input class="form-check-input" type="checkbox" id="impRespiratorio" name="impedimentos[]"
+                    value="Respiratorio">
                   <label class="form-check-label" for="impRespiratorio">Problemas respiratorios</label>
                 </div>
                 <div class="form-check">
@@ -152,11 +158,13 @@
               <!-- Grupo 4 -->
               <div class="col-6 col-md-3">
                 <div class="form-check">
-                  <input class="form-check-input" type="checkbox" id="impAuditivo" name="impedimentos[]" value="Auditivo">
+                  <input class="form-check-input" type="checkbox" id="impAuditivo" name="impedimentos[]"
+                    value="Auditivo">
                   <label class="form-check-label" for="impAuditivo">Discapacidad auditiva</label>
                 </div>
                 <div class="form-check">
-                  <input class="form-check-input" type="checkbox" id="impNeurologico" name="impedimentos[]" value="Neurológico">
+                  <input class="form-check-input" type="checkbox" id="impNeurologico" name="impedimentos[]"
+                    value="Neurológico">
                   <label class="form-check-label" for="impNeurologico">Condición neurológica</label>
                 </div>
                 <div class="form-check">
@@ -170,7 +178,8 @@
 
         <!-- Botones -->
         <div class="d-flex justify-content-center gap-3 mb-4">
-          <button type="button" class="btn btn-custom">Salir</button>
+          <button type="button" class="btn btn-custom"
+            onclick="window.location.href='../../View/Administrador/ListaEjercicios.html'">Regresar</button>
           <button type="submit" class="btn btn-custom">Agregar</button>
         </div>
 
@@ -187,7 +196,6 @@
     integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
     crossorigin="anonymous"></script>
   <script type="module" src="js/EjercicioFunciones.js"></script>
-
 </body>
 
 </html>

@@ -1,12 +1,105 @@
-// Importa el modelo EjercicioModel desde la carpeta Modelo
-import { EjercicioModel } from "../Modelo/EjercicioModel.js";
-
 // URL base de la API de ejercicios
 
 const URL_API = "http://localhost:7086/api"
 
-// Espera a que todo el DOM esté cargado antes de ejecutar el código
 document.addEventListener("DOMContentLoaded", function () {
+  // --- AGREGAR EJERCICIO ---
+  const formAgregar = document.getElementById("formAgregarEjercicio");
+  if (formAgregar) {
+    formAgregar.addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      // Obtiene los valores
+      const nombre = document.getElementById("add-nombre").value.trim();
+      const descripcion = document
+        .getElementById("add-descripcion")
+        .value.trim();
+      const areaMuscular = document.getElementById("add-areaMuscular").value;
+      const repeticiones = parseInt(
+        document.getElementById("add-repeticiones").value,
+        10
+      );
+      const guiaEjercicio = document
+        .getElementById("add-guiaEjercicio")
+        .value.trim();
+      const dificultad = document.getElementById("add-dificultad").value;
+
+      // Obtener los checkboxes marcados
+      const areaMuscularAfectada = Array.from(
+        document.querySelectorAll(
+          "#add-impedimentos input[type='checkbox']:checked"
+        )
+      )
+        .map((cb) => cb.value)
+        .join(", ");
+
+      // Validaciones
+      if (
+        !nombre ||
+        !descripcion ||
+        !areaMuscular ||
+        !guiaEjercicio ||
+        !dificultad
+      ) {
+        mostrarMensaje(
+          "Por favor complete todos los campos obligatorios.",
+          "danger"
+        );
+        return;
+      }
+      if (isNaN(repeticiones) || repeticiones <= 0) {
+        mostrarMensaje(
+          "Las repeticiones deben ser un número positivo.",
+          "danger"
+        );
+        return;
+      }
+      if (!/^https?:\/\/.+\..+/.test(guiaEjercicio)) {
+        mostrarMensaje(
+          "Ingrese una URL válida para la guía del ejercicio.",
+          "danger"
+        );
+        return;
+      }
+
+      const ejercicioDTO = {
+        nombre,
+        descripcion,
+        areaMuscular,
+        areaMuscularAfectada,
+        repeticiones,
+        guiaEjercicio,
+        dificultad,
+      };
+
+      try {
+        const response = await fetch(`${URL_API}/Ejercicio/crearEjercicio`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(ejercicioDTO),
+        });
+
+        if (response.ok) {
+          mostrarMensaje("¡Ejercicio agregado exitosamente!", "success");
+          formAgregar.reset();
+          await cargarEjercicios();
+        } else {
+          let errorMsg = "Error al agregar el ejercicio.";
+          try {
+            const error = await response.json();
+            if (error && error.mensaje) errorMsg += "<br>" + error.mensaje;
+          } catch (jsonErr) {}
+          mostrarMensaje(errorMsg, "danger");
+        }
+      } catch (err) {
+        mostrarMensaje(
+          "Error al conectar con la API: " + err.message,
+          "danger"
+        );
+      }
+    });
+  }
+
   // --- TABLA DE EJERCICIOS ---
   if (document.getElementById("tablaEjercicios")) {
     cargarEjercicios();
@@ -51,7 +144,6 @@ document.addEventListener("DOMContentLoaded", function () {
         .value.trim();
       const dificultad = document.getElementById("edit-dificultad").value;
 
-      // ✅ Obtener los checkboxes marcados
       const areaMuscularAfectada = Array.from(
         document.querySelectorAll(
           "#edit-impedimentos input[type='checkbox']:checked"
@@ -89,7 +181,6 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
       }
 
-      // Crea el objeto para enviar
       const ejercicioDTO = {
         nombre,
         descripcion,
@@ -101,12 +192,14 @@ document.addEventListener("DOMContentLoaded", function () {
       };
 
       try {
-        // ✅ CORREGIDO: Agregar controlador Ejercicio
-        const response = await fetch(`${URL_API}/Ejercicio/editarEjercicio/${idEditar}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(ejercicioDTO),
-        });
+        const response = await fetch(
+          `${URL_API}/Ejercicio/editarEjercicio/${idEditar}`,
+          {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(ejercicioDTO),
+          }
+        );
 
         if (response.ok) {
           mostrarMensaje("¡Ejercicio editado exitosamente!", "success");
@@ -142,7 +235,6 @@ document.addEventListener("DOMContentLoaded", function () {
     tbody.innerHTML = "<tr><td colspan='8'>Cargando...</td></tr>";
 
     try {
-      // ✅ CORREGIDO: Agregar controlador Ejercicio
       const resp = await fetch(`${URL_API}/Ejercicio/listaEjercicios`);
       if (!resp.ok) throw new Error("No se pudo obtener la lista");
       const ejercicios = await resp.json();
@@ -168,9 +260,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
       tbody.innerHTML = "";
       lista.forEach((ej) => {
-       tbody.insertAdjacentHTML(
-  "beforeend",
-  `
+        tbody.insertAdjacentHTML(
+          "beforeend",
+          `
   <tr>
     <td>${ej.Nombre}</td>
     <td>${ej.Descripcion}</td>
@@ -189,8 +281,7 @@ document.addEventListener("DOMContentLoaded", function () {
     </td>
   </tr>
   `
-);
-
+        );
       });
     } catch (err) {
       mostrarMensaje("Error al cargar ejercicios: " + err.message, "danger");
@@ -201,8 +292,9 @@ document.addEventListener("DOMContentLoaded", function () {
   // --- Mostrar modal editar ---
   async function mostrarModalEditar(id) {
     try {
-      // ✅ CORREGIDO: Agregar controlador Ejercicio
-      const resp = await fetch(`${URL_API}/Ejercicio/obtenerEjercicioPorId/${id}`);
+      const resp = await fetch(
+        `${URL_API}/Ejercicio/obtenerEjercicioPorId/${id}`
+      );
       if (!resp.ok) throw new Error("No se pudo obtener el ejercicio");
       const ejercicio = await resp.json();
 
@@ -220,7 +312,7 @@ document.addEventListener("DOMContentLoaded", function () {
       document.getElementById("edit-dificultad").value =
         ejercicio.Dificultad ?? "";
 
-      // ✅ Marcar los checkboxes de impedimentos
+      // Marcar los checkboxes de impedimentos
       const impedimentos = (ejercicio.AreaMuscularAfectada ?? "")
         .split(",")
         .map((i) => i.trim());
@@ -249,7 +341,6 @@ document.addEventListener("DOMContentLoaded", function () {
         mostrarMensaje("ID de ejercicio inválido.", "danger");
         return;
       }
-      // ✅ CORREGIDO: Agregar controlador Ejercicio (y arreglar typo "eliminarEjericicio")
       const resp = await fetch(`${URL_API}/Ejercicio/eliminarEjercicio/${id}`, {
         method: "DELETE",
       });
