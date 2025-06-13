@@ -287,7 +287,7 @@ namespace PowerVital.Migrations
                     b.Property<decimal>("Altura")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("EntrenadorId")
+                    b.Property<int?>("EntrenadorId")
                         .HasColumnType("int");
 
                     b.Property<bool>("EstadoPago")
@@ -401,8 +401,7 @@ namespace PowerVital.Migrations
                     b.HasOne("PowerVital.Models.Entrenador", "Entrenador")
                         .WithMany("Clientes")
                         .HasForeignKey("EntrenadorId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("Entrenador");
                 });

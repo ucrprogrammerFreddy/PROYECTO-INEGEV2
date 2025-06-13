@@ -301,3 +301,16 @@ grid-template-rows:auto 1fr auto;
   }
 }
 
+.btn-regresar2 {
+  background-color: #b3644a; /* Color marrón similar al de la imagen */
+  color: #b3644a;
+ 
+}
+.btn-regresar2 span {
+  margin-left: 4px;
+}
+.btn-regresar2:hover,
+.btn-regresar2:focus {
+  background-color: #9b796d;
+  outline: none;
+}

@@ -1,5 +1,4 @@
-
-// LoginFunciones.js 
+// LoginFunciones.js
 import { LoginModel } from "../../Model/LoginModel.js";
 
 const URL_API = "http://mi-api-powergym-2025.somee.com/api/Login/Login";

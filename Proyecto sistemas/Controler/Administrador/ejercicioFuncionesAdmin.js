@@ -1,12 +1,11 @@
 const URL_API = "http://mi-api-powergym-2025.somee.com/api/Ejercicio";
-// const URL_API = "http://localhost:7086/api/Ejercicio";
 
 let listaEjerciciosGlobal = [];
 
 document.addEventListener("DOMContentLoaded", function () {
   cargarEjerciciosAdmin();
   inicializarFiltroEjercicios();
-  mostrarBotonAgregarSiEntrenador();
+  mostrarBotonAgregarSoloEntrenador();
 
   function inicializarFiltroEjercicios() {
     const filtroInput = document.getElementById("filtroEjercicio");
@@ -111,32 +110,28 @@ document.addEventListener("DOMContentLoaded", function () {
     `;
   }
 
-  /**
-   * Muestra el botón "Agregar" solo si el usuario logeado es Entrenador.
-   * Oculta el botón para Admin.
-   */
-  function mostrarBotonAgregarSiEntrenador() {
+  function mostrarBotonAgregarSoloEntrenador() {
     try {
       const usuarioActual = JSON.parse(
-        sessionStorage.getItem("usuarioActual") ||
-          localStorage.getItem("usuarioActual")
+        sessionStorage.getItem("usuario") || localStorage.getItem("usuario")
       );
+      console.log("Usuario actual:", usuarioActual); // para depuración
+
       const btnAgregar = document.getElementById("btnAgregarEjercicio");
-      if (!usuarioActual || !btnAgregar) return;
+      if (!btnAgregar) return;
+
       if (
+        usuarioActual &&
         usuarioActual.Rol &&
         usuarioActual.Rol.toLowerCase() === "entrenador"
       ) {
-        // Mostrar botón si es entrenador
         btnAgregar.style.display = "";
       } else {
-        // Ocultar botón si es admin o cualquier otro rol
-        btnAgregar.style.display = "none";
+        btnAgregar.remove(); // <-- elimina el botón completamente del DOM
       }
     } catch (e) {
-      // Si hay error en el parseo, por seguridad oculta el botón
       const btnAgregar = document.getElementById("btnAgregarEjercicio");
-      if (btnAgregar) btnAgregar.style.display = "none";
+      if (btnAgregar) btnAgregar.remove();
     }
   }
 });
