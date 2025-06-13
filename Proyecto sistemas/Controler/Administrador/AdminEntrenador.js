@@ -94,7 +94,6 @@ export function renderizarEntrenadores(lista) {
           '${entrenador.Nombre}',
           '${entrenador.Email}',
           '${entrenador.Telefono}',
-          '${entrenador.Clave}',
           '${entrenador.FormacionAcademica || ""}'
         )">
           <i class="fas fa-pen-to-square icono-btn"></i>
@@ -115,14 +114,12 @@ window.mostrarModalEditar = function (
   Nombre,
   Correo,
   Telefono,
-  Clave,
   Formacion
 ) {
   document.getElementById("idEditar").value = Id;
   document.getElementById("nombreEditar").value = Nombre;
   document.getElementById("correoEditar").value = Correo;
   document.getElementById("telefonoEditar").value = Telefono;
-  document.getElementById("claveEditar").value = Clave;
   document.getElementById("formacionEditar").value = Formacion;
 
   new bootstrap.Modal(document.getElementById("modalEditarEntrenador")).show();
@@ -160,11 +157,6 @@ function getEntrenadorDesdeFormulario() {
 }
 
 
-
-
-
-
-
 // Crear nuevo entrenador
 export async function agregarEntrenador() {
   const nuevo = getEntrenadorDesdeFormulario();
@@ -200,7 +192,6 @@ export async function editarEntrenador(id) {
     IdIdUsuario: id,
     Nombre: document.getElementById("nombreEditar").value,
     Email: document.getElementById("correoEditar").value,
-    Clave: document.getElementById("claveEditar").value,
     Telefono: parseInt(document.getElementById("telefonoEditar").value),
     FormacionAcademica: document.getElementById("formacionEditar").value,
     Rol: "Entrenador",

@@ -196,121 +196,7 @@ namespace PowerVital.Controllers
 
 
 
-
-
-
-
-        // ✅ POST: api/cliente/CrearCliente
-        //[HttpPost("CrearCliente")]
-        //public async Task<ActionResult> CrearCliente([FromBody] GuardarClienteDto dto)
-        //{
-        //    if (!ModelState.IsValid)
-        //        return BadRequest(ModelState);
-
-        //    //if (string.IsNullOrWhiteSpace(dto.Nombre) || string.IsNullOrWhiteSpace(dto.Clave) || string.IsNullOrWhiteSpace(dto.Email))
-        //    //    return BadRequest(new { mensaje = "Nombre, Clave y Email son obligatorios" });
-
-        //    if (string.IsNullOrWhiteSpace(dto.Nombre) || string.IsNullOrWhiteSpace(dto.Email))
-        //        return BadRequest(new { mensaje = "Nombre y Email son obligatorios" });
-
-
-        //    if (dto.FechaNacimiento > DateTime.Now)
-        //        return BadRequest(new { mensaje = "La fecha de nacimiento no puede ser en el futuro" });
-
-        //    if (dto.Altura <= 0 || dto.Peso <= 0)
-        //        return BadRequest(new { mensaje = "Altura y peso deben ser mayores que cero" });
-
-        //    var entrenador = await _context.Entrenadores.FirstOrDefaultAsync(e => e.IdUsuario == dto.EntrenadorId);
-        //    if (entrenador == null)
-        //        return BadRequest(new { mensaje = "El entrenador especificado no existe" });
-
-        //    var emailExiste = await _context.Clientes.AnyAsync(c => c.Email == dto.Email);
-        //    if (emailExiste)
-        //        return Conflict(new { mensaje = "El correo electrónico ya está registrado." });
-
-
-        //    // 👉 Generar clave segura
-        //    string claveGenerada = Utilidades.GenerarClaveSegura();
-
-        //    // 👉 Hashearla
-        //    var hasher = new PasswordHasher<Cliente>();
-        //    string claveHasheada = hasher.HashPassword(null, claveGenerada);
-
-        //    // 👉 Crear cliente
-
-
-
-        //    var nuevoCliente = new Cliente
-        //    {
-        //        Nombre = dto.Nombre,
-        //        Clave = claveHasheada,
-        //        Email = dto.Email,
-        //        FechaNacimiento = dto.FechaNacimiento,
-        //        Telefono = dto.Telefono,
-        //        Genero = dto.Genero,
-        //        Altura = dto.Altura,
-        //        Peso = dto.Peso,
-        //        EstadoPago = dto.EstadoPago,
-        //        EntrenadorId = dto.EntrenadorId,
-        //        Rol = "Cliente"
-        //    };
-
-        //    _context.Clientes.Add(nuevoCliente);
-        //    await _context.SaveChangesAsync();
-
-        //    // 👉 Enviar correo con la clave generada
-
-        //    try
-        //    {
-        //        await _emailService.EnviarCorreoAsync(
-        //        nuevoCliente.Email,
-        //        " Gracias por inscribirte en PowerVital.Tu cuenta  - Contraseña temporal",
-        //        $"Hola {nuevoCliente.Nombre},\n\nTu contraseña temporal es: {claveGenerada}\n\nPuedes cambiarla después de iniciar sesión.\n\nEquipo PowerVital"
-        //        );
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine("⚠️ Error al enviar correo: " + ex.Message);
-        //        // No detiene el flujo aunque falle el correo
-        //    }
-
-
-        //    if (dto.PadecimientosCompletos != null && dto.PadecimientosCompletos.Count > 0)
-        //    {
-        //        var padecimientosCliente = dto.PadecimientosCompletos.Select(p => new PadecimientoCliente
-        //        {
-        //            IdCliente = nuevoCliente.IdUsuario,
-        //            IdPadecimiento = p.IdPadecimiento,
-        //            Severidad = p.Severidad
-        //        });
-
-        //        _context.PadecimientoCliente.AddRange(padecimientosCliente);
-        //        await _context.SaveChangesAsync();
-        //    }
-
-        //    return Ok(new { IdUsuario = nuevoCliente.IdUsuario });
-        //}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+      
 
         // ✅ PUT: api/cliente/editarCliente
         [HttpPut("editarCliente")]
@@ -341,7 +227,11 @@ namespace PowerVital.Controllers
                 return Conflict(new { mensaje = "El correo electrónico ya está registrado por otro usuario." });
 
             cliente.Nombre = dto.Nombre;
-            cliente.Clave = dto.Clave;
+            if (!string.IsNullOrWhiteSpace(dto.Clave))
+            {
+                cliente.Clave = dto.Clave;
+            }
+
             cliente.Email = dto.Email;
             cliente.FechaNacimiento = dto.FechaNacimiento;
             cliente.Telefono = dto.Telefono;

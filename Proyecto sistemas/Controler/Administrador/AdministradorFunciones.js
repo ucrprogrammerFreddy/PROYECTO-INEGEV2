@@ -3,6 +3,7 @@ import { AdministradorModel } from "../../Model/AdministradorModel.js";
 
 const URL_API = "http://mi-api-powergym-2025.somee.com/api/Administradores";
 //const URL_API = "http://localhost:7086/api/Administradores";
+
 const ruta = window.location.pathname;
 
 let administradoresGlobal = [];
@@ -198,7 +199,6 @@ function actualizarAdministrador() {
     idIdUsuario: parseInt(id),
     Nombre: $("#nombre").val(),
     Email: $("#email").val(),
-    Clave: $("#clave").val(),
     Telefono: parseInt($("#telefono").val()),
     Rol: "Admin",
     FormacionAcademica: $("#formacionAcademica").val(),

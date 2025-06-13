@@ -70,89 +70,7 @@ namespace PowerVital.Controllers
         }
 
 
-        // POST: api/Administradores
-        //[HttpPost("crearAdministrador")]
-        //public async Task<ActionResult> CrearAdministrador([FromBody] AdministradorDto dto)
-        //{
-        //    // ✅ 1. Validar el modelo entrante con base en las anotaciones del DTO
-        //    if (!ModelState.IsValid)
-        //    {
-        //        // ❌ Si el modelo no es válido (campos requeridos, longitud, etc.), retorna error 400
-        //        return BadRequest(ModelState);
-        //    }
-
-        //    // ✅ 2. Validar que el correo electrónico no esté registrado
-        //    var correoExistente = await _context.Administradores
-        //        .AnyAsync(a => a.Email == dto.Email);
-
-        //    if (correoExistente)
-        //    {
-        //        // ❌ Si ya existe un usuario con ese correo, retorna error 409 (conflicto)
-        //        return Conflict(new { message = "⚠️ El correo electrónico ya está en uso por otro administrador." });
-        //    }
-
-        //    // ✅ 3. Crear objeto del modelo Administrador con los datos del DTO
-        //    var administrador = new Administrador
-        //    {
-        //        Nombre = dto.Nombre,
-        //        Email = dto.Email,
-        //        Clave = dto.Clave, // ⚠️ Idealmente deberías encriptar esta clave
-        //        Rol = dto.Rol,
-        //        Telefono = dto.Telefono,
-        //        titulacion = dto.FormacionAcademica
-        //    };
-
-        //    // ✅ 4. Guardar el nuevo administrador en la base de datos
-        //    _context.Administradores.Add(administrador);
-        //    await _context.SaveChangesAsync();
-
-        //    // ✅ 5. Retornar mensaje de éxito y el nuevo ID
-        //    return Ok(new
-        //    {
-        //        message = "✅ Administrador creado exitosamente.",
-        //        id = administrador.IdUsuario
-        //    });
-        //}
-
-
-
-        //[HttpPost("crearAdministrador")]
-        //public async Task<ActionResult> CrearAdministrador([FromBody] AdministradorDto dto)
-        //{
-        //    if (!ModelState.IsValid)
-        //        return BadRequest(ModelState);
-
-        //    string emailNormalizado = dto.Email.ToLower();
-
-        //    // Buscar si ya existe el email en Usuarios o Administradores (por si acaso hay desincronización)
-        //    var correoExistente = await _context.Usuarios.AnyAsync(u => u.Email.ToLower() == emailNormalizado)
-        //        || await _context.Administradores.AnyAsync(a => a.Email.ToLower() == emailNormalizado);
-
-        //    if (correoExistente)
-        //        return Conflict(new { message = "⚠️ El correo electrónico ya está registrado." });
-
-        //    // Crear instancia del Administrador (hereda de Usuario)
-        //    var admin = new Administrador
-        //    {
-        //        Nombre = dto.Nombre,
-        //        Email = dto.Email,
-        //        Clave = dto.Clave,
-        //        Rol = "Admin",
-        //        Telefono = dto.Telefono,
-        //        titulacion = dto.FormacionAcademica
-        //    };
-
-        //    _context.Administradores.Add(admin);
-        //    await _context.SaveChangesAsync();
-
-        //    return Ok(new
-        //    {
-        //        message = "✅ Administrador creado exitosamente.",
-        //        id = admin.IdUsuario
-        //    });
-        //}
-
-
+       
 
 
         [HttpPost("crearAdministrador")]
@@ -237,7 +155,10 @@ namespace PowerVital.Controllers
 
             administradorExistente.Nombre = dto.Nombre;
             administradorExistente.Email = dto.Email;
-            administradorExistente.Clave = dto.Clave;
+            if (!string.IsNullOrWhiteSpace(dto.Clave))
+            {
+                administradorExistente.Clave = dto.Clave;
+            }
             administradorExistente.Rol = dto.Rol;
             administradorExistente.Telefono = dto.Telefono;
             administradorExistente.titulacion = dto.FormacionAcademica; // Actualización del campo titulacion
