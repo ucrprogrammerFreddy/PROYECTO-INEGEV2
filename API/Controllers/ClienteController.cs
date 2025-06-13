@@ -116,6 +116,10 @@ namespace PowerVital.Controllers
 
             // 👉 Generar clave y hashearla
             string claveGenerada = Utilidades.GenerarClaveSegura();
+
+
+     
+
             var hasher = new PasswordHasher<Cliente>();
             string claveHasheada = hasher.HashPassword(null, claveGenerada);
 

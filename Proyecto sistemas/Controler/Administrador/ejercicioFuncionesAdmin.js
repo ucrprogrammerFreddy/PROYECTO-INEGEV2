@@ -1,5 +1,5 @@
 const URL_API = "http://mi-api-powergym-2025.somee.com/api/Ejercicio";
-
+//const URL_API = "http://localhost:7086/api/Ejercicio";
 let listaEjerciciosGlobal = [];
 
 document.addEventListener("DOMContentLoaded", function () {

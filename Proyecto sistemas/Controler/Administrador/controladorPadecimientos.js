@@ -1,4 +1,6 @@
+
 const API_URL = "http://mi-api-powergym-2025.somee.com/api/padecimiento";
+//const API_URL = "http://localhost:7086/api/padecimiento";
 
 let filaEnEdicion = null;
 let datosOriginales = {}; // Para cancelar
@@ -288,9 +290,9 @@ function configurarFormularioAgregar() {
       descripcion: descripcion,
       areaMuscularAfectada: areasSeleccionadas,
     };
-
+                
     fetch(
-      "http://mi-api-powergym-2025.somee.com/api/Padecimiento/crearPadecimiento",
+      "http://mi-api-powergym-2025.somee.com/api/padecimiento",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

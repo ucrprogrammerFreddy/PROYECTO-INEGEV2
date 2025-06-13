@@ -2,7 +2,7 @@ import { ClienteModel } from "../../Model/ClienteModel.js";
 
 // Definimos la base de la URL para las peticiones a la API
 const API_BASE = "http://mi-api-powergym-2025.somee.com/api";
-
+//const API_BASE = "http://localhost:7086/api";
 // Variable global para lista de padecimientos
 window.listaPadecimientos = [];
 

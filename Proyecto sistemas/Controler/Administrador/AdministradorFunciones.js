@@ -2,6 +2,7 @@
 import { AdministradorModel } from "../../Model/AdministradorModel.js";
 
 const URL_API = "http://mi-api-powergym-2025.somee.com/api/Administradores";
+//const URL_API = "http://localhost:7086/api/Administradores";
 const ruta = window.location.pathname;
 
 let administradoresGlobal = [];
@@ -43,7 +44,7 @@ if (ruta.includes("RegistroAdministrador.html")) {
       $("#idadmin").val(adminEditar.idIdUsuario);
       $("#nombre").val(adminEditar.nombre);
       $("#email").val(adminEditar.email);
-      $("#clave").val(adminEditar.clave);
+      $("#clave").val("mi-clave-privada");
       $("#formacionAcademica").val(adminEditar.formacionAcademica);
       $("#telefono").val(adminEditar.telefono);
     } else {
@@ -240,14 +241,32 @@ window.editarAdministrador = function (admin) {
   window.location.href = "EditarAdministrador.html";
 };
 
+
+
+
 function construirDesdeFormulario() {
   return new AdministradorModel(
     $("#idadmin").val() ? parseInt($("#idadmin").val()) : 0,
     $("#nombre").val(),
     $("#email").val(),
-    $("#clave").val(),
+    "", // Clave será generada automáticamente
     "Admin",
     parseInt($("#telefono").val()),
     $("#formacionAcademica").val()
   );
 }
+
+
+
+
+// function construirDesdeFormulario() {
+//   return new AdministradorModel(
+//     $("#idadmin").val() ? parseInt($("#idadmin").val()) : 0,
+//     $("#nombre").val(),
+//     $("#email").val(),
+//     $("#clave").val(),
+//     "Admin",
+//     parseInt($("#telefono").val()),
+//     $("#formacionAcademica").val()
+//   );
+// }

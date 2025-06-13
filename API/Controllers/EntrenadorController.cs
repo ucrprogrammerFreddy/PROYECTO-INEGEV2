@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using PowerVital.Data;
 using PowerVital.Models;
 using PowerVital.DTOs;
+using Microsoft.AspNetCore.Identity;
 
 namespace PowerVital.Controllers
 {
@@ -11,11 +12,13 @@ namespace PowerVital.Controllers
     public class EntrenadorController : ControllerBase
     {
         private readonly AppDbContext _context;
-
-        public EntrenadorController(AppDbContext context)
+        private readonly EmailService _emailService;
+        public EntrenadorController(AppDbContext context, EmailService emailService)
         {
             _context = context;
+            _emailService = emailService;
         }
+
 
         // ✅ GET: api/Entrenador
         [HttpGet("listaEntrenador")]
@@ -62,31 +65,32 @@ namespace PowerVital.Controllers
             return Ok(dto);
         }
 
-        // ✅ POST: api/Entrenador
+
         [HttpPost("agregarEntrenador")]
         public async Task<ActionResult> AgregarEntrenador([FromBody] EntrenadorDTO dto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (string.IsNullOrWhiteSpace(dto.Clave))
-                return BadRequest("La clave es obligatoria.");
-
-            // Normalizar email (minúsculas)
             string emailNormalizado = dto.Email.ToLower();
 
-            // Validar existencia del email en entrenadores (opcional: también en Usuarios)
             var correoExistente = await _context.Entrenadores.AnyAsync(e => e.Email.ToLower() == emailNormalizado)
                 || await _context.Usuarios.AnyAsync(u => u.Email.ToLower() == emailNormalizado);
 
             if (correoExistente)
                 return Conflict(new { message = "⚠️ El correo electrónico ya está registrado." });
 
+            // 🔐 Generar clave segura
+            string claveTemporal = Utilidades.GenerarClaveSegura();
+            var hasher = new PasswordHasher<Entrenador>();
+            string claveHasheada = hasher.HashPassword(null, claveTemporal);
+
+            // Crear entrenador
             var nuevoEntrenador = new Entrenador
             {
                 Nombre = dto.Nombre,
                 Email = dto.Email,
-                Clave = dto.Clave, // ⚠️ En producción, debes hashear la clave
+                Clave = claveHasheada,
                 Telefono = dto.Telefono,
                 Rol = "Entrenador",
                 FormacionAcademica = dto.FormacionAcademica
@@ -95,19 +99,75 @@ namespace PowerVital.Controllers
             _context.Entrenadores.Add(nuevoEntrenador);
             await _context.SaveChangesAsync();
 
-            var dtoResultado = new EntrenadorDTO
+            // Enviar correo
+            try
             {
-                idIdUsuario = nuevoEntrenador.IdUsuario,
-                Nombre = nuevoEntrenador.Nombre,
-                Email = nuevoEntrenador.Email,
-                Clave = nuevoEntrenador.Clave,
-                Telefono = nuevoEntrenador.Telefono,
-                FormacionAcademica = nuevoEntrenador.FormacionAcademica,
-                Rol = nuevoEntrenador.Rol
-            };
+                string asunto = "📩 Tu clave temporal - PowerVital";
+                string mensaje = $"Hola {dto.Nombre},\n\nTu clave temporal para acceder es:\n👉 {claveTemporal}\n\nPor seguridad, cámbiala después de iniciar sesión.";
+                await _emailService.EnviarCorreoAsync(dto.Email, asunto, mensaje);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"❌ Error al enviar correo: {ex.Message}");
+            }
 
-            return CreatedAtAction(nameof(ObtenerEntrenadorPorId), new { id = dtoResultado.idIdUsuario }, dtoResultado);
+            return Ok(new
+            {
+                message = "✅ Entrenador creado y clave enviada al correo.",
+                id = nuevoEntrenador.IdUsuario
+            });
         }
+
+
+
+
+        // ✅ POST: api/Entrenador
+        //[HttpPost("agregarEntrenador")]
+        //public async Task<ActionResult> AgregarEntrenador([FromBody] EntrenadorDTO dto)
+        //{
+        //    if (!ModelState.IsValid)
+        //        return BadRequest(ModelState);
+
+        //    if (string.IsNullOrWhiteSpace(dto.Clave))
+        //        return BadRequest("La clave es obligatoria.");
+
+        //    // Normalizar email (minúsculas)
+        //    string emailNormalizado = dto.Email.ToLower();
+
+        //    // Validar existencia del email en entrenadores (opcional: también en Usuarios)
+        //    var correoExistente = await _context.Entrenadores.AnyAsync(e => e.Email.ToLower() == emailNormalizado)
+        //        || await _context.Usuarios.AnyAsync(u => u.Email.ToLower() == emailNormalizado);
+
+        //    if (correoExistente)
+        //        return Conflict(new { message = "⚠️ El correo electrónico ya está registrado." });
+
+        //    var nuevoEntrenador = new Entrenador
+        //    {
+        //        Nombre = dto.Nombre,
+        //        Email = dto.Email,
+        //        Clave = dto.Clave, // ⚠️ En producción, debes hashear la clave
+        //        Telefono = dto.Telefono,
+        //        Rol = "Entrenador",
+        //        FormacionAcademica = dto.FormacionAcademica
+        //    };
+
+        //    _context.Entrenadores.Add(nuevoEntrenador);
+        //    await _context.SaveChangesAsync();
+
+        //    var dtoResultado = new EntrenadorDTO
+        //    {
+        //        idIdUsuario = nuevoEntrenador.IdUsuario,
+        //        Nombre = nuevoEntrenador.Nombre,
+        //        Email = nuevoEntrenador.Email,
+        //        Clave = nuevoEntrenador.Clave,
+        //        Telefono = nuevoEntrenador.Telefono,
+        //        FormacionAcademica = nuevoEntrenador.FormacionAcademica,
+        //        Rol = nuevoEntrenador.Rol
+        //    };
+
+        //    return CreatedAtAction(nameof(ObtenerEntrenadorPorId), new { id = dtoResultado.idIdUsuario }, dtoResultado);
+        //}
+
         // ✅ PUT: api/Entrenador/{id}
         [HttpPut("editarEntrenador/{id}")]
         public async Task<IActionResult> EditarEntrenador(int id, [FromBody] EntrenadorDTO dto)

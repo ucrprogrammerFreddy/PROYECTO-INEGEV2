@@ -1,4 +1,5 @@
 const URL_API = "http://mi-api-powergym-2025.somee.com/api/Entrenador/";
+//const URL_API = "http://localhost:7086/api/Entrenador/";
 
 // Función principal que se ejecuta al cargar la página
 document.addEventListener("DOMContentLoaded", () => {
@@ -84,7 +85,7 @@ export function renderizarEntrenadores(lista) {
       <td>${entrenador.Nombre}</td>
       <td>${entrenador.Email}</td>
       <td>${entrenador.Telefono}</td>
-      <td>${entrenador.Clave}</td>
+    
       <td>${entrenador.FormacionAcademica || ""}</td>
       <td>${entrenador.Rol || ""}</td>
       <td class="acciones-clientes">
@@ -136,16 +137,33 @@ window.mostrarModalEliminar = function (id) {
 };
 
 //  Formato para obtener datos desde formulario de creación
+// function getEntrenadorDesdeFormulario() {
+//   return {
+//     Nombre: document.getElementById("nombre").value,
+//     Email: document.getElementById("correo").value,
+//     Clave: document.getElementById("clave").value,
+//     Telefono: parseInt(document.getElementById("telefono").value),
+//     FormacionAcademica: document.getElementById("formacion").value,
+//     Rol: "Entrenador",
+//   };
+// }
+
 function getEntrenadorDesdeFormulario() {
   return {
     Nombre: document.getElementById("nombre").value,
     Email: document.getElementById("correo").value,
-    Clave: document.getElementById("clave").value,
+    // Clave: "", // ❌ Ya no se incluye
     Telefono: parseInt(document.getElementById("telefono").value),
     FormacionAcademica: document.getElementById("formacion").value,
-    Rol: "Entrenador",
+    Rol: "Entrenador"
   };
 }
+
+
+
+
+
+
 
 // Crear nuevo entrenador
 export async function agregarEntrenador() {
