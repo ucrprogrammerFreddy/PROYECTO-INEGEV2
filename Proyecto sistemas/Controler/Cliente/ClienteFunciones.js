@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (!clienteId) {
     alert("Cliente no identificado. Por favor, inicie sesión.");
-    window.location.href = '/Proyecto sistemas/View/Cliente/Login.html';
+    window.location.href = '../../View/Login/Login.html';
     return;
   }
 
