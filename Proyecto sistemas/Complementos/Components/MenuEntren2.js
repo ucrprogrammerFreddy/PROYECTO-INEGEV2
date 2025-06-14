@@ -1,5 +1,12 @@
-// MenuEntren.js
+// ../../Complementos/Components/MenuEntren.js
+
 export function renderTrainerLayout() {
+  // Limpia menús anteriores si ya existen
+  document.querySelector(".header")?.remove();
+  document.getElementById("idMenuHambEntrenador")?.remove();
+  document.getElementById("menu-overlay")?.remove();
+  document.querySelector(".footer")?.remove();
+
   const headerHTML = `
     <header class="header">
       <div class="header-content">
@@ -84,12 +91,3 @@ export function renderTrainerLayout() {
     });
   }, 0);
 }
-// En ../../Complementos/Components/MenuEntren.js
-export function renderMenuEntrenador() {
-  // Código que inserta el menú de entrenador en el DOM, por ejemplo:
-  document.getElementById("menu-lateral").innerHTML = `
-    <!-- Aquí el HTML de tu menú de entrenador -->
-  `;
-}
-// LLAMAMOS AUTOMÁTICAMENTE
-renderTrainerLayout();

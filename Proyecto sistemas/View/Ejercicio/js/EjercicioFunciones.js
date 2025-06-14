@@ -1,6 +1,4 @@
-// URL base de la API de ejercicios
-
-const URL_API = "http://localhost:7086/api"
+const URL_API = "http://mi-api-powergym-2025.somee.com/api/Ejercicio"; // URL base de la API de ejercicios
 
 document.addEventListener("DOMContentLoaded", function () {
   // --- AGREGAR EJERCICIO ---
@@ -73,7 +71,7 @@ document.addEventListener("DOMContentLoaded", function () {
       };
 
       try {
-        const response = await fetch(`${URL_API}/Ejercicio/crearEjercicio`, {
+        const response = await fetch(`${URL_API}/crearEjercicio`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(ejercicioDTO),
@@ -192,14 +190,11 @@ document.addEventListener("DOMContentLoaded", function () {
       };
 
       try {
-        const response = await fetch(
-          `${URL_API}/Ejercicio/editarEjercicio/${idEditar}`,
-          {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(ejercicioDTO),
-          }
-        );
+        const response = await fetch(`${URL_API}/editarEjercicio/${idEditar}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(ejercicioDTO),
+        });
 
         if (response.ok) {
           mostrarMensaje("¡Ejercicio editado exitosamente!", "success");
@@ -235,7 +230,7 @@ document.addEventListener("DOMContentLoaded", function () {
     tbody.innerHTML = "<tr><td colspan='8'>Cargando...</td></tr>";
 
     try {
-      const resp = await fetch(`${URL_API}/Ejercicio/listaEjercicios`);
+      const resp = await fetch(`${URL_API}/listaEjercicios`);
       if (!resp.ok) throw new Error("No se pudo obtener la lista");
       const ejercicios = await resp.json();
 
@@ -292,9 +287,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // --- Mostrar modal editar ---
   async function mostrarModalEditar(id) {
     try {
-      const resp = await fetch(
-        `${URL_API}/Ejercicio/obtenerEjercicioPorId/${id}`
-      );
+      const resp = await fetch(`${URL_API}/obtenerEjercicioPorId/${id}`);
       if (!resp.ok) throw new Error("No se pudo obtener el ejercicio");
       const ejercicio = await resp.json();
 
@@ -341,7 +334,7 @@ document.addEventListener("DOMContentLoaded", function () {
         mostrarMensaje("ID de ejercicio inválido.", "danger");
         return;
       }
-      const resp = await fetch(`${URL_API}/Ejercicio/eliminarEjercicio/${id}`, {
+      const resp = await fetch(`${URL_API}/eliminarEjercicio/${id}`, {
         method: "DELETE",
       });
       if (!resp.ok) {

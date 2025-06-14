@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8" />
-  <title>Lista de Ejercicios (Administrador)</title>
+  <title>Lista de Ejercicios (Administrador/Entrenador)</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <!-- Bootstrap y estilos externos -->
@@ -16,16 +16,12 @@
 
   <!-- Estilos personalizados -->
   <link rel="stylesheet" href="../../Complementos/css/AdministradorEstilos.css" />
-  <!--<link rel="stylesheet" href="../Ejercicio/css/indexadmin.css" />-->
-
-
+  <!-- Tus estilos de botones personalizados deben estar en tu CSS externo -->
 
   <style>
     .btn-regresar2 {
       background-color: #b3644a;
-      /* Color marrón similar al de la imagen */
       color: #fff;
-
     }
 
     .btn-regresar2 span {
@@ -38,36 +34,30 @@
       outline: none;
     }
   </style>
-
 </head>
 
 <body>
-
-  <!-- Header, menú lateral y footer los genera MenuEntren.js -->
+  <!-- El menú se inserta dinámicamente por JS -->
 
   <!-- CONTENIDO PRINCIPAL -->
   <main class="contenedor-main" id="mainContent">
-
     <div class="container mt-5">
       <h2 class="mb-4">Ejercicios registrados</h2>
-      <div id="alertPlaceholder">
-        <div class="d-flex justify-content-end gap-3">
-          <button class="btn btn-regresar2" onclick="window.location.href='../../View/Administrador/Index.html'">
-            Regresar al Menú
-          </button>
-          <button id="btnAgregarEjercicio" class="btn btn-sm btn-enviar"
-            onclick="window.location.href='../../View/Ejercicio/indexEjercicio.html'">
-            <i class="bi bi-plus-circle"></i>Agregar
-          </button>
-        </div>
+      <div id="alertPlaceholder"></div>
+      <div class="d-flex justify-content-end gap-3 mb-3">
+        <button class="btn btn-regresar2" id="btnRegresarMenu">
+          Regresar al Menú
+        </button>
+        <button id="btnAgregarEjercicio" class="btn btn-sm btn-enviar"
+          onclick="window.location.href='../../View/Ejercicio/indexEjercicio.html'">
+          <i class="bi bi-plus-circle"></i>Agregar
+        </button>
       </div>
-
       <!-- Filtro de búsqueda -->
       <div class="input-group mb-3" style="max-width: 350px;">
         <span class="input-group-text"><i class="fas fa-search"></i></span>
         <input type="text" class="form-control" id="filtroEjercicio" placeholder="Buscar por nombre de ejercicio">
       </div>
-
       <!-- Tabla con scroll horizontal -->
       <div class="tabla-scroll mb-2">
         <table class="table table-striped align-middle" id="tablaEjercicios">
@@ -80,7 +70,7 @@
               <th>Área Muscular</th>
               <th>Área Muscular Afectada</th>
               <th>Dificultad</th>
-              <!--NO hay columna "Acciones" -->
+              <th id="thAcciones">Acciones</th>
             </tr>
           </thead>
           <tbody>
@@ -88,21 +78,111 @@
           </tbody>
         </table>
       </div>
-
     </div>
   </main>
 
-  <!-- Scripts principales -->
   <script type="module">
-    import { renderAdminLayout } from "../../Controler/Administrador/AdminLayout.js";
-    renderAdminLayout();
+    // Utilidad: limpia el menú antes de volver a insertarlo
+    function limpiarLayoutMenu() {
+      document.querySelector(".header")?.remove();
+      document.getElementById("idMenuHambEntrenador")?.remove();
+      document.getElementById("menu-overlay")?.remove();
+      document.querySelector(".footer")?.remove();
+    }
+
+    async function cargarMenuPorRol() {
+      let usuarioActual = null;
+      try {
+        usuarioActual = JSON.parse(
+          sessionStorage.getItem("usuario") || localStorage.getItem("usuario")
+        );
+      } catch (e) { }
+
+      if (
+        usuarioActual &&
+        usuarioActual.Rol &&
+        usuarioActual.Rol.toLowerCase() === "admin"
+      ) {
+        const module = await import("../../Controler/Administrador/AdminLayout.js");
+        if (typeof module.renderAdminLayout === "function") {
+          module.renderAdminLayout();
+        }
+      } else if (
+        usuarioActual &&
+        usuarioActual.Rol &&
+        usuarioActual.Rol.toLowerCase() === "entrenador"
+      ) {
+        limpiarLayoutMenu();
+        const module = await import("../../Complementos/Components/MenuEntren2.js");
+        if (typeof module.renderTrainerLayout === "function") {
+          module.renderTrainerLayout();
+        }
+      } else {
+        window.location.href = "../../View/Login/Login.html";
+      }
+    }
+
+    cargarMenuPorRol();
+
+    // Botón regresar dinámico según rol
+    document.addEventListener("DOMContentLoaded", function () {
+      const btnRegresar = document.getElementById("btnRegresarMenu");
+      if (btnRegresar) {
+        btnRegresar.addEventListener("click", async function (e) {
+          e.preventDefault();
+          let usuarioActual = null;
+          try {
+            usuarioActual = JSON.parse(
+              sessionStorage.getItem("usuario") || localStorage.getItem("usuario")
+            );
+          } catch (e) { }
+          if (
+            usuarioActual &&
+            usuarioActual.Rol &&
+            usuarioActual.Rol.toLowerCase() === "admin"
+          ) {
+            window.location.href = "../../View/Administrador/Index.html";
+          } else if (
+            usuarioActual &&
+            usuarioActual.Rol &&
+            usuarioActual.Rol.toLowerCase() === "entrenador"
+          ) {
+            window.location.href = "../../View/Entrenador/Index.html";
+          } else {
+            window.location.href = "../../View/Login/Login.html";
+          }
+        });
+      }
+
+      // Oculta el th de "Acciones" si es administrador
+      ocultarThAccionesSiAdmin();
+
+      function ocultarThAccionesSiAdmin() {
+        try {
+          const usuarioActual = JSON.parse(
+            sessionStorage.getItem("usuario") || localStorage.getItem("usuario")
+          );
+          if (
+            usuarioActual &&
+            usuarioActual.Rol &&
+            usuarioActual.Rol.toLowerCase() === "admin"
+          ) {
+            const thAcciones = document.getElementById("thAcciones");
+            if (thAcciones) thAcciones.style.display = "none";
+          }
+        } catch (e) { }
+      }
+    });
   </script>
-  <!-- Importa solo el JS que ya trae la lógica de ocultar el botón -->
+
+
+
+  <!-- Incluye tu JS externo que contiene TODOS tus métodos (incluyendo cargar por usuario) -->
   <script type="module" src="../../Controler/Administrador/ejercicioFuncionesAdmin.js"></script>
 
-  <!-- Bootstrap JS -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
+
 </body>
 
 </html>

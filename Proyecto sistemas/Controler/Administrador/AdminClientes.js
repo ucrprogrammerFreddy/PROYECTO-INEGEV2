@@ -549,61 +549,37 @@ function obtenerClienteDesdeFormulario(tipo) {
   // Validar campos obligatorios
   const nombre = getCampo("nombre");
 
-let clave = null;
-if (tipo === "Crear") {
-  clave = "mi-clave-secreta";
- }
+  let clave = null;
+  if (tipo === "Crear") {
+    clave = "mi-clave-secreta";
+  }
   const email = getCampo("correo");
   const genero = getCampo("genero");
 
-// || (tipo === "Crear" && !clave
+  // || (tipo === "Crear" && !clave
 
-if (!nombre || !email || !genero || (tipo === "Crear" && !clave)) {
-  alert("Por favor, rellena todos los campos obligatorios (nombre, correo, género).");
-  throw new Error("Campos requeridos vacíos");
-}
+  if (!nombre || !email || !genero || (tipo === "Crear" && !clave)) {
+    alert(
+      "Por favor, rellena todos los campos obligatorios (nombre, correo, género)."
+    );
+    throw new Error("Campos requeridos vacíos");
+  }
 
-
-
-  // if (!nombre || !clave || !email || !genero) {
-  //   alert(
-  //     "Por favor, rellena todos los campos obligatorios (nombre, clave, correo, género)."
-  //   );
-  //   throw new Error("Campos requeridos vacíos");
-  // }
-
-  // Construir objeto cliente final
-  // const cliente = {
-  //   IdUsuario: tipo === "Crear" ? 0 : getCampo("idUsuario", true) || 0,
-  //   Nombre: nombre,
-  //   Clave: clave,
-  //   Email: email,
-  //   Telefono: getCampo("telefono"),
-  //   FechaNacimiento: fechaNacISO,
-  //   Genero: genero,
-  //   Altura: getCampo("altura", true, true) || 0,
-  //   Peso: getCampo("peso", true, true) || 0,
-  //   EstadoPago: true,
-  //   EntrenadorId: entrenadorId || 0,
-  //   Padecimientos: padecimientosCompletos.map((p) => p.IdPadecimiento),
-  //   PadecimientosCompletos: padecimientosCompletos, // con severidad
-  // };
-
-    const cliente = {
-  IdUsuario: tipo === "Crear" ? 0 : getCampo("idUsuario", true) || 0,
-  Nombre: nombre,
-  Email: email,
-  Telefono: getCampo("telefono"),
-  FechaNacimiento: fechaNacISO,
-  Genero: genero,
-  Altura: getCampo("altura", true, true) || 0,
-  Peso: getCampo("peso", true, true) || 0,
-  EstadoPago: true,
-  EntrenadorId: entrenadorId || 0,
-  Padecimientos: padecimientosCompletos.map((p) => p.IdPadecimiento),
-  PadecimientosCompletos: padecimientosCompletos,
-  ...(tipo === "Crear" && { Clave: clave }), // 👈 Solo incluir Clave si se está creando
-};
+  const cliente = {
+    IdUsuario: tipo === "Crear" ? 0 : getCampo("idUsuario", true) || 0,
+    Nombre: nombre,
+    Email: email,
+    Telefono: getCampo("telefono"),
+    FechaNacimiento: fechaNacISO,
+    Genero: genero,
+    Altura: getCampo("altura", true, true) || 0,
+    Peso: getCampo("peso", true, true) || 0,
+    EstadoPago: true,
+    EntrenadorId: entrenadorId || 0,
+    Padecimientos: padecimientosCompletos.map((p) => p.IdPadecimiento),
+    PadecimientosCompletos: padecimientosCompletos,
+    ...(tipo === "Crear" && { Clave: clave }), // 👈 Solo incluir Clave si se está creando
+  };
 
   return cliente;
 }
@@ -797,9 +773,6 @@ $(document).on("click", ".btn-cambiar-pago", function () {
   const nuevoEstadoPago = $(this).data("estado");
   actualizarEstadoPagoClientePorId(idCliente, nuevoEstadoPago);
 });
-
-
-
 
 //Para buscar
 document.addEventListener("DOMContentLoaded", () => {
