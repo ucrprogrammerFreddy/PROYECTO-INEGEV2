@@ -21,43 +21,51 @@
 </head>
 
 <body>
-  <main class="contenedor-main mt-5" id="mainContent">
-    <div class="container ">
-      <div class="d-flex justify-content-between align-items-center mt-4 mb-3">
-        <h5>Lista de Entrenadores</h5>
-        <a class="btn btn-sm btn-enviar btn-agregar" onclick="window.location.href='RegistroEntrenador.html'"> <i
-            class="bi bi-plus-circle"></i> Agregar</a>
+  <div id="main-wrapper"> <!-- ✅ Contenedor padre para que el footer funcione correctamente -->
 
-      </div>
-      <div class="d-flex gap-2 mb-3">
-        <div class="input-group" style="max-width: 300px;">
-          <span class="input-group-text"><i class="fas fa-search"></i></span>
-          <input type="text" class="form-control" id="filtroEntrenador" placeholder="Search Entrenador">
+    <main class="contenedor-main mt-5" id="mainContent">
+      <div class="container">
+        <div class="d-flex justify-content-between align-items-center mt-4 mb-3">
+          <h3>Entrenadores</h3>
+          <a class="btn btn-sm btn-enviar btn-agregar" onclick="window.location.href='RegistroEntrenador.html'">
+            <i class="bi bi-plus-circle"></i> Agregar
+          </a>
         </div>
-        <button class="btn btn-dark"><i class="fas fa-filter"></i></button>
-      </div>
-      <table class="table table-bordered text-center">
-        <thead>
-          <tr>
-            <th>Nombre</th>
-            <th>correo</th>
-            <th>Teléfono</th>
-           
-            <th>Formación Académica</th>
-            <th>Rol</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody id="entrenador-tbody">
 
-        </tbody>
-      </table>
-      <div class="d-flex justify-content-end">
-        <button class="btn btn-volver" onclick="window.location.href='../../View/Administrador/Index.html'"><i
-            class="fas fa-arrow-left"></i> Regresar</button>
+        <div class="d-flex gap-2 mb-3">
+          <div class="input-group" style="max-width: 300px;">
+            <span class="input-group-text"><i class="fas fa-search"></i></span>
+            <input type="text" class="form-control" id="filtroEntrenador" placeholder="Search Entrenador">
+          </div>
+          <button class="btn btn-dark"><i class="fas fa-filter"></i></button>
+        </div>
+
+        <table class="table table-bordered text-center">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Correo</th>
+              <th>Teléfono</th>
+              <th>Formación Académica</th>
+              <th>Rol</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="entrenador-tbody">
+            <!-- Se carga con JS -->
+          </tbody>
+        </table>
+
+        <div class="d-flex justify-content-end">
+          <button class="btn btn-volver" onclick="window.location.href='../../View/Administrador/Index.html'">
+            <i class="fas fa-arrow-left"></i> Regresar
+          </button>
+        </div>
       </div>
-    </div>
-  </main>
+    </main>
+
+  </div> <!-- ✅ Fin del main-wrapper -->
+
 
 
   <!-- MODAL EDITAR ENTRENADOR -->

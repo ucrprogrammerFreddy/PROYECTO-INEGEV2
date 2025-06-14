@@ -1,18 +1,40 @@
 /* -------------------- RESET -------------------- */
-
-/* AdministradorEstilos.css */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
+html, body {
+  height: 100%;
+}
+
 body {
   background-color: #ECF0F1;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Asegura que el wrapper y el main crezcan */
+#main-wrapper {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.contenedor-main {
+  transition: margin-left 0.3s ease;
+  padding: 100px 20px 30px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.contenedor-main.shifted {
+  margin-left: 220px;
 }
 
 /* -------------------- HEADER -------------------- */
@@ -80,6 +102,9 @@ body {
 .menu-header h1 {
   color: #fff;
   font-weight: 800;
+  font-size: 1.4rem;
+  margin: 0;
+  line-height: 1;
 }
 
 .close-btn {
@@ -145,35 +170,27 @@ body {
   border-left: 4px solid white;
 }
 
-/* -------------------- CONTENIDO PRINCIPAL -------------------- */
-.contenedor-main {
-   transition: margin-left 0.3s ease; 
-  /* padding: 90px 20px 90px; */
-  padding: 60px 20px 60px; /* antes era 90px */
-   flex: 1; 
-  
-}
-
-
-
-.contenedor-main.shifted {
-  margin-left: 220px;
-}
-
 /* -------------------- FOOTER -------------------- */
 .footer {
   background-color: #022227;
   color: white;
-  padding: 10px 15px;
   text-align: center;
-  height: 80px;
   width: 100%;
   z-index: 10;
-  margin-top: 30px;
+  margin-top: auto;
+  padding: 10px 0;
+}
+
+.footer .footer-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
 }
 
 .footer-logo {
-  height: 50px;
+  height: 36px;
+  margin: 0 5px;
 }
 
 /* -------------------- BOTONES -------------------- */
@@ -246,21 +263,6 @@ body {
   }
 }
 
-
-.menu-header h1 {
-  font-size: 1.4rem; /* igual al primer HTML donde se ve bien */
-  margin: 0;
-  padding: 0;
-  line-height: 1;
-}
-
-    .bg-verde-panel {
-      background-color: #316163 !important;
-    }
-
-    body {
-      background-color: #f8f9fa;
-    }
 /* -------------------- TABLAS -------------------- */
 table {
   width: 100%;
@@ -289,10 +291,12 @@ tr:hover {
   background-color: #f1f1f1;
 }
 
-
+.table thead th {
+  background-color: #316163 !important;
+  color: #fff !important;
+}
 
 /* -------------------- FORMULARIOS -------------------- */
-/* Estilo base del contenedor */
 .form-wrapper {
   max-width: 700px;
   margin: 2rem auto;
@@ -302,7 +306,6 @@ tr:hover {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
 }
 
-/* Título del formulario */
 .form-wrapper h2 {
   text-align: center;
   font-weight: bold;
@@ -310,7 +313,6 @@ tr:hover {
   font-size: 1.5rem;
 }
 
-/* Entradas personalizadas */
 .form-wrapper .input-custom {
   border-radius: 8px;
   padding: 10px;
@@ -327,7 +329,6 @@ tr:hover {
   box-shadow: 0 0 0 2px rgba(49, 97, 99, 0.2);
 }
 
-/* Botones del formulario */
 .form-wrapper .form-buttons {
   display: grid;
   justify-content: center;
@@ -343,24 +344,11 @@ tr:hover {
   border-radius: 30px;
   font-weight: bold;
   font-size: 1rem;
-  margin-top: 1rem;       /* separa del logo */
-    /* separa del formulario */
+  margin-top: 1rem;
   text-align: center;
 }
 
-
-
-.bg-danger {
-   background-color: #b8a88a !important;
-  border-color: #a99677 !important;
-
-}
-
-.bg-warning {
- background-color: #4F6654 !important; /* Verde oscuro elegante */
-  border-color: #4F6654 !important;
-    color: #3d3d3d !important;
-}
+/* -------------------- TABLA - BOTONES -------------------- */
 .acciones-clientes {
   display: flex;
   gap: 6px;
@@ -380,6 +368,7 @@ tr:hover {
   transition: background 0.2s;
   cursor: pointer;
 }
+
 .btn-tabla-editar:hover {
   background-color: #39503e;
 }
@@ -396,6 +385,7 @@ tr:hover {
   transition: background 0.2s;
   cursor: pointer;
 }
+
 .btn-tabla-eliminar:hover {
   background-color: #a99677;
 }
@@ -404,7 +394,3 @@ tr:hover {
 .btn-tabla-eliminar .icono-btn {
   font-size: 1.2em;
 }
-    .table thead th {
-      background-color: #316163 !important;
-      color: #fff !important;
-    }

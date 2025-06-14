@@ -641,10 +641,10 @@ export function listarClientes() {
             <td>
               <div class="acciones-clientes">
                 <button class='btn-tabla-editar' onclick='editarCliente(${c.IdUsuario})'>
-                  <i class="fa fa-pen-to-square icono-btn"></i>
+                  <i class="bi bi-pencil-fill"></i>
                 </button>
                 <button class='btn-tabla-eliminar' onclick='eliminarCliente(${c.IdUsuario})'>
-                  <i class="fa fa-trash-can icono-btn"></i>
+                  <i class="bi bi-trash-fill"></i>
                 </button>
               </div>
             </td>
@@ -796,4 +796,23 @@ $(document).on("click", ".btn-cambiar-pago", function () {
   const idCliente = $(this).data("id");
   const nuevoEstadoPago = $(this).data("estado");
   actualizarEstadoPagoClientePorId(idCliente, nuevoEstadoPago);
+});
+
+
+
+
+//Para buscar
+document.addEventListener("DOMContentLoaded", () => {
+  const inputFiltro = document.getElementById("filtroCliente");
+  if (inputFiltro) {
+    inputFiltro.addEventListener("input", () => {
+      const texto = inputFiltro.value.toLowerCase();
+      const filas = document.querySelectorAll("#clientes-tbody tr");
+
+      filas.forEach((fila) => {
+        const textoFila = fila.textContent.toLowerCase();
+        fila.style.display = textoFila.includes(texto) ? "" : "none";
+      });
+    });
+  }
 });

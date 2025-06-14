@@ -96,18 +96,19 @@ export function renderizarEntrenadores(lista) {
           '${entrenador.Telefono}',
           '${entrenador.FormacionAcademica || ""}'
         )">
-          <i class="fas fa-pen-to-square icono-btn"></i>
+          <i class="bi bi-pencil-fill"></i>
         </button>
         <button class="btn-tabla-eliminar" title="Eliminar" onclick="mostrarModalEliminar(${
           entrenador.idIdUsuario
         })">
-          <i class="fas fa-trash icono-btn"></i>
+          <i class="bi bi-trash-fill"></i>
         </button>
       </td>
     `;
     tbody.appendChild(fila);
   });
 }
+
 //  Mostrar modal de edición con datos precargados
 window.mostrarModalEditar = function (
   Id,

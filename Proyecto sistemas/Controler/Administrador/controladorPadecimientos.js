@@ -59,10 +59,10 @@ function listarPadecimientos() {
           <td>${p.AreaMuscularAfectada}</td>
           <td class="acciones-clientes">
             <button class="btn-tabla-editar" data-id="${p.IdPadecimiento}" title="Editar" type="button">
-              <i class="fas fa-pen-to-square icono-btn"></i>
+              <i class="bi bi-pencil-fill"></i>
             </button>
             <button class="btn-tabla-eliminar" onclick="eliminarPadecimiento(${p.IdPadecimiento})" title="Eliminar" type="button">
-              <i class="fas fa-trash icono-btn"></i>
+              <i class="bi bi-trash-fill"></i>
             </button>
           </td>
         `;

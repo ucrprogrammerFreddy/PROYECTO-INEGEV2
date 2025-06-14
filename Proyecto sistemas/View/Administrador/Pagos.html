@@ -12,32 +12,45 @@
 </head>
 
 <body>
-  <main class="contenedor-main" id="mainContent">
-    <div class="container mt-5">
-      <div class="d-flex justify-content-between align-items-center mt-4 mb-3">
-        <h5>Editar Estado de Pago de Clientes</h5>
+  <div id="main-wrapper">
+    <main class="contenedor-main" id="mainContent">
+      <div class="container mt-5">
+        <div class="d-flex justify-content-between align-items-center mt-4 mb-3">
+          <h3>Estados de Pagos</h3>
+        </div>
+
+
+        <div class="d-flex gap-2 mb-3">
+          <div class="input-group" style="max-width: 300px;">
+            <span class="input-group-text"><i class="fas fa-search"></i></span>
+            <input type="text" class="form-control" id="filtroCliente" placeholder="Buscar...">
+          </div>
+          <button class="btn btn-dark"><i class="fas fa-filter"></i></button>
+        </div>
+
+
+        <div class="tabla-scroll">
+          <table class="table table-bordered text-center">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Email</th>
+                <th>Teléfono</th>
+                <th>Estado de Pago</th>
+                <th>Cambiar Estado de Pago</th>
+              </tr>
+            </thead>
+            <tbody id="clientes-tbody">
+              <!-- Filas cargadas dinámicamente -->
+            </tbody>
+          </table>
+        </div>
+        <div class="d-flex justify-content-end">
+          <a class="btn btn-volver" href="../../View/Administrador/Index.html"> <i class="fas fa-arrow-left"></i> Regresar</a>
+        </div>
       </div>
-      <div class="tabla-scroll">
-        <table class="table table-bordered text-center">
-          <thead>
-            <tr>
-              <th>Nombre</th>
-              <th>Email</th>
-              <th>Teléfono</th>
-              <th>Estado de Pago</th>
-              <th>Cambiar Estado de Pago</th>
-            </tr>
-          </thead>
-          <tbody id="clientes-tbody">
-            <!-- Filas cargadas dinámicamente -->
-          </tbody>
-        </table>
-      </div>
-      <div class="d-flex justify-content-end">
-        <a class="btn btn-volver" href="../../View/Administrador/Index.html">Regresar al Menú</a>
-      </div>
-    </div>
-  </main>
+    </main>
+  </div>
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -51,6 +64,7 @@
   <script type="module">
     import { listarClientesPagos } from "../../Controler/Administrador/AdminClientes.js";
     listarClientesPagos();
+   
     // El evento del botón ya está delegado en AdminClientes.js
   </script>
 </body>

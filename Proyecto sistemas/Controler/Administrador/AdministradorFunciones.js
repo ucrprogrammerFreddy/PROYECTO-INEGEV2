@@ -123,15 +123,15 @@ function cargarTabla(lista) {
         <td>${a.Rol}</td>
         <td>${a.Telefono}</td>
         <td>${a.FormacionAcademica}</td>
-        <td>
-          <button class="btn bg-warning btn-sm" title="Modificar"
+        <td class="acciones-clientes">
+          <button class="btn-tabla-editar" title="Modificar"
             onclick='editarAdministrador(${JSON.stringify(a).replace(
               /"/g,
               "&quot;"
             )})'>
             <i class="bi bi-pencil-fill"></i>
           </button>
-          <button class="btn bg-danger btn-sm" title="Eliminar"
+          <button class="btn-tabla-eliminar" title="Eliminar"
             onclick="eliminarAdministrador(${a.idIdUsuario})">
             <i class="bi bi-trash-fill"></i>
           </button>

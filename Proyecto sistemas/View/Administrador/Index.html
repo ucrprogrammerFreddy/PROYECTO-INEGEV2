@@ -7,24 +7,11 @@
   <title>Panel Administrador</title>
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <link rel="stylesheet" href="../../Complementos/css/indexadmin.css" />
-
-  <style>
-    footer {
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-      background-color: #f8f9fa;
-      text-align: center;
-      padding: 10px 0;
-      font-size: 14px;
-      color: #6c757d;
-    }
-  </style>
+  <link rel="stylesheet" href="../../Complementos/css/AdministradorEstilos.css" />
 </head>
 
 <body>
-  <div class="mt-4" id="main-wrapper">
+  <div id="main-wrapper"> <!-- ✅ ENVOLTURA PARA COMPATIBILIDAD CON FOOTER -->
     <main class="contenedor-main pt-4" id="mainContent">
       <div class="card-grid mt-4">
         <a href="../../View/Administrador/Empleados.html" class="custom-card">
@@ -46,16 +33,12 @@
         </a>
       </div>
     </main>
-
   </div>
 
   <script type="module">
     import { renderAdminLayout } from "../../Controler/Administrador/AdminLayout.js";
     renderAdminLayout();
   </script>
-  <!-- Script -->
-  <!-- Aqui mandamos a traer el menu -->
-
 </body>
 
 </html>

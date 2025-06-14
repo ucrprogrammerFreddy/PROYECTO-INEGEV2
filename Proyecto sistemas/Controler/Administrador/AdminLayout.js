@@ -26,7 +26,7 @@ export function renderAdminLayout() {
               <i class="fas fa-users"></i> Usuarios <span class="caret"><i class="fas fa-caret-down"></i></span>
             </a>
             <ul class="submenu" id="clientesSubmenu">
-              <li><a href="Empleados.html">Administrador Registro</a></li>
+              <li><a href="Empleados.html">Administradores</a></li>
               <li><a href="ListaEntrenadores.html">Entrenadores</a></li>
               <li><a href="ListaClientes.html">Clientes</a></li>
             </ul>
@@ -39,21 +39,15 @@ export function renderAdminLayout() {
   `;
 
   const footerHTML = `
-     <div>
-    <footer class="footer ">
-    <div class="container">
-    <div class="row align-items-center justify-content-center">
-      <div class="col-12 col-md-auto mb-2 mb-md-0">
-        <p class="mb-0">PowerVital Todos los derechos Reservados</p>
+    <footer class="footer">
+      <div class="footer-contenido">
+        <p class="mb-0">© 2025 PowerVital. Todos los derechos reservados</p>
+        <div class="footer-logos">
+          <img src="../../Complementos/img/facebook.png" alt="Facebook" class="footer-logo" />
+          <img src="../../Complementos/img/instagram.png" alt="Instagram" class="footer-logo" />
+        </div>
       </div>
-      <div class="col-12 col-md-auto">
-        <img src="../../Complementos/img/facebook.png" alt="Facebook" class="footer-logo" />
-        <img src="../../Complementos/img/instagram.png" alt="Instagram" class="footer-logo" />
-      </div>
-    </div>
-  </div>
     </footer>
-    </div>
   `;
 
   const main = document.querySelector("main");
