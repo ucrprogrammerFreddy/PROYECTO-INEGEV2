@@ -1,21 +1,25 @@
-# Imagen base para compilación
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+# Etapa 1: Build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /app
 
 # Copiar archivos del proyecto
-COPY . . 
+COPY . .
 
-# Restaurar dependencias y compilar
+# Restaurar dependencias
 RUN dotnet restore
+
+# Compilar y publicar en modo Release
 RUN dotnet publish -c Release -o out
 
-# Imagen base para producción
-FROM mcr.microsoft.com/dotnet/aspnet:7.0
+# Etapa 2: Runtime
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
+
+# Copiar desde la etapa de build
 COPY --from=build /app/out .
 
-# Puerto expuesto
+# Puerto de escucha
 EXPOSE 80
 
-# Comando de inicio
-ENTRYPOINT ["dotnet", "PowerVital.API.dll"]
+# Ejecutar el proyecto
+ENTRYPOINT ["dotnet", "PowerVital.dll"]
