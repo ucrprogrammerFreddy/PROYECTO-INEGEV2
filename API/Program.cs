@@ -15,7 +15,8 @@ var allowedOrigins = new[] {
     "http://127.0.0.1:5501", // tu front en local
     "http://127.0.0.1:5500", // tu front en local
     "http://mi-api-powergym-2025.somee.com", // la propia API (por si usas front ahí mismo)
-    "http://tu-front.somee.com" // <-- cuando subas el front
+    "http://tu-front.somee.com", // <-- cuando subas el front
+     "https://powervital.onrender.com"
 };
 
 builder.Services.AddCors(options =>
