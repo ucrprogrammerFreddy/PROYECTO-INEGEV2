@@ -17,6 +17,7 @@ var allowedOrigins = new[] {
     "http://mi-api-powergym-2025.somee.com", // la propia API (por si usas front ahí mismo)
     "http://tu-front.somee.com", // <-- cuando subas el front
      "https://powervital.onrender.com"
+     "https://www.powervital.onrender.com" // por si se accede con www también
 };
 
 builder.Services.AddCors(options =>
