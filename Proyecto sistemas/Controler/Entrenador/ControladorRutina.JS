@@ -1,7 +1,9 @@
 // ===============================
 // 🔗 APIs
 // ===============================
-const API_BASE = "http://mi-api-powergym-2025.somee.com/api";
+//const API_BASE = "http://mi-api-powergym-2025.somee.com/api";
+const API_BASE = "https://proyecto-inegev2-1.onrender.com/api";
+
 const API_CLIENTE = `${API_BASE}/Cliente`;
 const API_PADECIMIENTO_CLIENTE = `${API_BASE}/AsignarPadecimientos`;
 const API_PADECIMIENTO_GENERAL = `${API_BASE}/Padecimiento`;

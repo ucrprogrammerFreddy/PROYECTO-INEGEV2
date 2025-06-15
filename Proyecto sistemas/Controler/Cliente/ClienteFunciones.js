@@ -1,5 +1,9 @@
 //const API_BASE = "http://mi-api-powergym-2025.somee.com/api";
-const API_BASE = "http://localhost:7086/api";
+//const API_BASE = "http://localhost:7086/api";
+
+const API_BASE = "https://proyecto-inegev2-1.onrender.com/api";
+
+
 document.addEventListener("DOMContentLoaded", () => {
   const clienteId = sessionStorage.getItem("clienteId");
 

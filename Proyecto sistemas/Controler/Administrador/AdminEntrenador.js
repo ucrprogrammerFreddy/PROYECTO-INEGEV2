@@ -1,5 +1,5 @@
-const URL_API = "http://mi-api-powergym-2025.somee.com/api/Entrenador/";
-
+//const URL_API = "http://mi-api-powergym-2025.somee.com/api/Entrenador/";
+const URL_API = "https://proyecto-inegev2-1.onrender.com/api/Entrenador/";
 //const URL_API = "http://localhost:7086/api/Entrenador/";
 // Función principal que se ejecuta al cargar la página
 document.addEventListener("DOMContentLoaded", () => {

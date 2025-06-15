@@ -1,9 +1,9 @@
 // ADMINISTRADOR FUNCIONES
 import { AdministradorModel } from "../../Model/AdministradorModel.js";
 
-const URL_API = "http://mi-api-powergym-2025.somee.com/api/Administradores";
+//const URL_API = "http://mi-api-powergym-2025.somee.com/api/Administradores";
 //const URL_API = "http://localhost:7086/api/Administradores";
-
+const URL_API = "https://proyecto-inegev2-1.onrender.com/api/Administradores";
 const ruta = window.location.pathname;
 
 let administradoresGlobal = [];

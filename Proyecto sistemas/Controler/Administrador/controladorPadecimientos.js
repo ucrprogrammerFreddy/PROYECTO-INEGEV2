@@ -1,7 +1,7 @@
 
-const API_URL = "http://mi-api-powergym-2025.somee.com/api/padecimiento";
-
-//const API_URL = "http://localhost:7086/api/padecimiento";
+//const API_URL = "http://mi-api-powergym-2025.somee.com/api/padecimiento";
+const API_URL = "https://proyecto-inegev2-1.onrender.com/api/padecimiento";
+//const API_URL = "http://localhost:7086/api/padecimiento/padecimiento";
 
 let filaEnEdicion = null;
 let datosOriginales = {}; // Para cancelar
@@ -297,7 +297,7 @@ function configurarFormularioAgregar() {
 
 
     fetch(
-      "http://mi-api-powergym-2025.somee.com/api/padecimiento",
+      "https://proyecto-inegev2-1.onrender.com/api/padecimiento/crearPadecimiento",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

@@ -44,8 +44,8 @@ document.addEventListener("DOMContentLoaded", () => {
 // 🔹 OBTENER DATOS DEL CLIENTE DIRECTAMENTE (función auxiliar)
 async function obtenerDatosClienteDirecto(clienteId) {
  //const API_BASE = "http://mi-api-powergym-2025.somee.com/api";
-  const API_BASE = "http://localhost:7086/api";
-
+  //const API_BASE = "http://localhost:7086/api";
+const API_BASE = "https://proyecto-inegev2-1.onrender.com/api/Ejercicio";
 
   try {
     const endpoints = [

@@ -1,7 +1,8 @@
 // LoginFunciones.js
 import { LoginModel } from "../../Model/LoginModel.js";
 
-const URL_API = "http://mi-api-powergym-2025.somee.com/api/Login/Login";
+//const URL_API = "http://mi-api-powergym-2025.somee.com/api/Login/Login";
+const URL_API = "https://proyecto-inegev2-1.onrender.com/api/Login/Login";
 //const URL_API = "http://localhost:7086/api/Login/Login";
 
 

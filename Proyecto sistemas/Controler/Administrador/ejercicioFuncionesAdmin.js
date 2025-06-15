@@ -1,6 +1,6 @@
 // URL base de la API para ejercicios
-const URL_API = "http://mi-api-powergym-2025.somee.com/api/Ejercicio";
-
+//const URL_API = "http://mi-api-powergym-2025.somee.com/api/Ejercicio";
+const URL_API = "https://proyecto-inegev2-1.onrender.com/api/Ejercicio";
 // Variable global para almacenar la lista de ejercicios.
 let listaEjerciciosGlobal = [];
 
