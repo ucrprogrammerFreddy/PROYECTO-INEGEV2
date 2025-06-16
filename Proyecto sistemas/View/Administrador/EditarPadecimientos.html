@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Registrar Padecimiento</title>
+  <link rel="stylesheet" href="../../Complementos/css/padecimientos.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <!-- <link rel="stylesheet" href="/Proyecto sistemas/Complementos/css/EntrenadorEstilo.css" /> -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="../../Complementos/css/AdministradorEstilos.css" />
+
+
+</head>
+
+<body data-accion="agregar">
+  <div id="main-wrapper">
+    <main class="contenedor-main" id="mainContent">
+      <div class="formulario-container">
+        <form class="formulario">
+          <div class="form-group">
+            <label for="nombre">Nombre</label>
+            <input type="text" id="nombre" name="nombre" placeholder="Nombre del padecimiento" />
+          </div>
+          <div class="form-group">
+            <label for="Descripcion">Descripción</label>
+            <input type="text" id="Descripcion" name="Descripcion" placeholder="Descripción del padecimiento" />
+          </div>
+          <div class="form-group-group">
+            <label>Área Muscular Afectada (Padecimientos)</label>
+            <div class="form-options">
+              <label><input type="checkbox" name="AreaMuscularAfectada" value="cabeza" /> Cabeza</label>
+              <label><input type="checkbox" name="AreaMuscularAfectada" value="cuello" /> Cuello</label>
+              <label><input type="checkbox" name="AreaMuscularAfectada" value="hombros" /> Hombros</label>
+              <label><input type="checkbox" name="AreaMuscularAfectada" value="columna" /> Columna</label>
+              <label><input type="checkbox" name="AreaMuscularAfectada" value="cadera" /> Cadera</label>
+              <label><input type="checkbox" name="AreaMuscularAfectada" value="abdomen" /> Abdomen</label>
+              <label><input type="checkbox" name="AreaMuscularAfectada" value="pecho" /> Pecho</label>
+              <label><input type="checkbox" name="AreaMuscularAfectada" value="espalda" /> Espalda</label>
+              <label><input type="checkbox" name="AreaMuscularAfectada" value="brazos" /> Brazos</label>
+              <label><input type="checkbox" name="AreaMuscularAfectada" value="muñecas" /> Muñecas</label>
+              <label><input type="checkbox" name="AreaMuscularAfectada" value="piernas" /> Piernas</label>
+              <label><input type="checkbox" name="AreaMuscularAfectada" value="rodillas" /> Rodillas</label>
+              <label><input type="checkbox" name="AreaMuscularAfectada" value="tobillos" /> Tobillos</label>
+              <label><input type="checkbox" name="AreaMuscularAfectada" value="pantorrillas" /> Pantorrillas</label>
+              <label><input type="checkbox" name="AreaMuscularAfectada" value="glúteos" /> Glúteos</label>
+              <label><input type="checkbox" name="AreaMuscularAfectada" value="corazon" /> Corazón</label>
+              <label><input type="checkbox" name="AreaMuscularAfectada" value="pulmones" /> Pulmones</label>
+
+              <label><input type="checkbox" name="AreaMuscularAfectada" value="hernia" /> Hernia</label>
+              <label><input type="checkbox" name="AreaMuscularAfectada" value="fuerza" /> Debilidad muscular</label>
+              <label><input type="checkbox" name="AreaMuscularAfectada" value="visual" /> Discapacidad visual</label>
+              <label><input type="checkbox" name="AreaMuscularAfectada" value="auditivo" /> Discapacidad auditiva</label>
+              <label><input type="checkbox" name="AreaMuscularAfectada" value="neurologico" /> Condición
+                neurológica</label>
+            </div>
+          </div>
+
+          <div class="form-buttons">
+            <a href="ListaPadecimientos.html" class="btn-cancelar">Regresar</a>
+            <button type="submit" class="btn-agregar">Agregar Padecimiento</button>
+          </div>
+        </form>
+      </div>
+
+    </main>
+</div>
+
+  <script type="module">
+    import { renderAdminLayout } from "../../Controler/Administrador/AdminLayout.js";
+    renderAdminLayout();
+  </script>
+
+
+
+  <script src="../../Controler/Administrador/controladorPadecimientos.js"></script>
+</body>
+
+</html>

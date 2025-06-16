@@ -41,10 +41,16 @@ $.get(`${API_PADECIMIENTO_GENERAL}/listaPadecimientos`, (data) => {
 // ===============================
 // 🎯 FOCUS → cargar todos los clientes
 // ===============================
+const idEntrenador = sessionStorage.getItem("idEntrenador");
+
 $("#clienteBuscador").on("focus", function () {
   $.get(`${API_CLIENTE}/listaClientes`, (clientes) => {
     const $lista = $("#listaResultados").empty();
-    clientes.forEach((c) => {
+    // Filtra solo los del entrenador actual
+    const clientesFiltrados = clientes.filter(
+      (c) => c.EntrenadorId == idEntrenador
+    );
+    clientesFiltrados.forEach((c) => {
       $lista.append(
         `<li data-id="${c.IdUsuario}">${c.Nombre} – ${c.Email}</li>`
       );

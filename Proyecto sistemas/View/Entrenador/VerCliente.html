@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -10,6 +11,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="../Ejercicio/css/indexadmin.css" />
 </head>
+
 <body class="fade-in-up">
 
   <!-- Header -->
@@ -35,12 +37,8 @@
               <span class="input-group-text">
                 <i class="fas fa-search"></i>
               </span>
-              <input 
-                type="text" 
-                class="form-control form-control-lg" 
-                placeholder="Buscar cliente por nombre o email..." 
-                id="buscarCliente"
-              />
+              <input type="text" class="form-control form-control-lg" placeholder="Buscar cliente por nombre o email..."
+                id="buscarCliente" />
               <button class="btn btn-custom px-4" type="button">
                 <i class="fas fa-search me-1"></i>Buscar
               </button>
@@ -55,13 +53,13 @@
       <div class="col-12 col-xl-10">
         <div class="card shadow-sm">
           <div class="card-header d-flex justify-content-between align-items-center">
-  <h5 class="mb-0">
-    <i class="fas fa-users me-2"></i>Mis Clientes Asignados
-  </h5>
-  <button class="btn btn-sm btn-custom" onclick="window.location.href='index.html'">
-    <i class="fas fa-arrow-left me-1"></i>Regresar
-  </button>
-</div>
+            <h5 class="mb-0">
+              <i class="fas fa-users me-2"></i>Mis Clientes Asignados
+            </h5>
+            <button class="btn btn-sm btn-custom" onclick="window.location.href='index.html'">
+              <i class="fas fa-arrow-left me-1"></i>Regresar
+            </button>
+          </div>
 
           <div class="card-body p-0">
             <div class="table-responsive">
@@ -105,7 +103,7 @@
                       </button>
                     </td>
                   </tr>
-                  
+
                   <!-- Contenido dinámico desde ControladorEntrenador.js -->
                   <tr id="loading-row">
                     <td colspan="4" class="text-center py-4">
@@ -132,36 +130,37 @@
           <h5 class="modal-title" id="modalRutinaLabel">
             <i class="fas fa-dumbbell me-2"></i>Rutina del Cliente
           </h5>
-          <button type="button" class="btn fs-4 fw-bold" style="color: #9f5639;" data-bs-dismiss="modal" aria-label="Cerrar">
-             ✖
+          <button type="button" class="btn fs-4 fw-bold" style="color: #9f5639;" data-bs-dismiss="modal"
+            aria-label="Cerrar">
+            ✖
           </button>
 
         </div>
         <div class="modal-body">
-  <!-- SECCIÓN ESTÁTICA: botón de cerrar y correo -->
-  <hr class="my-4" />
-  <div class="row justify-content-end align-items-center">
-    <div class="col-md-6">
-      <label for="correoDestino" class="form-label">Enviar rutina por correo:</label>
-      <div class="input-group">
-        <input type="email" id="correoDestino" class="form-control" placeholder="ejemplo@correo.com" required />
-        <button class="btn btn-custom" onclick="enviarRutinaPorCorreo()">
-          <i class="fas fa-paper-plane me-1"></i>Enviar
-        </button>
-      </div>
-    </div>
-  </div>
+          <!-- SECCIÓN ESTÁTICA: botón de cerrar y correo -->
+          <hr class="my-4" />
+          <div class="row justify-content-end align-items-center">
+            <div class="col-md-6">
+              <label for="correoDestino" class="form-label">Enviar rutina por correo:</label>
+              <div class="input-group">
+                <input type="email" id="correoDestino" class="form-control" placeholder="ejemplo@correo.com" required />
+                <button class="btn btn-custom" onclick="enviarRutinaPorCorreo()">
+                  <i class="fas fa-paper-plane me-1"></i>Enviar
+                </button>
+              </div>
+            </div>
+          </div>
 
-  <!-- SECCIÓN DINÁMICA: aquí se inserta con JS -->
-  <div id="contenidoRutinaDinamico" class="mt-4">
-    <div class="text-center py-4">
-      <div class="spinner-border" role="status">
-        <span class="visually-hidden">Cargando...</span>
-      </div>
-      <p class="mt-2 mb-0 text-muted">Cargando información...</p>
-    </div>
-  </div>
-</div>
+          <!-- SECCIÓN DINÁMICA: aquí se inserta con JS -->
+          <div id="contenidoRutinaDinamico" class="mt-4">
+            <div class="text-center py-4">
+              <div class="spinner-border" role="status">
+                <span class="visually-hidden">Cargando...</span>
+              </div>
+              <p class="mt-2 mb-0 text-muted">Cargando información...</p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -174,7 +173,7 @@
     <div class="footer-text">
       <strong>PowerVital</strong> - Todos los derechos reservados
     </div>
-    
+
     <div class="social-icons">
       <a href="https://facebook.com" class="icono-social facebook" target="_blank" rel="noopener noreferrer">
         <i class="fab fa-facebook-f"></i>
@@ -187,7 +186,7 @@
 
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  
+
   <!-- Script del menú (inserta menú lateral y eventos) -->
   <!-- <script type="module" src="../../Complementos/Components/MenuEntren.js"></script> -->
   <script type="module" src="../../Controler/Entrenador/ControladorEntrenador.js"></script>
@@ -220,6 +219,7 @@
       `;
     }
   </script>
-    <script type="module" src="../../Complementos/Components/MenuEntren.js"></script>
+  <script type="module" src="../../Complementos/Components/MenuEntren.js"></script>
 </body>
+
 </html>
