@@ -184,7 +184,7 @@ function abrirDetalleRutina(idRutina, numeroRutina) {
   });
   
   // Navegar a la página de detalle
-  window.location.href = '/Proyecto sistemas/View/Cliente/DetalleRutina.html';
+  window.location.href = '../../View/Cliente/DetalleRutina.html';
 }
 
 function obtenerMusculosUnicos(ejercicios) {

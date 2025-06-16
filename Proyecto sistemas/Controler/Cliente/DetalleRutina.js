@@ -262,7 +262,7 @@ function mostrarDetalleRutina(rutina, numeroRutina, cliente) {
 
     <!-- Botones de navegación -->
     <div class="d-flex justify-content-between mt-4">
-      <button class="btn btn-secondary" onclick="window.location.href='/Proyecto sistemas/View/Cliente/RutinaCliente.html'">
+      <button class="btn btn-secondary" onclick="window.location.href='../../View/Cliente/RutinaCliente.html'">
         <i class="fas fa-arrow-left"></i> Volver a Rutinas
       </button>
       <button class="btn btn-success" onclick="descargarRutinaPDF()">
