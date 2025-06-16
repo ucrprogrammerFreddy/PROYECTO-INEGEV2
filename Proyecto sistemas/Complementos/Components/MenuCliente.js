@@ -6,8 +6,8 @@ export function MenuCliente() {
         <div class="close-btn" id="closeSidebar"><i class="fas fa-times"></i></div>
       </div>
       <ul>
-        <li><a href="../../View/Cliente/Index.html"><i class="fas fa-home"></i> Inicio</a></li>
-        <li><a href="../../View/Cliente/RutinaCliente.html"><i class="fas fa-dumbbell"></i> Rutinas</a></li>
+        <li><a href="../View/Cliente/Index.html"><i class="fas fa-home"></i> Inicio</a></li>
+        <li><a href="../View/Cliente/RutinaCliente.html"><i class="fas fa-dumbbell"></i> Rutinas</a></li>
         <li><a href="#"><i class="fas fa-circle-question"></i> Help</a></li>
         <li><a href="#" id="logoutBtn"><i class="fas fa-right-from-bracket"></i> Cerrar Sesión</a></li>
       </ul>
