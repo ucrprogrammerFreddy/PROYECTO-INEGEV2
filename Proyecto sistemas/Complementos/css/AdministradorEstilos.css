@@ -394,3 +394,35 @@ tr:hover {
 .btn-tabla-eliminar .icono-btn {
   font-size: 1.2em;
 }
+.btn-regresar2 {
+  background-color: #8c684d; /* Color marrón similar al de la imagen */
+  color: #ffffff;
+ 
+}
+.btn-regresar2 span {
+  margin-left: 4px;
+}
+.btn-regresar2:hover,
+.btn-regresar2:focus {
+  background-color: #9b796d;
+  outline: none;
+}
+
+.btn-regresar3 {
+  background-color: #8c684d; /* Color marrón similar al de la imagen */
+  color: #ffffff;
+ 
+}
+.btn-regresar3 {
+  background-color: #b3644a; /* Color marrón similar al de la imagen */
+  color: #ffffff;
+ 
+}
+.btn-regresar3 span {
+  margin-left: 4px;
+}
+.btn-regresar3:hover,
+.btn-regresar3:focus {
+  background-color: #eea166;
+  outline: none;
+}
