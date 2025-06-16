@@ -219,10 +219,14 @@ footer p {
 }
 
 /* Para que el footer siempre esté abajo, agregá esto al body */
-body {
-   min-height: 100vh;
-   display: flex;
-   flex-direction: column;
+.layout {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.main-wrapper {
+    flex: 1;
 }
 
 /* Contenedor de iconos sociales */
