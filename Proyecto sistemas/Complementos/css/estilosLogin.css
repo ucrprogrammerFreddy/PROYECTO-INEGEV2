@@ -83,3 +83,44 @@ footer img {
 footer p {
     color: rgb(255, 255, 255);
 }
+
+
+
+
+.bg-custom {
+  background-color: #eafaf1 !important;
+}
+
+/* Estilo para alinear labels a la izquierda */
+label {
+  text-align: left;
+  display: block;
+  font-weight: 500;
+}
+
+/* Estilo contenedor para el campo de contraseña con ícono */
+.password-wrapper {
+  position: relative;
+}
+
+/* Estilo para ícono de mostrar/ocultar contraseña */
+.toggle-password {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+/* Spinner en el botón Aceptar */
+#btnAceptar .spinner-border {
+  vertical-align: middle;
+  margin-right: 8px;
+}
+
+input:-webkit-autofill {
+  background-color: #eafaf1 !important;
+  -webkit-box-shadow: 0 0 0 1000px #eafaf1 inset;
+}

@@ -137,27 +137,38 @@ namespace PowerVital.Controllers
             return Ok(new { message = "✅ Logout exitoso." });
         }
 
+
         [HttpPut("AsignarClaveManual")]
         public async Task<IActionResult> AsignarClaveManual([FromBody] CambiarClaveDTO dto)
         {
             if (string.IsNullOrWhiteSpace(dto.Correo) || string.IsNullOrWhiteSpace(dto.NuevaClave))
                 return BadRequest("Correo y nueva contraseña son obligatorios.");
 
-            // Buscar usuario por correo (en cualquier tabla según tu diseño)
             var usuario = await _context.Usuarios.FirstOrDefaultAsync(u => u.Email == dto.Correo);
-
             if (usuario == null)
                 return NotFound("Usuario no encontrado con ese correo.");
 
-            // Hashear nueva clave
             var hasher = new PasswordHasher<Usuario>();
             usuario.Clave = hasher.HashPassword(null, dto.NuevaClave);
 
             await _context.SaveChangesAsync();
 
-            return Ok(new { mensaje = "Contraseña actualizada exitosamente." });
-        }
+            try
+            {
+                await _emailService.EnviarCorreoAsync(
+                    usuario.Email,
+                    "🔐 Cambio de contraseña en PowerVital",
+                    $"Hola {usuario.Nombre},\n\nTu contraseña ha sido cambiada exitosamente. Si no fuiste tú, por favor ponte en contacto con nosotros inmediatamente al correo: powervitalgym@gmail.com.\n\nSaludos,\nEquipo PowerVital"
+                );
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("⚠️ Error al enviar correo de confirmación: " + ex.Message);
+                // Opcional: puedes seguir sin lanzar error
+            }
 
+            return Ok(new { mensaje = "Contraseña actualizada exitosamente y correo enviado." });
+        }
 
 
 
