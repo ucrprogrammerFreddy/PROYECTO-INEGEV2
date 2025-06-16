@@ -186,25 +186,43 @@ body {
    FOOTER FIJO MEJORADO
 ========================= */
 footer {
-    background-color: #022227; /* Verde oscuro */
-    color: #fffdfd;
-    padding: 1rem 0;
+   background-color: #022227; /* Verde oscuro */
+   color: #fffdfd;
+   padding: 1rem 0;
+   text-align: center;
+   margin-top: auto; /* Empuja el footer hacia abajo */
+}
+
+footer .footer-content {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   gap: 15px;
+   flex-wrap: wrap;
 }
 
 footer img {
-    width: 30px;
-    height: auto;
-    filter: none !important; /* QUITAR FILTRO GRIS - MOSTRAR COLORES ORIGINALES */
-    transition: transform 0.3s ease;
-    margin: 0 10px;
+   width: 30px;
+   height: 30px;
+   filter: none !important; /* QUITAR FILTRO GRIS - MOSTRAR COLORES ORIGINALES */
+   transition: transform 0.3s ease;
+   margin: 0 5px;
 }
 
 footer img:hover {
-    transform: scale(1.1); /* EFECTO HOVER DE ESCALA */
+   transform: scale(1.1); /* EFECTO HOVER DE ESCALA */
 }
 
 footer p {
-    color: rgb(255, 255, 255); /* TEXTO BLANCO PARA CONTRASTE */
+   color: rgb(255, 255, 255); /* TEXTO BLANCO PARA CONTRASTE */
+   margin: 0;
+}
+
+/* Para que el footer siempre esté abajo, agregá esto al body */
+body {
+   min-height: 100vh;
+   display: flex;
+   flex-direction: column;
 }
 
 /* Contenedor de iconos sociales */
