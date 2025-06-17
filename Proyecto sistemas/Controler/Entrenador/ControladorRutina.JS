@@ -331,6 +331,7 @@ function eliminarEjercicio(index) {
   rutinaSugerida.splice(index, 1);
   mostrarTablaRutina();
 }
+window.eliminarEjercicio = eliminarEjercicio;
 
 // ===============================
 // 💾 GUARDAR RUTINA CON REFRESH
