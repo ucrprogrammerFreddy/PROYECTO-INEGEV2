@@ -161,19 +161,22 @@ namespace PowerVital.Controllers
         }
 
 
+        [HttpPost("VerificarCodigo")]
+        public IActionResult VerificarCodigo([FromBody] CodigoVerificacionDTO dto)
+        {
+            if (string.IsNullOrWhiteSpace(dto.Correo) || string.IsNullOrWhiteSpace(dto.Codigo))
+                return BadRequest("Correo y código son obligatorios.");
 
+            bool esValido = GestorCodigos.VerificarCodigo(dto.Correo, dto.Codigo);
 
+            if (!esValido)
+                return BadRequest("❌ Código incorrecto o expirado.");
 
-
-
-
-
-
-
-
-
-
-
+            // Borrar el código para que no se use de nuevo
+            GestorCodigos.EliminarCodigo(dto.Correo);
+            //reotorna un mensaje de exito 
+            return Ok("✅ Código verificado correctamente.");
+        }
 
 
 
