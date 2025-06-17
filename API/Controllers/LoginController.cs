@@ -137,27 +137,81 @@ namespace PowerVital.Controllers
             return Ok(new { message = "✅ Logout exitoso." });
         }
 
+
+
+        [HttpPost("EnviarCodigoVerificacion")]
+        public async Task<IActionResult> EnviarCodigoVerificacion([FromBody] string correo)
+        {
+            var usuario = await _context.Usuarios.FirstOrDefaultAsync(u => u.Email == correo);
+            if (usuario == null)
+                return NotFound("❌ No existe un usuario con ese correo.");
+
+            // Generar código aleatorio
+            var random = new Random();
+            string codigo = random.Next(100000, 999999).ToString(); // Código de 6 dígitos
+
+            // Guardar en memoria
+            GestorCodigos.GuardarCodigo(correo, codigo);
+
+            // Enviar correo
+            string mensaje = $"Hola {usuario.Nombre},\n\nTu código de verificación es: {codigo}\nEste código expirará en 10 minutos.\n\nSi no solicitaste este código, ignora este mensaje.\n\nPowerVital";
+            await _emailService.EnviarCorreoAsync(correo, "🔐 Código de verificación - PowerVital", mensaje);
+
+            return Ok(new { message = "✅ Código enviado correctamente." });
+        }
+
+
+        [HttpPost("VerificarCodigo")]
+        public IActionResult VerificarCodigo([FromBody] CodigoVerificacionDTO dto)
+        {
+            if (string.IsNullOrWhiteSpace(dto.Correo) || string.IsNullOrWhiteSpace(dto.Codigo))
+                return BadRequest("Correo y código son obligatorios.");
+
+            bool esValido = GestorCodigos.VerificarCodigo(dto.Correo, dto.Codigo);
+
+            if (!esValido)
+                return BadRequest("❌ Código incorrecto o expirado.");
+
+            // Borrar el código para que no se use de nuevo
+            GestorCodigos.EliminarCodigo(dto.Correo);
+            //reotorna un mensaje de exito 
+            return Ok("✅ Código verificado correctamente.");
+        }
+
+
+
+
         [HttpPut("AsignarClaveManual")]
         public async Task<IActionResult> AsignarClaveManual([FromBody] CambiarClaveDTO dto)
         {
             if (string.IsNullOrWhiteSpace(dto.Correo) || string.IsNullOrWhiteSpace(dto.NuevaClave))
                 return BadRequest("Correo y nueva contraseña son obligatorios.");
 
-            // Buscar usuario por correo (en cualquier tabla según tu diseño)
             var usuario = await _context.Usuarios.FirstOrDefaultAsync(u => u.Email == dto.Correo);
-
             if (usuario == null)
                 return NotFound("Usuario no encontrado con ese correo.");
 
-            // Hashear nueva clave
             var hasher = new PasswordHasher<Usuario>();
             usuario.Clave = hasher.HashPassword(null, dto.NuevaClave);
 
             await _context.SaveChangesAsync();
 
-            return Ok(new { mensaje = "Contraseña actualizada exitosamente." });
-        }
+            try
+            {
+                await _emailService.EnviarCorreoAsync(
+                    usuario.Email,
+                    "🔐 Cambio de contraseña en PowerVital",
+                    $"Hola {usuario.Nombre},\n\nTu contraseña ha sido cambiada exitosamente. Si no fuiste tú, por favor ponte en contacto con nosotros inmediatamente al correo: powervitalgym@gmail.com.\n\nSaludos,\nEquipo PowerVital"
+                );
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("⚠️ Error al enviar correo de confirmación: " + ex.Message);
+                // Opcional: puedes seguir sin lanzar error
+            }
 
+            return Ok(new { mensaje = "Contraseña actualizada exitosamente y correo enviado." });
+        }
 
 
 
