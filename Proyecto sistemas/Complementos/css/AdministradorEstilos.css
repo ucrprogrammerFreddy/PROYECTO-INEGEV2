@@ -426,3 +426,8 @@ tr:hover {
   background-color: #eea166;
   outline: none;
 }
+
+
+.footer img:hover {
+  transform: scale(1.1); /* EFECTO HOVER DE ESCALA */
+}

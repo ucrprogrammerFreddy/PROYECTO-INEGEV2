@@ -1,6 +1,4 @@
-
-/* indexadmin.css */
-
+/* === RESET GENERAL === */
 * {
   margin: 0;
   padding: 0;
@@ -10,9 +8,12 @@
 body {
   background-color: #ECF0F1;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
-/* -------------------- HEADER -------------------- */
+/* === HEADER === */
 .header {
   background-color: #ECF0F1;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
@@ -31,7 +32,7 @@ body {
 }
 
 .header-logo {
-  height: 60px;
+  height: 70px;
 }
 
 .menu-toggle {
@@ -44,7 +45,7 @@ body {
   color: #4f316d;
 }
 
-/* -------------------- SIDEBAR -------------------- */
+/* === SIDEBAR === */
 .slide {
   position: fixed;
   top: 0;
@@ -72,12 +73,14 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 15px 20px;
-
 }
 
 .menu-header h1 {
   color: #fff;
   font-weight: 800;
+  font-size: 1.4rem;
+  margin: 0;
+  line-height: 1;
 }
 
 .close-btn {
@@ -85,58 +88,12 @@ body {
   cursor: pointer;
 }
 
-/* -------------------- MENÚ PRINCIPAL -------------------- */
+/* === MENÚ PRINCIPAL === */
 .slide ul {
   list-style: none;
-  padding:1px;
+  padding: 1px;
   font-size: 20px;
 }
-.btn-aceptar {
-    background-color: #b66447;
-    color: #fff;
-    border: none;
-}
-
-.btn-agregar {
-    background-color: #A68768;
-    color: #fff;
-    border: none;
-}
-
-.btn-regresar {
-    background-color: #b66447;
-    color: #fff;
-    border: none;
-}
-
-.btn-aceptar:hover,
-.btn-aceptar:focus {
-    background-color: #9f5639;
-    color: #fff;
-}
-
-.btn-warning {
-    background-color: #A68768;
-    color: #fff;
-    border: none;
-}
-
-.btn-danger {
-    background-color: #b66447;
-    color: #fff;
-    border: none;
-}
-
-.table-success {
-  background-color: #316163 !important; /* tu color personalizado */
-  color: #fff !important;
-}
-
-   .table thead th {
-      background-color: #316163 !important;
-      color: #fff !important;
-    }
-
 
 .slide ul li a {
   display: flex;
@@ -152,7 +109,8 @@ body {
   margin-right: 10px;
 }
 
-.slide ul li a:hover {
+.slide ul li a:hover,
+.slide ul li a.active {
   background-color: #b66447;
   color: white;
   font-weight: bold;
@@ -164,7 +122,7 @@ body {
   margin-left: 5px;
 }
 
-/* -------------------- SUBMENÚ -------------------- */
+/* === SUBMENÚ === */
 .submenu {
   display: none;
   flex-direction: column;
@@ -174,8 +132,6 @@ body {
 .submenu.visible {
   display: flex;
 }
-
-
 
 .submenu li a {
   padding: 10px 35px;
@@ -191,68 +147,48 @@ body {
   border-left: 4px solid white;
 }
 
-/* -------------------- CONTENIDO PRINCIPAL -------------------- */
+/* === CONTENIDO PRINCIPAL === */
 .contenedor-main {
   transition: margin-left 0.3s ease;
   padding: 90px 20px 90px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .contenedor-main.shifted {
   margin-left: 220px;
 }
 
-/* -------------------- FOOTER -------------------- */.footer {
-
-display: grid;
-min-height: 100dvh;;
-grid-template-rows:auto 1fr auto;
-  background-color: #316163; /* mismo color del menú lateral */
-  background-color: #022227;
- margin-top: 0.5 rem;
-  color: white;
-  padding: 10px 15px;
-  text-align: center; 
-
-}
-
-
-
-
-#main-wrapper {
-  flex: 1; /* que el contenido crezca para ocupar el espacio restante */
-}
-
+/* === FOOTER === */
 .footer {
   background-color: #022227;
   color: white;
-  padding: 15px 20px;
   text-align: center;
+  width: 100%;
+  margin-top: auto;
+  padding: 16px 0;
 }
 
-
-
-
-.footer {
-  background-color: #022227;
-  color: white;
-  padding: 15px 20px;
-  text-align: center;
-  margin-top: 0.5rem;
-
-  /* Estilos para asegurar altura mínima sin exagerar */
-  min-height: auto;
-  height: auto;
+.footer .footer-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
 }
 
-
-
-
+.footer p {
+  margin: 0;
+  font-size: 14px;
+  order: -1;
+}
 
 .footer-logo {
-  height: 50px;
+  height: 30px;
+  margin: 0 6px;
 }
 
-/* -------------------- TARJETAS -------------------- */
+/* === TARJETAS === */
 .card-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -281,6 +217,7 @@ grid-template-rows:auto 1fr auto;
   margin-bottom: 10px;
 }
 
+/* === COLORES === */
 .bg-light-brown { background-color: #d3a87c; }
 .bg-light-green { background-color: #a3d3a1; }
 .bg-light-yellow { background-color: #f7e99d; }
@@ -290,21 +227,78 @@ grid-template-rows:auto 1fr auto;
 .icon-green { color: #275d27; }
 .icon-olive { color: #6b6b2d; }
 
-/* -------------------- RESPONSIVE -------------------- */
-@media (max-width: 768px) {
-  .slide {
-    width: 200px;
-  }
+/* === TABLA HEADER COLORES === */
+.table-success {
+  background-color: #316163 !important;
+  color: #fff !important;
+}
 
-  .contenedor-main.shifted {
-    margin-left: 200px;
-  }
+.table thead th,
+.table-light th {
+  background-color: #316163 !important;
+  color: #fff !important;
+}
+
+/* === BOTONES PERSONALIZADOS === */
+.btn-aceptar,
+.btn-regresar,
+.btn-danger {
+  background-color: #b66447;
+  color: #fff;
+  border: none;
+}
+
+.btn-aceptar:hover,
+.btn-aceptar:focus,
+.btn-regresar:hover,
+.btn-danger:hover {
+  background-color: #9f5639;
+}
+
+.btn-agregar,
+.btn-warning {
+  background-color: #A68768;
+  color: #fff;
+  border: none;
+}
+
+.btn-ver-rutina {
+  background-color: #256d5c;
+  color: #fff;
+  border: none;
+}
+
+.btn-ver-rutina:hover {
+  background-color: #1f5a4d;
+}
+
+.btn-nueva-rutina {
+  background-color: #a68768;
+}
+
+.btn-nueva-rutina:hover {
+  background-color: #947a5e;
+}
+
+.btn-perfil {
+  background-color: #a36f4f;
+}
+
+.btn-perfil:hover {
+  background-color: #8b5e41;
+}
+
+.btn-custom {
+  background-color: #b66447;
+}
+
+.btn-custom:hover {
+  background-color: #9f5639;
 }
 
 .btn-regresar2 {
-  background-color: #b3644a; /* Color marrón similar al de la imagen */
+  background-color: #b3644a;
   color: #b3644a;
- 
 }
 .btn-regresar2 span {
   margin-left: 4px;
@@ -313,4 +307,19 @@ grid-template-rows:auto 1fr auto;
 .btn-regresar2:focus {
   background-color: #9b796d;
   outline: none;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+  .slide {
+    width: 200px;
+  }
+
+  .contenedor-main.shifted {
+    margin-left: 200px;
+  }
+
+  .custom-card {
+    max-width: 95%;
+  }
 }

@@ -504,9 +504,9 @@ button[onclick*="verPerfil"] {
 }
 
 .footer img {
-  width: 50px;
+  width: 36px;
   height: auto;
-  margin: 0 10px;
+  margin: 0 6px;
   filter: none !important; /* QUITAR EL FILTRO GRIS */
   transition: transform 0.3s ease;
 }
@@ -807,148 +807,249 @@ td:last-child .d-flex {
    FOOTER MEJORADO - AGREGAR AL FINAL
 ========================= */
 
-/* Asegurar que el body ocupe toda la pantalla */
-html, body {
-  height: 100%;
+@media (max-width: 480px) {
+  .footer {
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    height: auto !important;
+    padding: 10px 15px !important;
+    text-align: center !important;
+    gap: 8px !important;
+  }
+
+  .footer-text {
+    font-size: 12px !important;
+    margin: 0 !important;
+    color: #ffffff;
+  }
+
+  .footer-text strong {
+    color: #C4A574;
+    font-weight: bold;
+  }
+
+  .social-icons {
+    display: flex !important;
+    gap: 8px !important;
+    justify-content: center !important;
+    flex-wrap: wrap;
+  }
+
+  .footer-logo {
+    width: 16px !important;
+    height: 16px !important;
+    border-radius: 50% !important;
+    object-fit: cover !important;
+    transition: transform 0.3s ease;
+  }
+
+  .footer-logo:hover {
+    transform: scale(1.1);
+  }
+
+  .content-wrapper {
+    padding-bottom: 100px; /* Espacio para footer en móviles */
+  }
 }
 
-/* Contenedor principal que empuja el footer hacia abajo */
-.main-container {
-  min-height: 100vh;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*--Nuevo
+
+/* -------------------- MENU LATERAL -------------------- */
+.slide {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 220px;
+  background-color: var(--color-menu);
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+  z-index: 1300;
+  color: white;
+  padding-top: 70px;
+}
+
+.slide.open {
+  transform: translateX(0);
+}
+
+.menu-header {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  background: var(--color-menu);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+}
+
+.menu-header h1 {
+  color: #fff;
+  font-weight: 800;
+  font-size: 1.4rem; /* Ajuste de tamaño más pequeño que antes */
+}
+
+.close-btn {
+  font-size: 30px;
+  cursor: pointer;
+  color: white;
+}
+
+.slide ul {
+  list-style: none;
+  padding: 1px;
+  font-size: 20px;
+  background-color: var(--color-menu);
+}
+
+.slide ul li a {
+  display: flex;
+  align-items: center;
+  color: #ecf1f1;
+  font-weight: 500;
+  padding: 10px 20px;
+  text-decoration: none;
+  transition: 0.2s ease-out;
+  background-color: transparent;
+}
+
+.slide ul li a i {
+  margin-right: 10px;
+  color: #ecf1f1;
+}
+
+.slide ul li a:hover,
+.slide ul li a.active {
+  background-color: var(--color-hover) !important;
+  color: white !important;
+  font-weight: bold;
+  border-left: 4px solid white;
+}
+
+.slide ul li {
+  background-color: transparent;
+  transition: background-color 0.3s;
+}
+
+.slide ul li:hover {
+  background-color: var(--color-hover);
+}
+
+/* -------------------- SUBMENÚ -------------------- */
+.submenu {
+  display: none;
+  flex-direction: column;
+  background-color: var(--color-menu);
+}
+
+.submenu.visible {
+  display: flex;
+}
+
+.submenu li a {
+  padding: 10px 35px;
+  font-size: 14px;
+  color: #e4f4f3;
+}
+
+.submenu li a:hover,
+.submenu li a.active {
+  background-color: var(--color-hover) !important;
+  color: white;
+  font-weight: bold;
+  border-left: 4px solid white;
+}
+
+
+/* -------------------- CORRECCIÓN BARRA DE BÚSQUEDA -------------------- */
+.container-fluid {
+  margin-top: 50px;
+}
+
+
+/* Contenedor principal del contenido */
+.contenedor-main {
+  transition: margin-left 0.3s ease;
+  padding: 100px 20px 30px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin-left: 0;
+}
+
+/* Cuando se abre el menú lateral */
+body.menu-open .contenedor-main {
+  margin-left: 90px; /* Aquí defines cuánto se corre (puedes ajustar este valor) */
+}
+
+/* === TARJETAS === */
+.card-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+  padding: 0 1rem;
+}
+
+.custom-card {
+  background: white;
+  padding: 28px;
+  border-radius: 14px;
+  box-shadow: 0 0 8px rgba(0,0,0,0.08);
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  text-decoration: none;
+  color: inherit;
+  max-width: 460px;
+  width: 100%;
+}
+
+.custom-card:hover {
+  transform: translateY(-4px) scale(1.015);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.icon-section {
+  font-size: 3rem;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 12px;
+  transition: transform 0.2s ease;
+}
+
+.custom-card:hover .icon-section {
+  transform: scale(1.03);
+}
+
+html, body {
+  height: 100%;
   display: flex;
   flex-direction: column;
 }
 
-/* El contenido principal toma todo el espacio disponible */
-.content-wrapper {
+.contenedor-main {
   flex: 1;
-  padding-bottom: 90px; /* Espacio para el footer */
-}
-
-/* Footer fijo en la parte inferior - MODIFICACIÓN DEL EXISTENTE */
-.footer {
-  position: fixed !important;
-  bottom: 0 !important;
-  left: 0 !important;
-  height: 70px !important;
-  width: 100% !important;
-  background-color: #022227 !important;
-  color: white !important;
-  display: flex !important;
-  justify-content: center !important;
-  align-items: center !important;
-  padding: 0 30px !important;
-  gap: 20px !important;
-  z-index: 1000 !important;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1) !important;
-}
-
-/* Texto del footer */
-.footer-text {
-  font-size: 14px;
-  font-weight: 500;
-  color: #ecf0f1;
-  margin: 0;
-}
-
-.footer-text strong {
-  color: #C4A574;
-  font-weight: 700;
-}
-
-/* Contenedor de iconos sociales */
-.social-icons {
   display: flex;
-  gap: 15px;
-  align-items: center;
+  flex-direction: column;
 }
 
-/* Iconos sociales */
-.icono-social {
-  width: 40px !important;
-  height: 40px !important;
-  border-radius: 50% !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  transition: all 0.3s ease !important;
-  text-decoration: none !important;
-  font-size: 20px !important;
-  filter: none !important; /* Override del filtro gris existente */
-}
-
-/* Facebook */
-.icono-social.facebook {
-  background-color: #1877f2 !important;
-  color: white !important;
-}
-
-.icono-social.facebook:hover {
-  background-color: #166fe5 !important;
-  transform: translateY(-3px) !important;
-  box-shadow: 0 5px 15px rgba(24, 119, 242, 0.4) !important;
-  color: white !important;
-}
-
-/* Instagram */
-.icono-social.instagram {
-  background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%) !important;
-  color: white !important;
-}
-
-.icono-social.instagram:hover {
-  transform: translateY(-3px) !important;
-  box-shadow: 0 5px 15px rgba(225, 48, 108, 0.4) !important;
-  color: white !important;
-}
-
-/* Responsive para footer */
-@media (max-width: 768px) {
-  .footer {
-    padding: 0 15px !important;
-    height: 65px !important;
-    gap: 15px !important;
-  }
-  
-  .footer-text {
-    font-size: 12px;
-  }
-  
-  .social-icons {
-    gap: 10px;
-  }
-  
-  .icono-social {
-    width: 35px !important;
-    height: 35px !important;
-    font-size: 18px !important;
-  }
-}
-
-@media (max-width: 480px) {
-  .footer {
-    flex-direction: column !important;
-    height: 80px !important;
-    padding: 8px 15px !important;
-    gap: 8px !important;
-  }
-  
-  .footer-text {
-    font-size: 11px;
-    text-align: center;
-  }
-  
-  .social-icons {
-    gap: 8px;
-  }
-  
-  .icono-social {
-    width: 32px !important;
-    height: 32px !important;
-    font-size: 16px !important;
-  }
-  
-  .content-wrapper {
-    padding-bottom: 100px; /* Más espacio en móviles */
-  }
+/* Asegura que el footer siempre quede abajo */
+.footer {
+  margin-top: auto;
 }

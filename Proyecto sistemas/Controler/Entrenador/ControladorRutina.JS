@@ -297,7 +297,7 @@ function mostrarTablaRutina() {
   }
   rutinaSugerida.forEach((ej, index) => {
     const guia = ej.GuiaEjercicio
-      ? `<a href="${escapeHtml(ej.GuiaEjercicio)}" target="_blank">Ver Guía</a>`
+      ? `<a href="${escapeHtml(ej.GuiaEjercicio)}" target="_blank" class="btn-guia"><i class="fas fa-video"></i> Ver Guía</a>`
       : "Sin guía";
     $tbody.append(`
       <tr>
@@ -309,7 +309,7 @@ function mostrarTablaRutina() {
         <td><input type="number" class="form-control reps-input" value="${
           ej.Repeticiones || 12
         }" min="1" data-index="${index}"></td>
-        <td>${guia}</td>
+        <td class=" text-center"> ${guia}</td>
         <td><input type="text" class="form-control comentario-input" placeholder="Comentario opcional" data-index="${index}"></td>
         <td class="text-center"><button class="btn btn-danger btn-sm" onclick="eliminarEjercicio(${index})"><i class="fas fa-trash-alt"></i> Eliminar</button></td>
       </tr>

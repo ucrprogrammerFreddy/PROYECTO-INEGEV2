@@ -18,11 +18,10 @@ export function renderAdminLayout() {
           <span class="close-btn" id="closeMenu">&times;</span>
         </div>
         <ul>
-          <li><a href="Index.html"><i class="fas fa-home"></i> Inicio</a></li>
-          <li><a href="#"><i class="fas fa-dollar-sign"></i> Pagos</a></li>
-          <li><a href="#"><i class="fas fa-users"></i> Clientes</a></li>
-          <li><a href="#"><i class="fas fa-dumbbell"></i> Ejercicios</a></li>
-          <li><a href="#"><i class="fas fa-sign-out-alt"></i> Salir</a></li>
+          <li><a href="../../View/Entrenador/Index.html"><i class="fas fa-home"></i> Inicio</a></li>
+          <li><a href="../../View/Entrenador/VerCliente.html"><i class="fas fa-users"></i> Clientes</a></li>
+          <li><a href="../../View/Administrador/ListaEjercicios.html"><i class="fas fa-dumbbell"></i> Ejercicios</a></li>
+          <li><a href="../../View/Login/Login.html"><i class="fas fa-sign-out-alt"></i> Salir</a></li>
         </ul>
       </nav>
     </div>
@@ -30,9 +29,13 @@ export function renderAdminLayout() {
 
   const footerHTML = `
     <footer class="footer">
-      <p>PowerVital Todos los derechos Reservados</p>
-      <img src="../../Complementos/img/facebook.png" alt="Facebook" class="footer-logo" />
-      <img src="../../Complementos/img/instagram.png" alt="Instagram" class="footer-logo" />
+      <div class="footer-content">
+        <p>© 2025 <strong>PowerVital.</strong> Todos los derechos reservados</p>
+        <div>
+          <img src="../../Complementos/img/facebook.png" alt="Facebook" class="footer-logo" />
+          <img src="../../Complementos/img/instagram.png" alt="Instagram" class="footer-logo" />
+        </div>
+      </div>
     </footer>
   `;
 
@@ -54,11 +57,15 @@ export function renderAdminLayout() {
     openMenu?.addEventListener("click", () => {
       sidebar.classList.add("open");
       mainContent?.classList.add("shifted");
+      document.body.classList.add("menu-open"); // Agregar esta línea
     });
 
     closeMenu?.addEventListener("click", () => {
       sidebar.classList.remove("open");
       mainContent?.classList.remove("shifted");
+      document.body.classList.remove("menu-open"); // Y esta línea
     });
+
   });
 }
+renderAdminLayout();

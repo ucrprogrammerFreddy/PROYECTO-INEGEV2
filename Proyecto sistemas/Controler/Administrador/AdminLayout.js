@@ -41,7 +41,7 @@ export function renderAdminLayout() {
   const footerHTML = `
     <footer class="footer">
       <div class="footer-contenido">
-        <p class="mb-0">© 2025 PowerVital. Todos los derechos reservados</p>
+        <p class="mb-0">© 2025 <Strong>PowerVital</Strong>. Todos los derechos reservados</p>
         <div class="footer-logos">
           <img src="../../Complementos/img/facebook.png" alt="Facebook" class="footer-logo" />
           <img src="../../Complementos/img/instagram.png" alt="Instagram" class="footer-logo" />
