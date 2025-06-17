@@ -138,6 +138,46 @@ namespace PowerVital.Controllers
         }
 
 
+
+        [HttpPost("EnviarCodigoVerificacion")]
+        public async Task<IActionResult> EnviarCodigoVerificacion([FromBody] string correo)
+        {
+            var usuario = await _context.Usuarios.FirstOrDefaultAsync(u => u.Email == correo);
+            if (usuario == null)
+                return NotFound("❌ No existe un usuario con ese correo.");
+
+            // Generar código aleatorio
+            var random = new Random();
+            string codigo = random.Next(100000, 999999).ToString(); // Código de 6 dígitos
+
+            // Guardar en memoria
+            GestorCodigos.GuardarCodigo(correo, codigo);
+
+            // Enviar correo
+            string mensaje = $"Hola {usuario.Nombre},\n\nTu código de verificación es: {codigo}\nEste código expirará en 10 minutos.\n\nSi no solicitaste este código, ignora este mensaje.\n\nPowerVital";
+            await _emailService.EnviarCorreoAsync(correo, "🔐 Código de verificación - PowerVital", mensaje);
+
+            return Ok(new { message = "✅ Código enviado correctamente." });
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         [HttpPut("AsignarClaveManual")]
         public async Task<IActionResult> AsignarClaveManual([FromBody] CambiarClaveDTO dto)
         {
