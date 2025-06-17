@@ -32,7 +32,7 @@ export function renderAdminLayout() {
             </ul>
           </li>
           <li><a href="../../View/Administrador/ListaEjercicios.html"><i class="fas fa-dumbbell"></i> Ejercicios</a></li>
-          <li><a href="../../View/Login/Login.html"><i class="fas fa-sign-out-alt"></i> Salir</a></li>
+          <li><a href="../../View/Login/index.html"><i class="fas fa-sign-out-alt"></i> Salir</a></li>
         </ul>
       </nav>
     </div>
