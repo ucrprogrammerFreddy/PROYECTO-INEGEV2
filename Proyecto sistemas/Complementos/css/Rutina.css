@@ -287,38 +287,7 @@ body.menu-open .btn-regresar-fijo {
   right: 240px;
 }
 
-/* ========================
-   FOOTER
-========================= */
-.footer {
-  margin-top: auto;
-  background-color: var(--color-footer);
-  color: white;
-  padding: 6px 20px;
-  text-align: center;
-  width: 100%;
-  z-index: 1000;
-}
 
-.footer-logo {
-  width: 36px;
-  height: auto;
-  margin: 0 5px;
-  vertical-align: middle;
-  transition: transform 0.3s ease;
-}
-
-.footer-logo:hover {
-  transform: scale(1.1);
-}
-
-.footer-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
 
 /* ========================
    RESPONSIVE
@@ -488,4 +457,54 @@ body.menu-open .btn-regresar-fijo {
   transition: background-color 0.3s ease;
   text-decoration: none;
   display: inline-block;
+}
+
+
+/* -------------------- FOOTER -------------------- */
+footer {
+  background-color: #022227;
+  color: white;
+  text-align: center;
+  width: 100%;
+  margin-top: auto;
+  padding: 8px 0;
+  z-index: 10;
+  font-size: 16px;
+}
+
+footer .container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background-color: transparent !important;
+
+  margin: 0 auto;    /* Centra horizontalmente */
+  padding: 10px;   /* Añade un poco de espacio lateral */
+}
+
+footer p {
+  margin: 0;
+  color: #ffffff;
+}
+
+footer strong {
+  font-weight: bold;
+}
+
+footer a {
+  display: inline-block;
+}
+
+footer img {
+  width: 30px;
+  height: auto;
+  margin: 0 10px;
+  transition: filter 0.3s ease, transform 0.3s ease;
+}
+
+footer img:hover {
+  filter: grayscale(0%);
+  transform: scale(1.05);
 }

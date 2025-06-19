@@ -28,14 +28,16 @@ export function renderAdminLayout() {
   `;
 
   const footerHTML = `
-    <footer class="footer">
-      <div class="footer-content">
-        <p>© 2025 <strong>PowerVital.</strong> Todos los derechos reservados</p>
-        <div>
-          <img src="../../Complementos/img/facebook.png" alt="Facebook" class="footer-logo" />
-          <img src="../../Complementos/img/instagram.png" alt="Instagram" class="footer-logo" />
+    <footer>
+        <div class="container d-flex justify-content-center">
+            <p>© 2025 <Strong>PowerVital</Strong>. Todos los derechos reservados.</p>
+            <a href="#">
+                <img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="Facebook" />
+            </a>
+            <a href="#">
+                <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram" />
+            </a>
         </div>
-      </div>
     </footer>
   `;
 

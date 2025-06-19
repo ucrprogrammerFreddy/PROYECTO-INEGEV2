@@ -170,28 +170,6 @@ body {
   border-left: 4px solid white;
 }
 
-/* -------------------- FOOTER -------------------- */
-.footer {
-  background-color: #022227;
-  color: white;
-  text-align: center;
-  width: 100%;
-  z-index: 10;
-  margin-top: auto;
-  padding: 10px 0;
-}
-
-.footer .footer-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-}
-
-.footer-logo {
-  height: 36px;
-  margin: 0 5px;
-}
 
 /* -------------------- BOTONES -------------------- */
 .btn-enviar,
@@ -428,6 +406,64 @@ tr:hover {
 }
 
 
-.footer img:hover {
+/* -------------------- FOOTER -------------------- */
+footer {
+  background-color: #022227;
+  color: white;
+  text-align: center;
+  width: 100%;
+  margin-top: auto;
+  padding: 18px 0;
+  z-index: 10;
+}
+
+footer .container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+footer p {
+  color: rgb(255, 255, 255);
+  margin: 0;
+}
+
+footer strong {
+  font-weight: bold;
+}
+
+/* Estilos de los íconos sociales */
+footer img {
+  width: 30px;
+  height: auto;
+  transition: filter 0.3s ease, transform 0.3s ease;
+  margin: 0 10px;
+}
+
+footer img:hover {
+  filter: grayscale(0%);
   transform: scale(1.1); /* EFECTO HOVER DE ESCALA */
+}
+
+.btn-ver {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #346364; /* Color de la imagen */
+  color: white;
+  font-weight: 500;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.btn-ver:hover {
+  background-color: #2b5253;
+  text-decoration: none;
+  transform: translateY(-1px);
 }

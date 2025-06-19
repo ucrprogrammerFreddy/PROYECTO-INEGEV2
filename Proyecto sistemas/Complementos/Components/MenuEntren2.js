@@ -36,11 +36,16 @@ export function renderTrainerLayout() {
   `;
 
   const footerHTML = `
-    <footer class="footer">
-      <img src="../../Complementos/img/facebook.png" alt="Facebook" class="footer-logo" />
-      <img src="../../Complementos/img/instagram.png" alt="Instagram" class="footer-logo" />
-      <p>PowerVital - Todos los derechos reservados</p>
-    </footer>
+<footer class="footer">
+  <div class="container footer-content">
+    <p class="mb-0">© 2025 <strong>PowerVital</strong>. Todos los derechos reservados</p>
+    <div class="footer-icons">
+      <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="Instagram" /></a>
+      <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Facebook" /></a>
+    </div>
+  </div>
+</footer>
+
   `;
 
   const overlayHTML = `<div id="menu-overlay"></div>`;

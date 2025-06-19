@@ -491,49 +491,6 @@ button[onclick*="verPerfil"] {
   animation: fadeInUp 0.6s ease;
 }
 
-/* -------------------- FOOTER -------------------- */
-.footer {
-  background-color: #022227 !important; /* Verde oscuro que me indicaste */
-  color: #ffffff;
-  padding: 0.5rem;
-  text-align: center;
-  width: 100%;
- 
-  bottom: 0;
-  z-index: 1000;
-}
-
-.footer img {
-  width: 36px;
-  height: auto;
-  margin: 0 6px;
-  filter: none !important; /* QUITAR EL FILTRO GRIS */
-  transition: transform 0.3s ease;
-}
-
-.footer img:hover {
-  transform: scale(1.1); /* EFECTO HOVER DE ESCALA */
-}
-
-.footer p {
-  color: #ffffff;
-  margin: 0;
-}
-
-/* ESTILOS ESPECÍFICOS PARA ÍCONOS SOCIALES CON COLOR */
-.footer a[href*="facebook"] img,
-.footer img[alt*="Facebook"],
-.icono-social[alt*="Facebook"] {
-  filter: none !important;
-  /* Facebook azul original */
-}
-
-.footer a[href*="instagram"] img,
-.footer img[alt*="Instagram"],
-.icono-social[alt*="Instagram"] {
-  filter: none !important;
-  /* Instagram colores originales */
-}
 
 /* -------------------- CARD GRID (para Panel Entrenador) -------------------- */
 .card-grid {
@@ -861,7 +818,10 @@ td:last-child .d-flex {
 
 
 
-
+.btn-ver-rutina:hover {
+  background-color: #1f5a4d;
+  color: #fff;
+}
 
 
 
@@ -1052,4 +1012,46 @@ html, body {
 /* Asegura que el footer siempre quede abajo */
 .footer {
   margin-top: auto;
+}
+
+
+/* -------------------- FOOTER -------------------- */
+footer {
+  background-color: #022227;
+  color: white;
+  text-align: center;
+  width: 100%;
+  margin-top: auto;
+  padding: 18px 0;
+  z-index: 10;
+}
+
+footer .container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+footer p {
+  color: rgb(255, 255, 255);
+  margin: 0;
+}
+
+footer strong {
+  font-weight: bold;
+}
+
+/* Estilos de los íconos sociales */
+footer img {
+  width: 30px;
+  height: auto;
+  transition: filter 0.3s ease, transform 0.3s ease;
+  margin: 0 10px;
+}
+
+footer img:hover {
+  filter: grayscale(0%);
+  transform: scale(1.1); /* EFECTO HOVER DE ESCALA */
 }

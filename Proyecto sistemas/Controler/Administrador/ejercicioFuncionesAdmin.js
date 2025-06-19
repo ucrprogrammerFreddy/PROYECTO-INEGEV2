@@ -71,7 +71,7 @@ document.addEventListener("DOMContentLoaded", function () {
         <td>${ej.Nombre}</td>
         <td>${ej.Descripcion}</td>
         <td>${ej.Repeticiones}</td>
-        <td><a href="${ej.GuiaEjercicio}" target="_blank">Ver video</a></td>
+        <td><a href="${ej.GuiaEjercicio}" target="_blank" class="btn-ver">Ver video<i class="fas fa-video"></i> </a></td>
         <td>${ej.AreaMuscular}</td>
         <td>${ej.AreaMuscularAfectada ?? ""}</td>
         <td>${ej.Dificultad}</td>

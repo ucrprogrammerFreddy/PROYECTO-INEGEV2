@@ -311,3 +311,44 @@ main,
     max-width: 95%;
   }
 }
+
+/* -------------------- FOOTER -------------------- */
+footer {
+  background-color: #022227;
+  color: white;
+  text-align: center;
+  width: 100%;
+  margin-top: auto;
+  padding: 18px 0;
+  z-index: 10;
+}
+
+footer .container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+footer p {
+  color: rgb(255, 255, 255);
+  margin: 0;
+}
+
+footer strong {
+  font-weight: bold;
+}
+
+/* Estilos de los íconos sociales */
+footer img {
+  width: 30px;
+  height: auto;
+  transition: filter 0.3s ease, transform 0.3s ease;
+  margin: 0 10px;
+}
+
+footer img:hover {
+  filter: grayscale(0%);
+  transform: scale(1.1); /* EFECTO HOVER DE ESCALA */
+}
