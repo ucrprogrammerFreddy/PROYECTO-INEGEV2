@@ -29,10 +29,17 @@ export function renderTrainerLayout() {
   `;
 
   const footerHTML = `
-    <footer class="footer">
-      <img src="../../Complementos/img/facebook.png" alt="Facebook" class="footer-logo" />
-      <img src="../../Complementos/img/instagram.png" alt="Instagram" class="footer-logo" />
-      <p>PowerVital - Todos los derechos reservados</p>
+    <!-- Footer (siempre al fondo) -->
+    <footer>
+        <div class="container d-flex justify-content-center">
+            <p>© 2025 PowerVital. Todos los derechos reservados.</p>
+            <a href="#">
+                <img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="Facebook" />
+            </a>
+            <a href="#">
+                <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram" />
+            </a>
+        </div>
     </footer>
   `;
 
